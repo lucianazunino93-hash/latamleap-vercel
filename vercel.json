@@ -1,0 +1,12 @@
+{
+    "rewrites": [
+          {
+                  "source": "/test",
+                  "destination": "https://create-your-heart-28.lovable.app"
+          },
+          {
+                  "source": "/(.*)",
+                  "destination": "https://create-your-heart-28.lovable.app/$1"
+          }
+    ]
+}
