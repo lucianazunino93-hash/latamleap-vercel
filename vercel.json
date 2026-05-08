@@ -1,12 +1,16 @@
 {
-    "rewrites": [
-          {
-                  "source": "/test",
-                  "destination": "https://create-your-heart-28.lovable.app"
-          },
-          {
-                  "source": "/(.*)",
-                  "destination": "https://create-your-heart-28.lovable.app/$1"
-          }
-    ]
+      "rewrites": [
+              {
+                        "source": "/test",
+                        "destination": "https://create-your-heart-28.lovable.app"
+              },
+              {
+                        "source": "/cloudenergy",
+                        "destination": "https://catamarca-sun-boost.lovable.app"
+              },
+              {
+                        "source": "/(.*)",
+                        "destination": "https://create-your-heart-28.lovable.app/$1"
+              }
+      ]
 }
