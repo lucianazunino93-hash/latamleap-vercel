@@ -1,3 +1,4 @@
+import { LanguageContext } from "./lib/language-context";
 import Purchase from "./pages/Purchase";
 import PaymentReturn from "./pages/PaymentReturn";
 import SEO from "./components/SEO";
@@ -20,13 +21,14 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = ({ url = "/" }: { url?: string }) => {
+ const language = (typeof window === "undefined" ? url : window.location.pathname).match(/^\/en(?:\/|$)/) ? "en" : "es";
  const Router = typeof window === "undefined" ? StaticRouter : BrowserRouter;
  return (
-  <QueryClientProvider client={queryClient}>
+  <LanguageContext.Provider value={language}><QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <Router location={url}>
+      <Router location={url} basename={language === "en" ? "/en" : "/"}>
         <SEO /><Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
@@ -41,7 +43,7 @@ const App = ({ url = "/" }: { url?: string }) => {
         </Routes>
       </Router>
     </TooltipProvider>
-  </QueryClientProvider>
+  </QueryClientProvider></LanguageContext.Provider>
  );
 };
 
