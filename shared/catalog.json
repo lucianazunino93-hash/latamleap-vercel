@@ -1,0 +1,45 @@
+[
+  {
+    "id": "landing",
+    "name": "Landing",
+    "price": 349000,
+    "description": "Presentá una oferta concreta y facilitá el primer contacto.",
+    "features": [
+      "Una página, hasta 6 secciones",
+      "Diseño adaptado a tu marca y a celulares",
+      "Textos comerciales a partir de tu información",
+      "Formulario y WhatsApp",
+      "SEO técnico inicial y publicación",
+      "Dos rondas de ajustes"
+    ]
+  },
+  {
+    "id": "sitio",
+    "name": "Web profesional",
+    "price": 789000,
+    "description": "Mostrá el valor de tu negocio y ayudá a que te elijan.",
+    "features": [
+      "Hasta 5 páginas",
+      "Diseño y textos adaptados a tu negocio",
+      "Formulario y WhatsApp",
+      "SEO inicial por página",
+      "Configuración de medición con tu cuenta",
+      "Dos rondas de ajustes",
+      "Panel de administración y capacitación"
+    ]
+  },
+  {
+    "id": "tienda",
+    "name": "Tienda online",
+    "price": 1299000,
+    "description": "Mostrá tus productos y recibí pedidos con pagos online.",
+    "features": [
+      "Catálogo inicial de hasta 30 productos",
+      "Carrito y configuración de Mercado Pago",
+      "Configuración de envíos según tu operación",
+      "Panel de productos y pedidos",
+      "SEO inicial y capacitación",
+      "Dos rondas de ajustes"
+    ]
+  }
+]

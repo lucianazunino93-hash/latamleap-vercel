@@ -1,0 +1,33 @@
+{
+  "origin": "https://www.latamleap.com",
+  "pages": {
+    "/": [
+      "Diseño web y tiendas online en Argentina | Latam Leap",
+      "Dale el salto a tu negocio con una landing, web profesional o tienda online a medida. Estrategia, marketing y desarrollo. Precios en pesos argentinos."
+    ],
+    "/services": [
+      "Servicios y precios de diseño web | Latam Leap",
+      "Landings desde $349.000, webs profesionales desde $789.000 y tiendas online desde $1.299.000 ARS. Alcance claro y cuidado mensual opcional."
+    ],
+    "/case-studies": [
+      "Proyectos de diseño web para negocios | Latam Leap",
+      "Conocé proyectos de Latam Leap: vet.mavie, Psicólogo Gonzalo Álvarez y Espacio Arukah."
+    ],
+    "/about": [
+      "Estrategia, marketing y desarrollo | Latam Leap",
+      "Soluciones simples a medida para negocios reales en Argentina. Conocé cómo trabajamos."
+    ],
+    "/privacy-policy": [
+      "Privacidad | Latam Leap",
+      "Cómo tratamos tus datos de contacto y contratación."
+    ],
+    "/terms-of-service": [
+      "Términos del servicio | Latam Leap",
+      "Alcance de los paquetes y condiciones del cuidado mensual."
+    ],
+    "/data-deletion": [
+      "Eliminar tus datos | Latam Leap",
+      "Cómo solicitar la eliminación de tus datos."
+    ]
+  }
+}

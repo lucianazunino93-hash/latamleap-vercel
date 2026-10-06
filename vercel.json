@@ -1,12 +1,41 @@
 {
-                "rewrites": [
-                                        {
-                                                                        "source": "/test",
-                                                                        "destination": "https://create-your-heart-28.lovable.app"
-                                        },
-                                        {
-                                                                        "source": "/(.*)",
-                                                                        "destination": "https://latam-leap-launchpad.lovable.app/$1"
-                                        }
-                ]
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/checkout.js": {
+      "includeFiles": "shared/catalog.json",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/test",
+      "destination": "https://create-your-heart-28.lovable.app"
+    },
+    {
+      "source": "/comprar/:planId",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/pago",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ]
 }

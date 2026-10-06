@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 32 100% 96%;
+    --foreground: 195 83% 16%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 195 83% 16%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 195 83% 16%;
+
+    --primary: 11 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 9 84% 51%;
+
+    --secondary: 31 61% 91%;
+    --secondary-foreground: 195 83% 16%;
+
+    --muted: 30 29% 86%;
+    --muted-foreground: 193 22% 38%;
+
+    --accent: 195 83% 16%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 100% 63.5%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 28 28% 78%;
+    --input: 28 28% 78%;
+    --ring: 11 100% 60%;
+
+    --radius: 0.5rem;
+
+    --surface-elevated: 0 0% 100%;
+    --surface-border: 28 28% 78%;
+    --text-secondary: 193 22% 38%;
+    --text-muted: 193 14% 52%;
+    --accent-glow: 11 100% 82%;
+    --error: 0 100% 63.5%;
+    --ghost-border: 195 22% 65%;
+    --surface-problem: 31 61% 91%;
+
+    --amber: 38 92% 50%;
+    --amber-foreground: 221 11% 11%;
+    --lavender: 251 95% 92%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 195 83% 16%;
+    --sidebar-primary: 11 100% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 31 61% 91%;
+    --sidebar-accent-foreground: 195 83% 16%;
+    --sidebar-border: 28 28% 78%;
+    --sidebar-ring: 11 100% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0;
+  }
+}
+
+@layer utilities {
+  .grid-background {
+    background-image:
+      linear-gradient(hsl(var(--primary) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--primary) / 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black, transparent);
+  }
+
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.03;
+  }
+
+  .glow-green {
+    background: radial-gradient(ellipse at 50% 50%, hsl(var(--accent-glow) / 0.6) 0%, transparent 70%);
+  }
+
+  .studio-grid {
+    background-image: linear-gradient(hsl(var(--foreground) / .08) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground) / .08) 1px, transparent 1px);
+    background-size: 42px 42px;
+  }
+
+  .section-kicker {
+    @apply text-xs font-bold uppercase text-primary mb-5;
+    letter-spacing: .12em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+}
+
+section[id] { scroll-margin-top: 5rem; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
