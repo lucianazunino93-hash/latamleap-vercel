@@ -27,7 +27,7 @@ export default function ServiceDetail() {
       <LocalizedAnchor href="#contacto" className="inline-flex bg-primary text-primary-foreground rounded-md px-6 py-3 font-bold"><Text value="Consultar por " /><Text value={plan.name} /></LocalizedAnchor>
     </section>
     <section className="py-16 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-12">
-      <div><h2 className="text-3xl font-bold mb-5"><Text value="Qué incluye" /></h2><ul className="space-y-3">{plan.features.map(feature => <li key={feature} className="flex gap-3"><span aria-hidden="true" className="text-primary">✓</span><Text value={feature} /></li>)}</ul></div>
+      <div><h2 className="text-3xl font-bold mb-5"><Text value="Qué incluye" /></h2><ul className="space-y-3">{plan.features.map(feature => <li key={feature} className="flex gap-3"><span aria-hidden="true" className="text-primary-text">✓</span><Text value={feature} /></li>)}</ul></div>
       <div><h2 className="text-3xl font-bold mb-5"><Text value="Para qué negocios tiene sentido" /></h2><p className="text-muted-foreground mb-6">{copy.fit}</p><h3 className="text-xl font-bold mb-3"><Text value="Un ejemplo de uso" /></h3><p className="text-muted-foreground">{copy.example}</p></div>
     </div></section>
     <section className="py-16 max-w-4xl mx-auto px-5 sm:px-6"><h2 className="text-3xl font-bold mb-7"><Text value="Lo que necesitás saber antes de elegir" /></h2>{copy.questions.map(([question, answer]) => <article key={question} className="border-b border-border py-5"><h3 className="text-xl font-bold mb-3">{question}</h3><p className="text-muted-foreground leading-relaxed">{answer}</p></article>)}

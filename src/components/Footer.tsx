@@ -33,7 +33,7 @@ const Footer = () => (<footer className="bg-foreground text-background py-12">
           {socials.map((s) => (<LocalizedAnchor key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs text-background/70 hover:text-primary transition-colors">
               <s.Icon size={14}/> <Text value={s.label}/>
             </LocalizedAnchor>))}
-          <span aria-label="TikTok" aria-disabled="true" className="text-background/30"><Music2 size={14}/></span>
+          <span role="img" aria-label="TikTok" aria-disabled="true" className="text-background/30"><Music2 size={14}/></span>
           <LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="text-xs bg-primary text-primary-foreground font-bold px-4 py-2 rounded-lg hover:bg-primary-hover transition-all"><Text value={" WhatsApp \u2192 "}/></LocalizedAnchor>
         </div>
       </div>

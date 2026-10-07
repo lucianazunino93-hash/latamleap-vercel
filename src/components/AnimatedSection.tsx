@@ -1,22 +1,7 @@
-import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
-interface Props {
-  children: ReactNode;
-  className?: string;
-  delay?: number;
-}
+interface Props { children: ReactNode; className?: string; delay?: number; }
 
-const AnimatedSection = ({ children, className = "", delay = 0 }: Props) => (
-  <motion.div
-    initial={false}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
-    transition={{ duration: 0.6, delay, ease: "easeOut" }}
-    className={className}
-  >
-    {children}
-  </motion.div>
-);
-
+// Sections already render visibly in static HTML; no animation runtime is needed.
+const AnimatedSection = ({ children, className = "" }: Props) => <div className={className}>{children}</div>;
 export default AnimatedSection;

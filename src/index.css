@@ -1,3 +1,6 @@
+@font-face { font-family: "DM Sans"; font-style: normal; font-weight: 400 700; font-display: optional; src: url("/fonts/dm-sans-latin.woff2") format("woff2"); }
+@font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 500 700; font-display: optional; src: url("/fonts/space-grotesk-latin.woff2") format("woff2"); }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,8 +17,9 @@
     --popover-foreground: 195 83% 16%;
 
     --primary: 11 100% 60%;
-    --primary-foreground: 0 0% 100%;
-    --primary-hover: 9 84% 51%;
+    --primary-foreground: 195 83% 16%;
+    --primary-hover: 11 100% 65%;
+    --primary-text: 11 80% 38%;
 
     --secondary: 31 61% 91%;
     --secondary-foreground: 195 83% 16%;
@@ -38,7 +42,7 @@
     --surface-elevated: 0 0% 100%;
     --surface-border: 28 28% 78%;
     --text-secondary: 193 22% 38%;
-    --text-muted: 193 14% 52%;
+    --text-muted: 193 22% 38%;
     --accent-glow: 11 100% 82%;
     --error: 0 100% 63.5%;
     --ghost-border: 195 22% 65%;
@@ -106,7 +110,7 @@
   }
 
   .section-kicker {
-    @apply text-xs font-bold uppercase text-primary mb-5;
+    @apply text-xs font-bold uppercase text-primary-text mb-5;
     letter-spacing: .12em;
   }
 }
@@ -117,3 +121,5 @@
 
 section[id] { scroll-margin-top: 5rem; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+.bg-foreground .text-primary-text { color: hsl(var(--primary)); }
