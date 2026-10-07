@@ -3,15 +3,20 @@ import { Link, useParams } from "react-router-dom";
 import catalog from "../../shared/catalog.json";
 import care from "../../shared/care.json";
 import { money } from "@/lib/money";
+import { useCurrency } from "@/lib/currency-context";
+import { Text, LocalizedAnchor } from "@/lib/language";
+import { formatPrice } from "../../shared/pricing.mjs";
 import { Button } from "@/components/ui/button";
 
 export default function Purchase() {
+  const { currency } = useCurrency();
   const { planId } = useParams();
   const plan = catalog.find(p => p.id === planId);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [serviceMode, setServiceMode] = useState("independent");
   if (!plan) return <section className="pt-32 p-6"><h1>Paquete no encontrado</h1><Link to="/#precios">Ver paquetes</Link></section>;
+  if (currency === "USD") return <section className="pt-32 pb-20 px-6 max-w-3xl mx-auto"><h1 className="text-4xl font-bold mb-5"><Text value={plan.name}/></h1><p className="text-3xl font-bold mb-6"><Text value="Desde "/>{formatPrice(plan, "USD")}</p><p className="text-muted-foreground mb-6"><Text value="El pago internacional se coordina al confirmar el alcance. Consultanos para acordar la contratación."/></p><Button asChild><LocalizedAnchor href="/#contacto"><Text value="Contanos tu proyecto"/></LocalizedAnchor></Button></section>;
   return <section className="pt-32 pb-20 px-6 max-w-3xl mx-auto"><p className="section-kicker">1. Tu proyecto</p><h1 className="text-4xl font-bold mb-5">{plan.name}</h1><p className="text-3xl font-bold mb-6">{money(plan.price)} ARS · desarrollo del alcance base</p><ul className="space-y-3 mb-6">{plan.features.map(f => <li key={f}>✓ {f}</li>)}</ul><p className="text-muted-foreground mb-6">Incluye una instancia inicial para definir público, oferta y mensaje, y acompañamiento durante el desarrollo. Comprás exclusivamente el alcance detallado. Luego del pago, verificamos la operación y coordinamos el inicio y el cronograma. Las ampliaciones requieren una propuesta adicional.</p>
     <form className="space-y-5" onSubmit={async e => { e.preventDefault(); setBusy(true); setError(""); const data = new FormData(e.currentTarget); try { const r = await fetch("/api/checkout", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({planId:plan.id,email:data.get("email"),serviceMode})}); const result = await r.json(); if (!r.ok || !result.url) throw new Error(); const url = new URL(result.url); if (url.protocol !== "https:" || !["www.mercadopago.com.ar","sandbox.mercadopago.com.ar"].includes(url.hostname)) throw new Error(); window.location.assign(url.href); } catch {setError("No pudimos abrir el pago. Podés contactarnos para coordinar la compra; no se realizó ningún cobro desde este formulario.");} finally {setBusy(false);} }}>
     <fieldset className="space-y-4"><legend className="text-2xl font-bold mb-4">2. Elegí cómo seguir después del lanzamiento</legend>

@@ -1,4 +1,5 @@
 import { createHash } from 'node:crypto';
+import { isCurrency } from '../shared/pricing.mjs';
 const solutions = ['Una landing', 'Una Web profesional', 'Una tienda online', 'Marketing o marca', 'Una solución a medida', 'Necesito orientación'];
 const clean = (value, max) => typeof value === 'string' && value.trim().length <= max ? value.trim() : null;
 
@@ -23,6 +24,8 @@ export function createLeadHandler({ apiKey = process.env.RESEND_API_KEY, domain 
       if (data.website) return send(200, { ok: true });
       const name = clean(data.name, 100), email = clean(data.email, 254), phone = clean(data.phone ?? '', 40), project = clean(data.project, 1500);
       if (!name || /[\r\n]/.test(name) || !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || /[\r\n]/.test(email) || phone === null || (phone && !/^[+\d\s().-]{6,40}$/.test(phone)) || !project || !solutions.includes(data.solution) || !['es', 'en'].includes(data.language) || !/^[\da-f-]{36}$/i.test(data.submissionId ?? '')) return send(400, { error: 'invalid_lead' });
+      const currency = data.currency ?? 'ARS';
+      if (!isCurrency(currency)) return send(400, { error: 'invalid_currency' });
       if (!apiKey || domain !== 'latamleap.com') return send(503, { error: 'email_unavailable' });
       const time = now();
       for (const [key, value] of attempts) if (time - value.start > 60000) attempts.delete(key);
@@ -30,8 +33,8 @@ export function createLeadHandler({ apiKey = process.env.RESEND_API_KEY, domain 
       const attempt = attempts.get(ip) || { start: time, count: 0 };
       if (attempt.count >= 5) return send(429, { error: 'too_many_requests' });
       attempt.count += 1; attempts.set(ip, attempt);
-      const text = `Nueva consulta desde Latam Leap\n\nNombre: ${name}\nEmail: ${email}\nTeléfono / WhatsApp: ${phone || 'No indicado'}\nSolución: ${data.solution}\nIdioma: ${data.language}\n\nProyecto:\n${project}\n\nPodés responder este correo directamente para contactar al cliente.`;
-      const digest = createHash('sha256').update(JSON.stringify([name, email, phone, data.solution, project, data.language, data.submissionId])).digest('hex');
+      const text = `Nueva consulta desde Latam Leap\n\nNombre: ${name}\nEmail: ${email}\nTeléfono / WhatsApp: ${phone || 'No indicado'}\nSolución: ${data.solution}\nIdioma: ${data.language}\nMoneda de referencia: ${currency}\n\nProyecto:\n${project}\n\nPodés responder este correo directamente para contactar al cliente.`;
+      const digest = createHash('sha256').update(JSON.stringify([name, email, phone, data.solution, project, data.language, currency, data.submissionId])).digest('hex');
       const result = await fetcher('https://api.resend.com/emails', {
         method: 'POST', headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'Idempotency-Key': `lead-${digest}` }, signal: AbortSignal.timeout(15000),
         body: JSON.stringify({ from: `Latam Leap <consultas@${domain}>`, to: [recipient], reply_to: email, subject: `Nueva consulta · ${data.solution} · ${name}`, text }),

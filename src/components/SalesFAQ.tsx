@@ -1,4 +1,4 @@
-import { Text, LocalizedAnchor } from "@/lib/language";
+import { Text } from "@/lib/language";
 import care from "../../shared/care.json";
 import { money } from "@/lib/money";
 const questions = [

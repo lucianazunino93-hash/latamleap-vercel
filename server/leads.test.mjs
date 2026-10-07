@@ -40,3 +40,11 @@ test('limits bursts and permits requests after the window expires', async () => 
   time = 60001;
   assert.equal((await run(handler)).status, 200);
 });
+
+test('includes the selected currency in the email and rejects unsupported currencies', async () => {
+  let text;
+  const handler = createLeadHandler({ apiKey: 'test', fetcher: async (_, options) => { text = JSON.parse(options.body).text; return { ok: true, json: async () => ({ id: 'sent' }) }; } });
+  assert.equal((await run(handler, { ...lead, currency: 'USD' })).status, 200);
+  assert.match(text, /Moneda de referencia: USD/);
+  assert.equal((await run(handler, { ...lead, currency: 'EUR' })).status, 400);
+});

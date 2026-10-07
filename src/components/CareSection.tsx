@@ -1,14 +1,20 @@
+import { useContext } from "react";
+import { LanguageContext } from "@/lib/language-context";
+import { useCurrency } from "@/lib/currency-context";
+import { formatPrice } from "../../shared/pricing.mjs";
+import PriceComparison from "./PriceComparison";
 import { Text, LocalizedAnchor } from "@/lib/language";
 import care from "../../shared/care.json";
-import { money } from "@/lib/money";
 export default function CareSection() {
+    const { currency } = useCurrency();
+    const language = useContext(LanguageContext);
     return <section id="cuidado" className="py-20 bg-card"><div className="max-w-7xl mx-auto px-5 sm:px-6">
     <p className="section-kicker"><Text value={"Despu\u00E9s del lanzamiento"}/></p>
     <h2 className="text-4xl md:text-5xl font-bold mb-5"><Text value={"Eleg\u00EDs c\u00F3mo seguir."}/></h2>
     <p className="text-lg text-muted-foreground max-w-3xl mb-10"><Text value={"Te acompa\u00F1amos durante el desarrollo en ambas opciones. Al comprar, eleg\u00EDs si quer\u00E9s sumar el cuidado de tu web despu\u00E9s de publicarla."}/></p>
     <div className="grid md:grid-cols-2 gap-6">
       <article className="border border-border rounded-xl p-7"><h3 className="text-2xl font-bold mb-4"><Text value={"Entrega independiente"}/></h3><p className="font-bold mb-4"><Text value={"Sin abono de acompa\u00F1amiento"}/></p><p className="text-muted-foreground mb-5"><Text value={"Recib\u00EDs tu web y una gu\u00EDa para dar los pr\u00F3ximos pasos. Dominio y hosting se pagan aparte. Las modificaciones posteriores llevan un presupuesto propio."}/></p><p className="text-sm text-muted-foreground"><Text value={"Web profesional y tienda incluyen panel y capacitaci\u00F3n. En la landing, los cambios los realizamos nosotros bajo presupuesto."}/></p></article>
-      <article className="border border-primary rounded-xl p-7"><h3 className="text-2xl font-bold mb-4"><Text value={"Cuidado mensual"}/></h3><p className="text-3xl font-bold mb-2">{money(care.price)}<Text value={" ARS/mes"}/></p><p className="text-sm text-muted-foreground mb-5"><Text value={"Adicional al desarrollo. Comienza el mes siguiente a la publicaci\u00F3n."}/></p><ul className="space-y-3"><li><Text value={"Hosting y dominio est\u00E1ndar incluidos."}/></li><li><Text value={"Hasta "}/>{care.requestsPerMonth}<Text value={" solicitudes y "}/>{care.hoursPerMonth}<Text value={" horas en total al mes, entre cambios y soporte t\u00E9cnico."}/></li><li><Text value={"Textos, im\u00E1genes, datos y ajustes sobre lo que ya existe."}/></li><li><Text value={"Cancelaci\u00F3n sin permanencia y traspaso est\u00E1ndar incluidos."}/></li></ul><p className="text-sm text-muted-foreground mt-5"><Text value={"Horas y solicitudes no acumulables. Nuevas p\u00E1ginas, redise\u00F1os, integraciones y excedentes se presupuestan antes de realizarse."}/></p></article>
+      <article className="border border-primary rounded-xl p-7"><h3 className="text-2xl font-bold mb-4"><Text value={"Cuidado mensual"}/></h3><p className="text-3xl font-bold mb-2">{formatPrice(care, currency, language)}<span>{language === "es" ? "/mes" : "/month"}</span></p><p className="text-sm text-muted-foreground mb-5"><Text value={"Adicional al desarrollo. Comienza el mes siguiente a la publicaci\u00F3n."}/></p><PriceComparison item={care}/><ul className="space-y-3"><li><Text value={"Hosting y dominio est\u00E1ndar incluidos."}/></li><li><Text value={"Hasta "}/>{care.requestsPerMonth}<Text value={" solicitudes y "}/>{care.hoursPerMonth}<Text value={" horas en total al mes, entre cambios y soporte t\u00E9cnico."}/></li><li><Text value={"Textos, im\u00E1genes, datos y ajustes sobre lo que ya existe."}/></li><li><Text value={"Cancelaci\u00F3n sin permanencia y traspaso est\u00E1ndar incluidos."}/></li></ul><p className="text-sm text-muted-foreground mt-5"><Text value={"Horas y solicitudes no acumulables. Nuevas p\u00E1ginas, redise\u00F1os, integraciones y excedentes se presupuestan antes de realizarse."}/></p></article>
     </div>
     <details className="mt-7 border border-border rounded-xl p-5"><summary className="font-bold cursor-pointer"><Text value={"Dominio, hosting y condiciones de salida"}/></summary><div className="space-y-4 text-sm text-muted-foreground mt-5"><p><Text value={care.domain}/></p><p><Text value={care.hosting}/></p><p><Text value={care.cancellation}/><Text value={" Desde la baja, los costos del nuevo proveedor quedan a tu cargo."}/></p><p><Text value={care.backup}/></p></div></details>
   </div></section>;

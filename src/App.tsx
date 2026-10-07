@@ -1,4 +1,5 @@
 import { LanguageContext } from "./lib/language-context";
+import { CurrencyProvider } from "./lib/currency";
 import Purchase from "./pages/Purchase";
 import PaymentReturn from "./pages/PaymentReturn";
 import SEO from "./components/SEO";
@@ -19,7 +20,7 @@ const App = ({ url = "/" }: { url?: string }) => {
  const language = (typeof window === "undefined" ? url : window.location.pathname).match(/^\/en(?:\/|$)/) ? "en" : "es";
  const Router = typeof window === "undefined" ? StaticRouter : BrowserRouter;
  return (
-  <LanguageContext.Provider value={language}>
+  <LanguageContext.Provider value={language}><CurrencyProvider>
       <Router location={url} basename={language === "en" ? "/en" : "/"}>
         <SEO /><Routes>
           <Route element={<Layout />}>
@@ -35,7 +36,7 @@ const App = ({ url = "/" }: { url?: string }) => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
-  </LanguageContext.Provider>
+  </CurrencyProvider></LanguageContext.Provider>
  );
 };
 

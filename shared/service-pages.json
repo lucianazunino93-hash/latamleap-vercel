@@ -1,94 +1,169 @@
 [
   {
-    "id": "landing", "path": "/services/landing-pages",
+    "id": "landing",
+    "path": "/services/landing-pages",
     "es": {
       "title": "Diseño de landing pages en Argentina | Latam Leap",
-      "description": "Landing pages a medida desde ${price} ARS. Una página con hasta seis secciones, textos comerciales, formulario, WhatsApp y SEO técnico inicial.",
+      "description": "Landing pages a medida desde {currency} {price}. Una página con hasta seis secciones, textos comerciales, formulario, WhatsApp y SEO técnico inicial.",
       "heading": "Una landing que convierta el interés en una consulta.",
-      "intro": "El diseño de una landing page reúne tu oferta en una sola página y guía al visitante hacia una acción: consultar, pedir un presupuesto o conocer un lanzamiento. En Latam Leap combinamos mensaje comercial, diseño y desarrollo a medida para negocios en Argentina.",
+      "intro": "El diseño de una landing page reúne tu oferta en una sola página y guía al visitante hacia una acción: consultar, pedir un presupuesto o conocer un lanzamiento. En Latam Leap combinamos mensaje comercial, diseño y desarrollo a medida para negocios en Argentina y otros países.",
       "fit": "Para profesionales, servicios y campañas con una oferta concreta. Si necesitás explicar varios servicios en páginas separadas, una web profesional puede darte más espacio.",
       "example": "Una página para un servicio de psicología, una campaña comercial o el lanzamiento de un producto, con una propuesta clara y un formulario de consulta.",
       "questions": [
-        ["¿Cuánto cuesta una landing page?", "El alcance base comienza en ${price} ARS, como pago único. El precio final depende de las funcionalidades y el contenido acordados antes de empezar."],
-        ["¿Qué información tengo que aportar?", "La información de tu negocio, el servicio o producto, tu marca y los materiales disponibles. Trabajamos los textos comerciales a partir de esa información."],
-        ["¿Puedo actualizar la landing después?", "Los cambios los realizamos nosotros: con un presupuesto aparte o dentro del cuidado mensual opcional."],
-        ["¿Incluye campañas de publicidad?", "Incluye la página y el alcance de desarrollo indicado. La gestión de campañas, los anuncios y su inversión se cotizan por separado."]
+        [
+          "¿Cuánto cuesta una landing page?",
+          "El alcance base comienza en {currency} {price}, como pago único. El precio final depende de las funcionalidades y el contenido acordados antes de empezar."
+        ],
+        [
+          "¿Qué información tengo que aportar?",
+          "La información de tu negocio, el servicio o producto, tu marca y los materiales disponibles. Trabajamos los textos comerciales a partir de esa información."
+        ],
+        [
+          "¿Puedo actualizar la landing después?",
+          "Los cambios los realizamos nosotros: con un presupuesto aparte o dentro del cuidado mensual opcional."
+        ],
+        [
+          "¿Incluye campañas de publicidad?",
+          "Incluye la página y el alcance de desarrollo indicado. La gestión de campañas, los anuncios y su inversión se cotizan por separado."
+        ]
       ]
     },
     "en": {
-      "title": "Custom landing page design in Argentina | Latam Leap",
-      "description": "Custom landing pages from ARS {price}. One page with up to six sections, sales copy, an inquiry form, WhatsApp and initial technical SEO.",
+      "title": "Custom landing page design | Latam Leap",
+      "description": "Custom landing pages from {currency} {price}. One page with up to six sections, sales copy, an inquiry form, WhatsApp and initial technical SEO.",
       "heading": "A landing page that turns interest into an inquiry.",
-      "intro": "A landing page brings your offer into one page and guides visitors toward an action: making an inquiry, requesting a quote or exploring a launch. Latam Leap combines sales messaging, design and custom development for businesses in Argentina.",
+      "intro": "A landing page brings your offer into one page and guides visitors toward an action: making an inquiry, requesting a quote or exploring a launch. Latam Leap combines sales messaging, design and custom development for businesses in Argentina and abroad.",
       "fit": "For professionals, services and campaigns with a clear offer. If you need separate pages to explain several services, a business website may give you more room.",
       "example": "A page for a psychology service, a commercial campaign or a product launch, with a clear offer and an inquiry form.",
       "questions": [
-        ["How much does a landing page cost?", "The base scope starts at ARS {price} as a one-time payment. The final price depends on the features and content agreed before development."],
-        ["What information do I need to provide?", "Your business information, service or product details, brand assets and available materials. We develop the sales copy from that information."],
-        ["Can I update the landing page later?", "We handle changes under a separate quote or within optional monthly care."],
-        ["Does it include advertising campaigns?", "It includes the page and the stated development scope. Campaign management, advertisements and ad spend are quoted separately."]
+        [
+          "How much does a landing page cost?",
+          "The base scope starts at {currency} {price} as a one-time payment. The final price depends on the features and content agreed before development."
+        ],
+        [
+          "What information do I need to provide?",
+          "Your business information, service or product details, brand assets and available materials. We develop the sales copy from that information."
+        ],
+        [
+          "Can I update the landing page later?",
+          "We handle changes under a separate quote or within optional monthly care."
+        ],
+        [
+          "Does it include advertising campaigns?",
+          "It includes the page and the stated development scope. Campaign management, advertisements and ad spend are quoted separately."
+        ]
       ]
     }
   },
   {
-    "id": "sitio", "path": "/services/business-websites",
+    "id": "sitio",
+    "path": "/services/business-websites",
     "es": {
       "title": "Diseño de páginas web para negocios en Argentina | Latam Leap",
-      "description": "Webs profesionales a medida desde ${price} ARS. Hasta cinco páginas, diseño y textos, panel de administración, formulario, WhatsApp y capacitación.",
+      "description": "Webs profesionales a medida desde {currency} {price}. Hasta cinco páginas, diseño y textos, panel de administración, formulario, WhatsApp y capacitación.",
       "heading": "Una web profesional que muestre por qué elegirte.",
-      "intro": "Una web profesional le da a tu negocio un espacio propio para presentar servicios, experiencia y formas de contacto. Latam Leap diseña y desarrolla páginas web a medida para profesionales y comercios en Argentina, con un panel para editar el contenido.",
+      "intro": "Una web profesional le da a tu negocio un espacio propio para presentar servicios, experiencia y formas de contacto. Latam Leap diseña y desarrolla páginas web a medida para profesionales y comercios en Argentina y otros países, con un panel para editar el contenido.",
       "fit": "Para negocios con varios servicios, información que merece páginas propias y contenido que quieren administrar. El alcance base permite hasta cinco páginas.",
       "example": "Una web para especialistas veterinarias con información de servicios, presentación del equipo y un camino claro para consultar. Podés ver vet.mavie entre nuestros proyectos.",
       "questions": [
-        ["¿Cuánto cuesta una web profesional?", "El alcance base comienza en ${price} ARS, como pago único. Acordamos las páginas, el contenido y las funcionalidades antes de confirmar el presupuesto."],
-        ["¿Puedo manejar el contenido yo?", "Sí. La web profesional incluye panel de administración y capacitación para las tareas habituales."],
-        ["¿Qué diferencia tiene con una landing?", "La landing concentra una oferta en una sola página. Una web profesional puede distribuir servicios, experiencia y contacto en hasta cinco páginas."],
-        ["¿Incluye SEO?", "Incluye SEO inicial por página y configuración de medición con tu cuenta. El posicionamiento depende también de la competencia, el contenido y el trabajo posterior; no prometemos una posición determinada."]
+        [
+          "¿Cuánto cuesta una web profesional?",
+          "El alcance base comienza en {currency} {price}, como pago único. Acordamos las páginas, el contenido y las funcionalidades antes de confirmar el presupuesto."
+        ],
+        [
+          "¿Puedo manejar el contenido yo?",
+          "Sí. La web profesional incluye panel de administración y capacitación para las tareas habituales."
+        ],
+        [
+          "¿Qué diferencia tiene con una landing?",
+          "La landing concentra una oferta en una sola página. Una web profesional puede distribuir servicios, experiencia y contacto en hasta cinco páginas."
+        ],
+        [
+          "¿Incluye SEO?",
+          "Incluye SEO inicial por página y configuración de medición con tu cuenta. El posicionamiento depende también de la competencia, el contenido y el trabajo posterior; no prometemos una posición determinada."
+        ]
       ]
     },
     "en": {
-      "title": "Custom business website design in Argentina | Latam Leap",
-      "description": "Custom business websites from ARS {price}. Up to five pages, design and copy, an admin panel, inquiry form, WhatsApp and training.",
+      "title": "Custom business website design | Latam Leap",
+      "description": "Custom business websites from {currency} {price}. Up to five pages, design and copy, an admin panel, inquiry form, WhatsApp and training.",
       "heading": "A business website that shows why people should choose you.",
-      "intro": "A business website gives you your own space to present services, experience and ways to get in touch. Latam Leap designs and develops custom websites for professionals and businesses in Argentina, with an admin panel to edit content.",
+      "intro": "A business website gives you your own space to present services, experience and ways to get in touch. Latam Leap designs and develops custom websites for professionals and businesses in Argentina and abroad, with an admin panel to edit content.",
       "fit": "For businesses with several services, information that deserves separate pages and content they want to manage. The base scope includes up to five pages.",
       "example": "A website for veterinary specialists with service information, a team introduction and a clear path to inquire. Explore vet.mavie in our selected projects.",
       "questions": [
-        ["How much does a business website cost?", "The base scope starts at ARS {price} as a one-time payment. We agree on pages, content and features before confirming the quote."],
-        ["Can I manage the content myself?", "Yes. The business website includes an admin panel and training for everyday tasks."],
-        ["How is it different from a landing page?", "A landing page focuses on one offer on a single page. A business website can organize services, experience and contact information across up to five pages."],
-        ["Does it include SEO?", "It includes initial SEO for each page and analytics setup with your account. Rankings also depend on competition, content and ongoing work; we do not promise a specific position."]
+        [
+          "How much does a business website cost?",
+          "The base scope starts at {currency} {price} as a one-time payment. We agree on pages, content and features before confirming the quote."
+        ],
+        [
+          "Can I manage the content myself?",
+          "Yes. The business website includes an admin panel and training for everyday tasks."
+        ],
+        [
+          "How is it different from a landing page?",
+          "A landing page focuses on one offer on a single page. A business website can organize services, experience and contact information across up to five pages."
+        ],
+        [
+          "Does it include SEO?",
+          "It includes initial SEO for each page and analytics setup with your account. Rankings also depend on competition, content and ongoing work; we do not promise a specific position."
+        ]
       ]
     }
   },
   {
-    "id": "tienda", "path": "/services/online-stores",
+    "id": "tienda",
+    "path": "/services/online-stores",
     "es": {
-      "title": "Diseño de tiendas online con Mercado Pago en Argentina | Latam Leap",
-      "description": "Tiendas online a medida desde ${price} ARS. Catálogo inicial de hasta 30 productos, carrito, Mercado Pago, envíos, panel de pedidos y capacitación.",
+      "title": "Diseño de tiendas online a medida | Latam Leap",
+      "description": "Tiendas online a medida desde {currency} {price}. Hasta 30 productos, carrito, pagos según tu país, envíos, panel de pedidos y capacitación.",
       "heading": "Una tienda online para organizar tus ventas.",
-      "intro": "Una tienda online reúne catálogo, pedidos y pagos en un mismo lugar. Latam Leap desarrolla tiendas a medida para negocios en Argentina, con configuración de Mercado Pago, envíos según tu operación y un panel para administrar productos y pedidos.",
+      "intro": "Una tienda online reúne catálogo, pedidos y pagos en un mismo lugar. Desarrollamos tiendas a medida desde Argentina para negocios de distintos países. Definimos los medios de pago y los envíos según tu operación, con un panel para administrar productos y pedidos.",
       "fit": "Para comercios que quieren mostrar sus productos y recibir pedidos con pagos online. Si necesitás reservas, suscripciones o una operación especial, definimos primero el alcance a medida.",
       "example": "Un comercio que quiere pasar de enviar fotos y coordinar pedidos manualmente a un catálogo con carrito, pagos y gestión de pedidos.",
       "questions": [
-        ["¿Cuánto cuesta una tienda online?", "El alcance base comienza en ${price} ARS, como pago único, e incluye un catálogo inicial de hasta 30 productos. Las funciones adicionales se presupuestan según la operación."],
-        ["¿Incluye Mercado Pago?", "Incluye carrito y configuración de Mercado Pago con tu cuenta. Las comisiones del proveedor de pagos y los cargos de plataformas o licencias se pagan por separado."],
-        ["¿Puedo cargar productos y gestionar pedidos?", "Sí. Incluye panel de productos y pedidos, y capacitación para administrar las tareas habituales."],
-        ["¿Cómo se configuran los envíos?", "Acordamos la configuración según tu operación y el alcance del proyecto. Las integraciones especiales con logística se revisan antes de confirmar el presupuesto."]
+        [
+          "¿Cuánto cuesta una tienda online?",
+          "El alcance base comienza en {currency} {price}, como pago único, e incluye un catálogo inicial de hasta 30 productos. Las funciones adicionales se presupuestan según la operación."
+        ],
+        [
+          "¿Incluye Mercado Pago?",
+          "Configuramos Mercado Pago cuando está disponible para el país de tu operación. Para otros mercados acordamos el proveedor y el alcance antes de contratar. Las comisiones del proveedor y los cargos de plataformas o licencias se pagan por separado."
+        ],
+        [
+          "¿Puedo cargar productos y gestionar pedidos?",
+          "Sí. Incluye panel de productos y pedidos, y capacitación para administrar las tareas habituales."
+        ],
+        [
+          "¿Cómo se configuran los envíos?",
+          "Acordamos la configuración según tu operación y el alcance del proyecto. Las integraciones especiales con logística se revisan antes de confirmar el presupuesto."
+        ]
       ]
     },
     "en": {
-      "title": "Custom online stores with Mercado Pago in Argentina | Latam Leap",
-      "description": "Custom online stores from ARS {price}. An initial catalog of up to 30 products, cart, Mercado Pago, shipping, order management and training.",
+      "title": "Custom online store development | Latam Leap",
+      "description": "Custom online stores from {currency} {price}. Up to 30 products, cart, payments for your country, shipping, order management and training.",
       "heading": "An online store that organizes your sales.",
-      "intro": "An online store brings your catalog, orders and payments together. Latam Leap develops custom stores for businesses in Argentina, with Mercado Pago setup, shipping configured for your operation and a panel to manage products and orders.",
+      "intro": "An online store brings your catalog, orders and payments together. We develop custom stores from Argentina for businesses across countries. Payment and shipping options are agreed for your operation, with a panel to manage products and orders.",
       "fit": "For businesses that want to showcase products and accept orders with online payments. For bookings, subscriptions or special operations, we first define a custom scope.",
       "example": "A business moving from sending product photos and manually coordinating orders to a catalog with a cart, payments and order management.",
       "questions": [
-        ["How much does an online store cost?", "The base scope starts at ARS {price} as a one-time payment and includes an initial catalog of up to 30 products. Additional features are quoted for your operation."],
-        ["Does it include Mercado Pago?", "It includes a cart and Mercado Pago configuration with your account. Payment provider fees and platform or license charges are paid separately."],
-        ["Can I add products and manage orders?", "Yes. It includes a product and order management panel and training for everyday tasks."],
-        ["How is shipping configured?", "We agree on configuration for your operation and project scope. Special logistics integrations are reviewed before confirming the quote."]
+        [
+          "How much does an online store cost?",
+          "The base scope starts at {currency} {price} as a one-time payment and includes an initial catalog of up to 30 products. Additional features are quoted for your operation."
+        ],
+        [
+          "Does it include Mercado Pago?",
+          "We configure Mercado Pago where it is available for your business location. For other markets, the payment provider and scope are agreed before contracting. Provider fees and platform or license charges are paid separately."
+        ],
+        [
+          "Can I add products and manage orders?",
+          "Yes. It includes a product and order management panel and training for everyday tasks."
+        ],
+        [
+          "How is shipping configured?",
+          "We agree on configuration for your operation and project scope. Special logistics integrations are reviewed before confirming the quote."
+        ]
       ]
     }
   }

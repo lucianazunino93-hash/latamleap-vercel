@@ -5,6 +5,7 @@ import { useContext, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CurrencySelector from "./CurrencySelector";
 import { WHATSAPP_URL } from "./HomeSections";
 const links = [
     { label: "Soluciones", href: "/#soluciones" },
@@ -39,7 +40,7 @@ const Navbar = () => {
           <Button asChild><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value={"Contanos tu proyecto"}/></LocalizedAnchor></Button>
         </div>
 
-        <div className="flex items-center gap-4"><LanguageSwitcher /><button className="lg:hidden text-foreground p-2 -mr-2" onClick={() => setOpen(!open)} aria-label={language === "en" ? (open ? "Close menu" : "Open menu") : (open ? "Cerrar menú" : "Abrir menú")} aria-expanded={open}>
+        <div className="flex items-center gap-3"><CurrencySelector /><LanguageSwitcher /><button className="lg:hidden text-foreground p-2 -mr-2" onClick={() => setOpen(!open)} aria-label={language === "en" ? (open ? "Close menu" : "Open menu") : (open ? "Cerrar menú" : "Abrir menú")} aria-expanded={open}>
           {open ? <X size={24}/> : <Menu size={24}/>}
         </button></div>
       </div>

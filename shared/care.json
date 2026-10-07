@@ -5,5 +5,6 @@
   "domain": "Un dominio estándar .com.ar disponible, registrado a tu nombre. No incluye dominios premium, compra a terceros ni otras extensiones; cualquier diferencia se presupuesta antes de contratar.",
   "hosting": "Hosting para el alcance base contratado. Ampliaciones por tráfico, almacenamiento o funcionalidades especiales se presupuestan previamente.",
   "cancellation": "Sin permanencia mínima. Incluye entrega de accesos, archivos y bases de datos, y un traspaso estándar al proveedor que elijas. Adaptaciones especiales al nuevo proveedor se cotizan aparte.",
-  "backup": "Conservamos una copia de respaldo de la base de datos durante seis meses después de la baja y luego la eliminamos. El respaldo no mantiene tu web publicada."
+  "backup": "Conservamos una copia de respaldo de la base de datos durante seis meses después de la baja y luego la eliminamos. El respaldo no mantiene tu web publicada.",
+  "priceUSD": 49
 }

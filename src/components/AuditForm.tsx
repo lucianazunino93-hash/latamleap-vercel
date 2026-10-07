@@ -1,4 +1,5 @@
 import { Text, LocalizedAnchor } from "@/lib/language";
+import { useCurrency } from "@/lib/currency-context";
 import { LanguageContext } from "@/lib/language-context";
 import { useContext, useId, useRef, useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button";
 interface Props { showIndustry?: boolean; buttonText?: string; showWhatsAppAlt?: boolean; }
 
 export default function AuditForm({ showWhatsAppAlt = true }: Props) {
+  const { currency } = useCurrency();
   const language = useContext(LanguageContext);
   const id = useId();
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -21,7 +23,7 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
     const payload = {
       name: String(fields.get("name") ?? "").trim(), email: String(fields.get("email") ?? "").trim(),
       phone: String(fields.get("phone") ?? "").trim(), solution: String(fields.get("solution") ?? ""),
-      project: String(fields.get("project") ?? "").trim(), website: String(fields.get("website") ?? ""), language,
+      project: String(fields.get("project") ?? "").trim(), website: String(fields.get("website") ?? ""), language, currency,
     };
     const fingerprint = JSON.stringify(payload);
     if (submission.current.fingerprint !== fingerprint) submission.current = { fingerprint, id: crypto.randomUUID() };

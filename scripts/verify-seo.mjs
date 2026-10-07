@@ -29,8 +29,9 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   for (const [lang, url] of Object.entries(model.alternates(route))) assert.equal(document.querySelector(`link[hreflang="${lang}"]`).href, url);
   for (const service of graph.filter(item => item['@type'] === 'Service')) {
     const plan = catalog.find(item => service['@id'].includes(servicePages.find(entry => entry.id === item.id).path));
-    assert.equal(service.offers.lowPrice, plan.price);
-    assert.equal(service.offers.priceCurrency, 'ARS');
+    assert.equal(service.offers.find(offer => offer.priceCurrency === 'ARS').lowPrice, plan.price);
+    assert.equal(service.offers.find(offer => offer.priceCurrency === 'USD').lowPrice, plan.priceUSD);
+    assert.ok(document.body.textContent.includes('USD'), `${route}: international price visible in comparison`);
   }
   assert.ok(!html.includes('storage.googleapis.com/gpt-engineer-file-uploads'));
   assert.ok(!document.body.textContent.includes('{price}'), `${route}: expanded prices`);

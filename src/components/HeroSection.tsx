@@ -20,7 +20,7 @@ const HeroSection = () => (<section className="relative pt-28 lg:pt-36 pb-16 lg:
             <Button asChild size="lg" variant="outline"><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value={"Necesito orientaci\u00F3n "}/><MessageCircle /></LocalizedAnchor></Button>
           </div>
 
-          <p className="text-sm text-text-muted leading-relaxed mt-6"><Text value={" Estrategia y desarrollo en Argentina. Un proceso simple, con acompa\u00F1amiento. "}/></p>
+          <p className="text-sm text-text-muted leading-relaxed mt-6"><Text value={" Desde Argentina, para negocios que quieren dar el salto. Un proceso simple, con acompa\u00F1amiento. "}/></p>
           <SocialLinks />
         </div>
 

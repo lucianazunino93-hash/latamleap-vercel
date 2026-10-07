@@ -11,7 +11,8 @@
       "Formulario y WhatsApp",
       "SEO técnico inicial y publicación",
       "Dos rondas de ajustes"
-    ]
+    ],
+    "priceUSD": 349
   },
   {
     "id": "sitio",
@@ -26,7 +27,8 @@
       "Configuración de medición con tu cuenta",
       "Dos rondas de ajustes",
       "Panel de administración y capacitación"
-    ]
+    ],
+    "priceUSD": 789
   },
   {
     "id": "tienda",
@@ -35,11 +37,12 @@
     "description": "Mostrá tus productos y recibí pedidos con pagos online.",
     "features": [
       "Catálogo inicial de hasta 30 productos",
-      "Carrito y configuración de Mercado Pago",
+      "Carrito y configuración de pagos según tu país",
       "Configuración de envíos según tu operación",
       "Panel de productos y pedidos",
       "SEO inicial y capacitación",
       "Dos rondas de ajustes"
-    ]
+    ],
+    "priceUSD": 1299
   }
 ]

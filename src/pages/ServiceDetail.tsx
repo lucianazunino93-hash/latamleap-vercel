@@ -2,7 +2,9 @@ import { useContext } from "react";
 import { useParams, Link } from "react-router-dom";
 import { LanguageContext } from "@/lib/language-context";
 import { Text, LocalizedAnchor } from "@/lib/language";
-import { money } from "@/lib/money";
+import { useCurrency } from "@/lib/currency-context";
+import { formatPrice } from "../../shared/pricing.mjs";
+import PriceComparison from "@/components/PriceComparison";
 import servicePages from "../../shared/service-pages.json";
 import catalog from "../../shared/catalog.json";
 import { getServiceCopy } from "../../shared/seo-model.mjs";
@@ -11,20 +13,21 @@ import NotFound from "./NotFound";
 
 export default function ServiceDetail() {
   const { serviceSlug } = useParams();
+  const { currency } = useCurrency();
   const language = useContext(LanguageContext);
   const service = servicePages.find(item => item.path.endsWith(`/${serviceSlug}`));
   const plan = catalog.find(item => item.id === service?.id);
   if (!service || !plan) return <NotFound />;
-  const copy = getServiceCopy(service, plan, language);
+  const copy = getServiceCopy(service, plan, language, currency);
   return <>
     <section className="pt-32 pb-16 px-5 sm:px-6 max-w-7xl mx-auto">
       <nav aria-label={language === "es" ? "Ruta de navegación" : "Breadcrumb"} className="text-sm text-muted-foreground mb-8"><Link to="/"><Text value="Inicio" /></Link> / <Link to="/services"><Text value="Servicios" /></Link> / <Text value={plan.name} /></nav>
-      <p className="section-kicker"><Text value={plan.name} /> · Argentina</p>
+      <p className="section-kicker"><Text value={plan.name} /> · <Text value="Desde Argentina, para el mundo"/></p>
       <h1 className="text-4xl md:text-6xl font-bold max-w-4xl mb-6">{copy.heading}</h1>
       <p className="text-lg text-muted-foreground max-w-3xl mb-8">{copy.intro}</p>
-      <p className="text-3xl font-bold mb-2"><Text value="Desde " />{money(plan.price)} ARS</p>
+      <p className="text-3xl font-bold mb-2"><Text value="Desde " />{formatPrice(plan, currency, language)}</p>
       <p className="text-sm text-muted-foreground mb-6"><Text value="Pago único por el alcance base. Confirmamos el presupuesto antes de empezar." /></p>
-      <LocalizedAnchor href="#contacto" className="inline-flex bg-primary text-primary-foreground rounded-md px-6 py-3 font-bold"><Text value="Consultar por " /><Text value={plan.name} /></LocalizedAnchor>
+      <PriceComparison item={plan}/><LocalizedAnchor href="#contacto" className="inline-flex bg-primary text-primary-foreground rounded-md px-6 py-3 font-bold"><Text value="Consultar por " /><Text value={plan.name} /></LocalizedAnchor>
     </section>
     <section className="py-16 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-12">
       <div><h2 className="text-3xl font-bold mb-5"><Text value="Qué incluye" /></h2><ul className="space-y-3">{plan.features.map(feature => <li key={feature} className="flex gap-3"><span aria-hidden="true" className="text-primary-text">✓</span><Text value={feature} /></li>)}</ul></div>
