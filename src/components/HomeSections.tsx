@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import vetMavie from "@/assets/projects/vet-mavie.jpg";
 import gonzaloAlvarez from "@/assets/projects/gonzalo-alvarez.jpg";
 import rifaSolidaria from "@/assets/projects/rifa-solidaria.jpg";
-export const WHATSAPP_URL = "https://wa.me/5493512954849?text=Hola!%20Vi%20Latam%20Leap%20y%20me%20gustar%C3%ADa%20contarles%20sobre%20un%20proyecto%20que%20tengo%20en%20mente.";
+export const WHATSAPP_URL = "https://wa.me/5493512085644?text=Hola!%20Vi%20Latam%20Leap%20y%20me%20gustar%C3%ADa%20contarles%20sobre%20un%20proyecto%20que%20tengo%20en%20mente.";
 const projects = [
     { name: "vet.mavie", type: "Sitio web para especialistas veterinarias", image: vetMavie, href: "https://www.vetmavie.com/", alt: "Sitio web de vet.mavie" },
     { name: "Psicólogo Gonzalo Álvarez", type: "Presencia digital y captación de consultas", image: gonzaloAlvarez, href: "https://www.psicogonzaloalvarez.com/", alt: "Sitio web del psicólogo Gonzalo Álvarez" },
