@@ -10,6 +10,13 @@ assert.equal(sitemap.getElementsByTagName('url').length, Object.keys(model.pages
 for (const [route, [title, description]] of Object.entries(model.pages)) {
   const html = await fs.readFile(`dist${route === '/' ? '' : route}/index.html`, 'utf8');
   const document = new JSDOM(html).window.document;
+  for (const image of document.querySelectorAll('img')) {
+    const urls = [image.getAttribute('src'), ...image.srcset.split(',').map(entry => entry.trim().split(/\s+/)[0])].filter(Boolean);
+    for (const url of urls) {
+      assert.ok(!url.startsWith('/src/'), `${route}: no development asset URL`);
+      if (url.startsWith('/')) await fs.access(`dist${url}`);
+    }
+  }
   assert.equal(document.title, title, `${route}: title`);
   assert.equal(document.querySelector('meta[name="description"]').content, description, `${route}: description`);
   assert.equal(document.documentElement.lang, model.language(route));

@@ -19,7 +19,7 @@ Imágenes originales de los tres proyectos: 294.571 bytes en total. Variantes pa
 
 Compilación, TypeScript y validaciones de SEO para 20 rutas pasan. ESLint conserva siete advertencias existentes en componentes UI, sin errores. No se modifica la API de leads ni la configuración del correo.
 
-La nueva puntuación de PageSpeed y los tiempos FCP/LCP deben medirse después del despliegue. No se debe confundir una reducción de bytes con una mejora ya medida de la puntuación ni con posicionamiento garantizado.
+Primera medición posterior al despliegue: rendimiento móvil 98, FCP 1,4 s, LCP 1,7 s, Speed Index 3,8 s, TBT 50 ms y CLS 0. Accesibilidad 97, SEO 100 y navegación agéntica 2/2. El informe detectó contraste pendiente y peticiones 404 de imágenes del HTML prerenderizado; se corrigen mediante tokens de contraste y resolución de assets a partir del manifiesto de Vite, con comprobaciones de existencia para todas las imágenes de las 20 páginas. La puntuación de esta primera medición no sustituye la medición de la versión final ni garantiza posicionamiento.
 
 ## Próximos contenidos SEO/GEO
 
