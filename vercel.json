@@ -7,6 +7,9 @@
     "api/checkout.js": {
       "includeFiles": "shared/catalog.json",
       "maxDuration": 30
+    },
+    "api/leads.js": {
+      "maxDuration": 30
     }
   },
   "rewrites": [
