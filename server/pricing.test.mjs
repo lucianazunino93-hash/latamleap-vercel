@@ -12,8 +12,8 @@ test('Argentina gets ARS, Colombia and United States get USD, missing country sa
   for (const country of [undefined, '', ['US'], 'unknown']) assert.equal(currencyForCountry(country), 'ARS');
 });
 test('fixed international prices remain independent of language and Argentine prices', () => {
-  assert.deepEqual(catalog.map(item => priceFor(item, 'USD')), [349, 789, 1299]);
-  assert.deepEqual(catalog.map(item => priceFor(item, 'ARS')), [349000, 789000, 1299000]);
+  assert.deepEqual(catalog.map(item => priceFor(item, 'USD')), [349, 879, 879, 1299]);
+  assert.deepEqual(catalog.map(item => priceFor(item, 'ARS')), [349000, 879000, 879000, 1299000]);
   assert.equal(formatPrice(care, 'USD', 'es'), 'USD 49');
   assert.equal(formatPrice(care, 'ARS', 'en'), 'ARS 49,000');
 });

@@ -17,7 +17,7 @@
   {
     "id": "sitio",
     "name": "Web profesional",
-    "price": 789000,
+    "price": 879000,
     "description": "Mostrá el valor de tu negocio y ayudá a que te elijan.",
     "features": [
       "Hasta 5 páginas",
@@ -28,12 +28,12 @@
       "Dos rondas de ajustes",
       "Panel de administración y capacitación"
     ],
-    "priceUSD": 789
+    "priceUSD": 879
   },
   {
     "id": "tienda",
     "name": "Tienda online",
-    "price": 1299000,
+    "price": 879000,
     "description": "Mostrá tus productos y recibí pedidos con pagos online.",
     "features": [
       "Catálogo inicial de hasta 30 productos",
@@ -43,6 +43,21 @@
       "SEO inicial y capacitación",
       "Dos rondas de ajustes"
     ],
-    "priceUSD": 1299
+    "priceUSD": 879
+  },
+  {
+    "id": "custom",
+    "name": "Solución a medida",
+    "price": 1299000,
+    "priceUSD": 1299,
+    "description": "Cuando una web no alcanza, creamos una herramienta para simplificar tu operación.",
+    "features": [
+      "Portal de clientes y documentación",
+      "Panel de gestión de clientes, tareas y vencimientos",
+      "Reservas, inscripciones o procesos específicos",
+      "Automatizaciones e integraciones según alcance",
+      "Primera versión con funciones acordadas",
+      "Capacitación para usar tu herramienta"
+    ]
   }
 ]

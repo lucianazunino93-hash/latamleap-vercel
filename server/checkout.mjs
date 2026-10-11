@@ -17,6 +17,7 @@ export function createCheckoutHandler({ token = process.env.MP_ACCESS_TOKEN, ori
    else {if(Buffer.byteLength(JSON.stringify(data))>4096)return send(413,{error:'too_large'});if(typeof data==='string'){try{data=JSON.parse(data);}catch{return send(400,{error:'invalid_json'});}}}
    if(!data || typeof data !== 'object') return send(400,{error:'invalid_purchase'});
    const plan=catalog.find(p=>p.id===data.planId);
+   if(plan?.id === 'custom') return send(400,{error:'custom_quote_required'});
    const serviceMode = data.serviceMode ?? 'independent';
    if(!['independent','care'].includes(serviceMode)) return send(400,{error:'invalid_service_mode'});
    if(!plan || typeof data.email!=='string' || data.email.length>254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))return send(400,{error:'invalid_purchase'});

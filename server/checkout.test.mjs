@@ -7,7 +7,7 @@ test('ignores browser prices and uses ARS catalog',()=>run({token:'TEST-example'
 test('rejects unknown plans and foreign origins',()=>run({token:'TEST-example',fetcher:()=>{throw Error('must not call');}},async url=>{assert.equal((await fetch(url+'/api/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({planId:'fake',email:'client@example.com'})})).status,400);assert.equal((await fetch(url+'/api/checkout',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://other.example'},body:'{}'})).status,403);}));
 test('supports Vercel parsed request bodies',async()=>{
  let status, payload;
- const handler=createCheckoutHandler({token:'TEST-example',fetcher:async(_url,options)=>{assert.equal(JSON.parse(options.body).items[0].unit_price,1299000);return {ok:true,json:async()=>({sandbox_init_point:'https://sandbox.mercadopago.com.ar/checkout/test'})};}});
+ const handler=createCheckoutHandler({token:'TEST-example',fetcher:async(_url,options)=>{assert.equal(JSON.parse(options.body).items[0].unit_price,879000);return {ok:true,json:async()=>({sandbox_init_point:'https://sandbox.mercadopago.com.ar/checkout/test'})};}});
  await handler({url:'/api/checkout',method:'POST',headers:{'content-type':'application/json'},body:{planId:'tienda',email:'test@example.com'}},{writeHead(code){status=code;},end(value){payload=JSON.parse(value);}});
  assert.equal(status,200);assert.match(payload.url,/sandbox/);
 });
@@ -23,7 +23,7 @@ test('care selection records future service without charging monthly fees',async
  const handler=createCheckoutHandler({token:'TEST-example',fetcher:async(_url,options)=>{
   const preference=JSON.parse(options.body);
   assert.equal(preference.items.length,1);
-  assert.equal(preference.items[0].unit_price,789000);
+  assert.equal(preference.items[0].unit_price,879000);
   assert.equal(preference.metadata.service_mode,'care');
   assert.equal(preference.metadata.plan_id,'sitio');
   assert.match(preference.items[0].title,/Web profesional/);

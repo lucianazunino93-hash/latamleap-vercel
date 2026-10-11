@@ -166,5 +166,61 @@
         ]
       ]
     }
+  },
+  {
+    "id": "custom",
+    "path": "/services/custom-solutions",
+    "es": {
+      "title": "Portales y sistemas a medida para negocios | Latam Leap",
+      "description": "Soluciones a medida desde {currency} {price}. Portales de clientes, documentación, paneles de gestión y plataformas específicas con alcance definido.",
+      "heading": "Tu negocio necesita algo propio.",
+      "intro": "Cuando una web no alcanza, creamos una herramienta a medida para organizar tu operación, conectar procesos y facilitar el trabajo de tu equipo. Primero entendemos el problema y definimos una primera versión útil.",
+      "fit": "Para negocios que necesitan organizar documentación y clientes, gestionar reservas o resolver un proceso que las herramientas actuales no cubren. Los ejemplos orientan la propuesta; cada proyecto tiene su propio alcance.",
+      "example": "Un portal donde tus clientes consultan documentos y el estado de un trabajo, o un panel para organizar clientes, tareas y vencimientos. Nuestra Rifa Solidaria muestra otra posibilidad: gestionar números, reservas y comprobantes.",
+      "questions": [
+        [
+          "¿Cuánto cuesta una solución a medida?",
+          "Desde {currency} {price} para una primera versión con alcance definido. Cotizamos según funciones, usuarios e integraciones; confirmamos el presupuesto antes de contratar."
+        ],
+        [
+          "¿Incluye todos los ejemplos del paquete?",
+          "No. Elegimos las funciones que resuelven tu necesidad y las detallamos en la propuesta. Los ejemplos no representan un conjunto de módulos incluido por ese precio."
+        ],
+        [
+          "¿Se pueden sumar funciones después?",
+          "Sí. Podemos construir por etapas. Las nuevas funciones y ampliaciones se presupuestan antes de desarrollarlas."
+        ],
+        [
+          "¿Cómo se define el soporte posterior?",
+          "Acordamos hosting, seguridad, mantenimiento y soporte según la plataforma. El cuidado mensual estándar cubre su alcance habitual; infraestructura especial, integraciones y tareas adicionales se cotizan por separado."
+        ]
+      ]
+    },
+    "en": {
+      "title": "Custom client portals and business systems | Latam Leap",
+      "description": "Custom solutions from {currency} {price}. Client portals, document management, dashboards and specialized platforms with a defined scope.",
+      "heading": "Your business needs something of its own.",
+      "intro": "When a website is not enough, we build a custom tool to organize your operation, connect processes and make your team’s work easier. We first understand the problem and define a useful first version.",
+      "fit": "For businesses that need to organize documents and clients, manage bookings or solve a process their current tools cannot handle. Examples guide the proposal; each project has its own scope.",
+      "example": "A portal where clients access documents and project status, or a dashboard to organize clients, tasks and deadlines. Our Rifa Solidaria project shows another possibility: managing numbers, reservations and payment receipts.",
+      "questions": [
+        [
+          "How much does a custom solution cost?",
+          "From {currency} {price} for a first version with a defined scope. Pricing depends on features, users and integrations; we confirm the quote before contracting."
+        ],
+        [
+          "Are all the examples included?",
+          "No. We choose the features that solve your needs and describe them in the proposal. The examples are not a bundle of modules included at that price."
+        ],
+        [
+          "Can we add features later?",
+          "Yes. We can build in stages. New features and extensions are quoted before development."
+        ],
+        [
+          "How is ongoing support defined?",
+          "Hosting, security, maintenance and support are agreed for the platform. Standard monthly care covers its usual scope; special infrastructure, integrations and additional work are quoted separately."
+        ]
+      ]
+    }
   }
 ]

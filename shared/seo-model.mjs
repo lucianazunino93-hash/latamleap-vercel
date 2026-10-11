@@ -17,8 +17,8 @@ export function createSeoModel({ seo, catalog, english, servicePages }) {
   const language = route => route === '/en' || route.startsWith('/en/') ? 'en' : 'es';
   const pages = { ...seo.pages };
   const amount = (id, lang, currency = 'ARS') => new Intl.NumberFormat(lang === 'es' ? 'es-AR' : 'en-US').format(priceFor(catalog.find(plan => plan.id === id), currency));
-  pages['/services'] = [pages['/services'][0], `Landings desde $${amount('landing', 'es')}, webs profesionales desde $${amount('sitio', 'es')} y tiendas online desde $${amount('tienda', 'es')} ARS. Alcance claro y cuidado mensual opcional.`];
-  pages['/en/services'] = [pages['/en/services'][0], `Landing pages from USD ${amount('landing', 'en', 'USD')}, business websites from USD ${amount('sitio', 'en', 'USD')} and online stores from USD ${amount('tienda', 'en', 'USD')}. Argentine prices in ARS are also available.`];
+  pages['/services'] = [pages['/services'][0], `Landings desde $${amount('landing', 'es')}, webs profesionales desde $${amount('sitio', 'es')} y tiendas online desde $${amount('tienda', 'es')} ARS. Soluciones a medida desde ${amount('custom', 'es')} ARS. Alcance definido.`];
+  pages['/en/services'] = [pages['/en/services'][0], `Landing pages from USD ${amount('landing', 'en', 'USD')}, business websites from USD ${amount('sitio', 'en', 'USD')} and online stores from USD ${amount('tienda', 'en', 'USD')}. Custom solutions from USD ${amount('custom', 'en', 'USD')}. ARS prices are also available.`];
   for (const service of servicePages) for (const lang of ['es', 'en']) {
     const copy = getServiceCopy(service, catalog.find(plan => plan.id === service.id), lang);
     const usd = getServiceCopy(service, catalog.find(plan => plan.id === service.id), lang, 'USD');
