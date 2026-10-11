@@ -25,6 +25,9 @@ test('care selection records future service without charging monthly fees',async
   assert.equal(preference.items.length,1);
   assert.equal(preference.items[0].unit_price,879000);
   assert.equal(preference.metadata.service_mode,'care');
+  assert.equal(preference.metadata.care_signup_requested,true);
+  assert.equal(preference.metadata.care_activation,'separate_signup_after_launch');
+  assert.equal(preference.items.reduce((sum,item)=>sum+item.unit_price*item.quantity,0),879000);
   assert.equal(preference.metadata.plan_id,'sitio');
   assert.match(preference.items[0].title,/Web profesional/);
   return {ok:true,json:async()=>({sandbox_init_point:'https://sandbox.mercadopago.com.ar/checkout/test'})};

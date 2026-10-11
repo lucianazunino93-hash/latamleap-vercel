@@ -7,8 +7,8 @@ const phrases = Object.keys(dictionary).filter(key => key.length > 12).sort((a, 
 export function translate(value: string, language: "es" | "en", currency: "ARS" | "USD" = "ARS") {
   const key = value.trim().replace(/\s+/g, " ");
   if (key.startsWith("Es opcional. Podés elegir entrega independiente")) return language === "es"
-    ? `Es opcional. Podés elegir entrega independiente y pagar dominio y hosting por separado, o sumar cuidado mensual por ${formatPrice(care, currency, language)} desde el mes siguiente a la publicación.`
-    : `It's optional. Choose independent delivery and pay domain and hosting separately, or add monthly care for ${formatPrice(care, currency, language)} starting the month after launch.`;
+    ? `Es opcional. Podés elegir entrega independiente y pagar dominio y hosting por separado, o sumar cuidado mensual por ${formatPrice(care, currency, language)} con adhesión y pago por separado al publicar tu web. La compra del desarrollo no activa la suscripción.`
+    : `It's optional. Choose independent delivery and pay domain and hosting separately, or add monthly care for ${formatPrice(care, currency, language)} with separate signup and payment when your website launches. The development purchase does not activate the subscription.`;
   if (language === "es") return value;
   if (dictionary[key]) return value.replace(value.trim(), dictionary[key]);
   if (key.startsWith("El abono es de")) return `Monthly care costs ${formatPrice(care, currency, language)}. It includes up to three requests and three total hours per month for changes and technical support, covering text, images, data and adjustments to existing features. Unused hours and requests do not roll over. New pages, redesigns, integrations and extra work are quoted in advance.`;
