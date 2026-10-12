@@ -1,0 +1,52 @@
+{
+  "fallbackArsPerUsd": 1500,
+  "rateUrl": "https://open.er-api.com/v6/latest/USD",
+  "notes": "US visitors see us prices in USD. Argentina visitors see ar prices converted to ARS with the live rate, or fallbackArsPerUsd when that rate is unavailable. The assistant tier in Argentina is proportional to the US tier (about one third): USD 1000 + USD 100/month. Edit ar.setup and ar.monthly to change it.",
+  "tiers": [
+    {
+      "id": "presence",
+      "recommended": false,
+      "name": { "es": "Presencia", "en": "Presence" },
+      "summary": {
+        "es": "Para que te encuentren en Google y puedan pedir un turno o escribirte.",
+        "en": "So people can find you on Google and book or get in touch."
+      },
+      "features": {
+        "es": ["Página única optimizada para Google", "Formulario de reserva o de contacto", "Alta y configuración de Google Business Profile"],
+        "en": ["One-page website optimized for Google", "Booking or contact form", "Google Business Profile setup"]
+      },
+      "us": { "setup": 900, "monthly": 0 },
+      "ar": { "setup": 300, "monthly": 0 }
+    },
+    {
+      "id": "leads",
+      "recommended": true,
+      "name": { "es": "Captación automática", "en": "Automated lead capture" },
+      "summary": {
+        "es": "Para no perder consultas, recordar turnos y pedir reseñas sin perseguir a nadie.",
+        "en": "So you stop missing inquiries, remind appointments and ask for reviews without chasing anyone."
+      },
+      "features": {
+        "es": ["Todo lo de Presencia", "Respuestas automáticas por WhatsApp y SMS", "Recordatorios de turnos", "Pedidos de reseña", "Automatizaciones con n8n"],
+        "en": ["Everything in Presence", "Automatic WhatsApp and SMS replies", "Appointment reminders", "Review requests", "Automations built with n8n"]
+      },
+      "us": { "setup": 1800, "monthly": 150 },
+      "ar": { "setup": 600, "monthly": 50 }
+    },
+    {
+      "id": "assistant",
+      "recommended": false,
+      "name": { "es": "Asistente con IA", "en": "AI assistant" },
+      "summary": {
+        "es": "Para responder consultas y agendar turnos a cualquier hora.",
+        "en": "So inquiries get an answer and appointments get booked at any hour."
+      },
+      "features": {
+        "es": ["Todo lo de Captación automática", "Agente de IA las 24 horas", "Responde consultas frecuentes", "Agenda turnos mientras vos atendés"],
+        "en": ["Everything in Automated lead capture", "24/7 AI agent", "Answers common inquiries", "Books appointments while you are with a client"]
+      },
+      "us": { "setup": 3000, "monthly": 300 },
+      "ar": { "setup": 1000, "monthly": 100 }
+    }
+  ]
+}

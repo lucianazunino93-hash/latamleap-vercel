@@ -2,4 +2,8 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /test
+Disallow: /comprar/
+Disallow: /pago
+Disallow: /en/comprar/
+Disallow: /en/pago
 Sitemap: https://www.latamleap.com/sitemap.xml

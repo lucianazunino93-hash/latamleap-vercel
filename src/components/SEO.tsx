@@ -4,9 +4,10 @@ import { useLocation } from "react-router-dom";
 import seo from "../../shared/seo.json";
 import catalog from "../../shared/catalog.json";
 import english from "../../shared/en.json";
+import offers from "../../shared/offers.json";
 import servicePages from "../../shared/service-pages.json";
 import { createSeoModel, serializeSchema } from "../../shared/seo-model.mjs";
-const model = createSeoModel({ seo, catalog, english, servicePages });
+const model = createSeoModel({ seo, catalog, english, servicePages, offers });
 
 export default function SEO() {
   const { pathname, hash } = useLocation();
@@ -25,7 +26,19 @@ export default function SEO() {
     meta('meta[property="og:locale"]', language === "es" ? "es_AR" : "en_US");
     meta('meta[name="twitter:title"]', title);
     meta('meta[name="twitter:description"]', description);
+    meta('meta[property="og:image"]', `${model.origin}/og-latamleap.png`);
+    meta('meta[name="twitter:image"]', `${model.origin}/og-latamleap.png`);
+    meta('meta[name="twitter:card"]', "summary_large_image");
     meta('meta[name="robots"]', model.isIndexable(route) ? "index,follow,max-image-preview:large" : "noindex,follow");
+    const google = String(seo.googleSiteVerification || "").trim();
+    if (google) {
+      let tag = document.querySelector('meta[name="google-site-verification"]');
+      if (!tag) { tag = document.createElement("meta"); tag.setAttribute("name", "google-site-verification"); document.head.appendChild(tag); }
+      tag.setAttribute("content", google);
+    }
+    const pixel = String(seo.metaPixelId || "").trim();
+    const fbq = (window as Window & { fbq?: (...args: unknown[]) => void }).fbq;
+    if (/^[0-9]+$/.test(pixel) && fbq) fbq("track", "PageView");
     document.querySelector('link[rel="canonical"]')?.setAttribute("href", `${model.origin}${route}`);
     document.querySelectorAll('link[rel="alternate"][hreflang]').forEach(link => link.remove());
     if (page) for (const [lang, url] of Object.entries(model.alternates(route))) {

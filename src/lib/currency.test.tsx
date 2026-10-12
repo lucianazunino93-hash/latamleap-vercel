@@ -15,7 +15,8 @@ test("detects currency and lets the visitor override it", async () => {
   expect(localStorage.getItem("latamleap.currency")).toBe("ARS");
   cleanup(); mount();
   expect(screen.getByRole("combobox")).toHaveValue("ARS");
-  expect(fetch).toHaveBeenCalledTimes(1);
+  await waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+  expect(screen.getByRole("combobox")).toHaveValue("ARS");
 });
 test("a late country response cannot replace the visitor choice", async () => {
   let resolve: (response: Response) => void;
