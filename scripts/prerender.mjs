@@ -2,9 +2,10 @@ import { createServer } from 'vite';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createSeoModel, serializeSchema } from '../shared/seo-model.mjs';
+import { trackingHead } from '../shared/tracking.mjs';
 const read = async file => JSON.parse(await fs.readFile(`shared/${file}.json`, 'utf8'));
-const [seo, catalog, english, servicePages] = await Promise.all(['seo', 'catalog', 'en', 'service-pages'].map(read));
-const model = createSeoModel({ seo, catalog, english, servicePages });
+const [seo, catalog, english, servicePages, offers] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers'].map(read));
+const model = createSeoModel({ seo, catalog, english, servicePages, offers });
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const vite = await createServer({ server: { middlewareMode: true }, optimizeDeps: { noDiscovery: true, include: [] }, appType: 'custom', mode: 'production' });
 try {
@@ -30,7 +31,7 @@ try {
     setMeta('name', 'robots', model.isIndexable(route) ? 'index,follow,max-image-preview:large' : 'noindex,follow');
     html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/?>/, `<link rel="canonical" href="${url}" />`);
     const links = Object.entries(model.alternates(route)).map(([lang, href]) => `<link rel="alternate" hreflang="${lang}" href="${href}" />`).join('');
-    html = html.replace('</head>', `${links}<script id="page-schema" type="application/ld+json">${serializeSchema(model.schema(route))}</script></head>`);
+    html = html.replace('</head>', `${links}${trackingHead(seo)}<script id="page-schema" type="application/ld+json">${serializeSchema(model.schema(route))}</script></head>`);
     const folder = path.join('dist', route); await fs.mkdir(folder, { recursive: true }); await fs.writeFile(path.join(folder, 'index.html'), html);
   }
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${Object.keys(model.pages).filter(model.isIndexable).map(route => `<url><loc>${model.origin}${route}</loc>${Object.entries(model.alternates(route)).map(([lang, href]) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`).join('')}</url>`).join('')}</urlset>`;

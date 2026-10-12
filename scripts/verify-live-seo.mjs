@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
 import { createSeoModel } from '../shared/seo-model.mjs';
 const read = async file => JSON.parse(await fs.readFile(`shared/${file}.json`, 'utf8'));
-const [seo, catalog, english, servicePages] = await Promise.all(['seo', 'catalog', 'en', 'service-pages'].map(read));
-const model = createSeoModel({ seo, catalog, english, servicePages });
+const [seo, catalog, english, servicePages, offers] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers'].map(read));
+const model = createSeoModel({ seo, catalog, english, servicePages, offers });
 const results = await Promise.allSettled(Object.keys(model.pages).map(async route => {
   const response = await fetch(`${model.origin}${route}`, { signal: AbortSignal.timeout(20000) });
   assert.equal(response.status, 200, `${route}: HTTP status`);

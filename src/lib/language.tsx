@@ -34,9 +34,10 @@ export function LanguageSwitcher() {
   const language = useContext(LanguageContext);
   const {pathname, hash, search} = useLocation();
   const suffix = `${pathname === "/" ? "" : pathname}${search}${hash}`;
+  const choose = (value: "es" | "en") => { document.cookie = `latamleap.lang=${value}; Path=/; Max-Age=31536000; SameSite=Lax`; };
   return <div role="group" className="flex items-center gap-2 text-xs font-bold" aria-label={language === "es" ? "Idioma" : "Language"}>
-    <a href={`${pathname}${search}${hash}`} hrefLang="es" lang="es" aria-current={language === "es" ? "page" : undefined} className={language === "es" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}>ES</a>
+    <a href={`${pathname}${search}${hash}`} hrefLang="es" lang="es" aria-current={language === "es" ? "page" : undefined} onClick={() => choose("es")} className={language === "es" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}>ES</a>
     <span aria-hidden="true" className="text-muted-foreground">/</span>
-    <a href={`/en${suffix}`} hrefLang="en" lang="en" aria-current={language === "en" ? "page" : undefined} className={language === "en" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}>EN</a>
+    <a href={`/en${suffix}`} hrefLang="en" lang="en" aria-current={language === "en" ? "page" : undefined} onClick={() => choose("en")} className={language === "en" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}>EN</a>
   </div>;
 }

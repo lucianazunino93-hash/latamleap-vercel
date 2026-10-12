@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Instagram, Music2 } from "lucide-react";
 import { WHATSAPP_URL } from "./HomeSections";
 const links = [
-    { label: "Soluciones", href: "/#soluciones" },
-    { label: "Proyectos", href: "/#proyectos" },
+    { label: "Electricistas", href: "/#electricians" },
+    { label: "Plomeros", href: "/#plumbers" },
     { label: "Precios", href: "/#precios" },
     { label: "Nosotros", href: "/about" },
 ];
@@ -23,7 +23,7 @@ const Footer = () => (<footer className="bg-foreground text-background py-12">
           <div className="flex items-center gap-2 justify-center md:justify-start mb-1">
             <span className="font-display font-bold text-background text-xs"><Text value={"LATAM LEAP"}/></span>
           </div>
-          <p className="text-[11px] text-background/60"><Text value={" \u00A9 2026 Latam Leap. Soluciones digitales para problemas reales. "}/></p>
+          <p className="text-[11px] text-background/60"><Text value="© 2026 Latam Leap. Sitios, Maps y recepcionista con IA para electricistas y plomeros." /></p>
         </div>
 
         <div className="flex items-center gap-6 flex-wrap justify-center">
