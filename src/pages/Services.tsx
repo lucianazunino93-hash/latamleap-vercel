@@ -1,5 +1,4 @@
 import { Text, LocalizedAnchor } from "@/lib/language";
-import CareSection from "@/components/CareSection";
 import { OfferFAQ, OfferPricing } from "@/components/OfferSections";
 import { FinalCTASection } from "@/components/HomeSections";
 
@@ -14,6 +13,5 @@ export default function Services() {
     <OfferPricing />
     <OfferFAQ />
     <FinalCTASection />
-    <CareSection />
   </>;
 }

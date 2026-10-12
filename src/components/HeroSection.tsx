@@ -17,6 +17,7 @@ const HeroSection = () => (<section className="relative pt-8 lg:pt-12 pb-16 lg:p
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedir la maqueta gratis" /><CalendarCheck /></LocalizedAnchor></Button>
+            <Button asChild size="lg" variant="outline"><LocalizedAnchor href="/#contacto"><Text value="Reservar una llamada" /></LocalizedAnchor></Button>
             <Button asChild size="lg" variant="outline"><LocalizedAnchor href="/#precios"><Text value="Ver precios" /><ArrowDown /></LocalizedAnchor></Button>
           </div>
 

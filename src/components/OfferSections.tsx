@@ -20,6 +20,7 @@ const questions = [
   ["¿El asistente reemplaza a mi equipo?", "No. Atiende cuando estás en un trabajo y toma los datos. Los casos que necesitan una persona siguen llegando a vos."],
   ["¿Hay un costo mensual?", "Presencia es un pago inicial. Captación automática y el asistente suman un abono mensual para mantener el mensaje automático, las reseñas y la recepcionista."],
   ["¿Hasta cuándo duran los precios de lanzamiento?", "Hasta la fecha y la cantidad de lugares publicados en el sitio. Esa fecha no se reinicia sola y el contador no baja solo: lo actualizamos en la configuración cuando entra un cliente."],
+  ["¿Cómo se paga en Estados Unidos?", "No hay checkout en el sitio. Después de la llamada, si seguimos, te enviamos un enlace de pago de Wise. La maqueta y la llamada no se pagan."],
 ];
 
 function rememberPlan(id: string) {
@@ -74,7 +75,7 @@ export function OfferPricing() {
     ? (language === "es" ? "cotización de respaldo" : "fallback rate")
     : (language === "es" ? "cotización del día" : "today's rate");
   return <section id="precios" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <div className="max-w-3xl mb-12"><p className="section-kicker"><Text value="Precios" /></p><h2 className="text-4xl md:text-6xl font-bold mb-5"><Text value="Tres niveles. Cada uno incluye el anterior." /></h2><p className="text-lg text-muted-foreground"><Text value="Captación automática incluye Presencia. El asistente incluye Captación automática. El precio que ves es el de tu país. No hay un botón de pago: el siguiente paso es una llamada o la maqueta gratis." /></p></div>
+    <div className="max-w-3xl mb-12"><p className="section-kicker"><Text value="Precios" /></p><h2 className="text-4xl md:text-6xl font-bold mb-5"><Text value="Tres niveles. Cada uno incluye el anterior." /></h2><p className="text-lg text-muted-foreground"><Text value="Captación automática incluye Presencia. El asistente incluye Captación automática. El precio que ves es el de tu país. No hay checkout en el sitio: el siguiente paso es una llamada o la maqueta gratis. En Estados Unidos, el pago se hace después con un enlace de Wise." /></p></div>
     <div className="grid lg:grid-cols-3 gap-6">{offers.tiers.map(tier => {
       const quote = quoteTier(tier, currency, arsPerUsd, launch);
       return <article key={tier.id} className={`bg-card rounded-xl p-7 flex flex-col ${tier.recommended ? "border-2 border-primary shadow-studio" : "border border-border"}`}>
@@ -92,7 +93,7 @@ export function OfferPricing() {
     })}</div>
     <p className="text-sm text-muted-foreground mt-6">{currency === "ARS"
       ? (language === "es" ? `Pesos proporcionales a los dólares de Argentina, a ${new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 }).format(arsPerUsd)} ARS por dólar (${rateLabel}).` : `Pesos proportional to Argentina's dollar amounts, at ${new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(arsPerUsd)} ARS per US dollar (${rateLabel}).`)
-      : <Text value="Precios de Estados Unidos, en dólares. En Argentina vas a ver el equivalente proporcional en pesos." />}</p>
+      : <Text value="Precios de Estados Unidos, en dólares. El pago, cuando corresponda, es un enlace de Wise: no hay checkout en el sitio. En Argentina vas a ver el equivalente proporcional en pesos." />}</p>
   </div></section>;
 }
 
