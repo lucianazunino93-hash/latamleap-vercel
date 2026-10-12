@@ -1,52 +1,61 @@
 {
   "fallbackArsPerUsd": 1500,
   "rateUrl": "https://open.er-api.com/v6/latest/USD",
-  "notes": "US visitors see us prices in USD. Argentina visitors see ar prices converted to ARS with the live rate, or fallbackArsPerUsd when that rate is unavailable. The assistant tier in Argentina is proportional to the US tier (about one third): USD 1000 + USD 100/month. Edit ar.setup and ar.monthly to change it.",
+  "notes": "Tiers are cumulative: lead capture includes Presence, and the AI assistant includes lead capture. US visitors see us prices in USD. Argentina visitors see ar prices converted to ARS. Each Argentina dollar amount is one third of the matching US amount, rounded to the nearest dollar. setup is the launch price. regularSetup is the price after the launch offer ends. Monthly fees do not have a separate regular price. The launch block controls the banner, the strikethrough, and whether a tier sells at setup or regularSetup. spotsLeft is a manual count: nothing on the site decreases it or resets a timer.",
+  "launch": {
+    "enabled": true,
+    "spotsTotal": 5,
+    "spotsLeft": 5,
+    "endsOn": "2026-12-31"
+  },
   "tiers": [
     {
       "id": "presence",
       "recommended": false,
       "name": { "es": "Presencia", "en": "Presence" },
       "summary": {
-        "es": "Para que te encuentren en Google y puedan pedir un turno o escribirte.",
-        "en": "So people can find you on Google and book or get in touch."
+        "es": "Para que te encuentren en Google Maps y puedan pedir el trabajo.",
+        "en": "So people can find you on Google Maps and request the job."
       },
+      "includes": { "es": "Es el primer nivel.", "en": "This is the first tier." },
       "features": {
-        "es": ["Página única optimizada para Google", "Formulario de reserva o de contacto", "Alta y configuración de Google Business Profile"],
-        "en": ["One-page website optimized for Google", "Booking or contact form", "Google Business Profile setup"]
+        "es": ["Página única optimizada para Google", "Perfil de Google Business para aparecer en Maps", "Formulario para pedir el trabajo", "Maqueta gratis de tu sitio en 48 horas"],
+        "en": ["One-page website optimized for Google", "Google Business Profile so you show up on Maps", "Form to request the job", "Free mockup of your site in 48 hours"]
       },
-      "us": { "setup": 900, "monthly": 0 },
-      "ar": { "setup": 300, "monthly": 0 }
+      "us": { "setup": 497, "regularSetup": 797, "monthly": 0 },
+      "ar": { "setup": 166, "regularSetup": 266, "monthly": 0 }
     },
     {
       "id": "leads",
       "recommended": true,
       "name": { "es": "Captación automática", "en": "Automated lead capture" },
       "summary": {
-        "es": "Para no perder consultas, recordar turnos y pedir reseñas sin perseguir a nadie.",
-        "en": "So you stop missing inquiries, remind appointments and ask for reviews without chasing anyone."
+        "es": "Todo lo de Presencia, más el mensaje cuando no atendés y el pedido de reseña.",
+        "en": "Everything in Presence, plus the text when you miss a call and the review request."
       },
+      "includes": { "es": "Incluye todo lo de Presencia.", "en": "Includes everything in Presence." },
       "features": {
-        "es": ["Todo lo de Presencia", "Respuestas automáticas por WhatsApp y SMS", "Recordatorios de turnos", "Pedidos de reseña", "Automatizaciones con n8n"],
-        "en": ["Everything in Presence", "Automatic WhatsApp and SMS replies", "Appointment reminders", "Review requests", "Automations built with n8n"]
+        "es": ["Incluye todo lo de Presencia", "Mensaje automático cuando no atendés", "Pedido de reseña en Google después del trabajo", "Automatizaciones con n8n"],
+        "en": ["Includes everything in Presence", "Automatic text when you miss a call", "Google review request after the job", "Automations built with n8n"]
       },
-      "us": { "setup": 1800, "monthly": 150 },
-      "ar": { "setup": 600, "monthly": 50 }
+      "us": { "setup": 797, "regularSetup": 1197, "monthly": 147 },
+      "ar": { "setup": 266, "regularSetup": 399, "monthly": 49 }
     },
     {
       "id": "assistant",
       "recommended": false,
       "name": { "es": "Asistente con IA", "en": "AI assistant" },
       "summary": {
-        "es": "Para responder consultas y agendar turnos a cualquier hora.",
-        "en": "So inquiries get an answer and appointments get booked at any hour."
+        "es": "Todo lo de Captación automática, más una recepcionista con IA que atiende mientras estás en un trabajo.",
+        "en": "Everything in Automated lead capture, plus an AI receptionist that answers while you are on a job."
       },
+      "includes": { "es": "Incluye todo lo de Captación automática, y por lo tanto también Presencia.", "en": "Includes everything in Automated lead capture, and therefore Presence too." },
       "features": {
-        "es": ["Todo lo de Captación automática", "Agente de IA las 24 horas", "Responde consultas frecuentes", "Agenda turnos mientras vos atendés"],
-        "en": ["Everything in Automated lead capture", "24/7 AI agent", "Answers common inquiries", "Books appointments while you are with a client"]
+        "es": ["Incluye todo lo de Captación automática", "Recepcionista con IA las 24 horas", "Responde y toma los datos del trabajo", "Escribe si estás en una obra y no podés atender"],
+        "en": ["Includes everything in Automated lead capture", "24/7 AI receptionist", "Answers and takes the job details", "Texts back when you are on a job and cannot pick up"]
       },
-      "us": { "setup": 3000, "monthly": 300 },
-      "ar": { "setup": 1000, "monthly": 100 }
+      "us": { "setup": 1197, "regularSetup": 1697, "monthly": 247 },
+      "ar": { "setup": 399, "regularSetup": 566, "monthly": 82 }
     }
   ]
 }

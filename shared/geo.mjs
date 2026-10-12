@@ -30,13 +30,39 @@ export function localizePath(pathname, language) {
   return pathname.slice(3) || "/";
 }
 
-export function quoteTier(tier, currency, rate) {
+/** Inclusive calendar date from config. No ticking countdown, and a past date turns the offer off. */
+export function isLaunchActive(launch, now = new Date()) {
+  if (!launch || launch.enabled !== true) return false;
+  const spots = Number(launch.spotsLeft);
+  if (!Number.isInteger(spots) || spots <= 0) return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(launch.endsOn || ""))) return false;
+  return now.toISOString().slice(0, 10) <= launch.endsOn;
+}
+
+export function sellingAmounts(list, launchActive) {
+  const regular = Number(list.regularSetup);
+  const discounted = launchActive && Number.isFinite(regular) && regular > Number(list.setup);
+  return {
+    setup: discounted || !Number.isFinite(regular) ? Number(list.setup) : regular,
+    monthly: Number(list.monthly) || 0,
+    regularSetup: discounted ? regular : null,
+  };
+}
+
+export function quoteTier(tier, currency, rate, launchActive = false) {
   const list = currency === "ARS" ? tier.ar : tier.us;
+  const amounts = sellingAmounts(list, launchActive);
   const multiplier = currency === "ARS" ? rate : 1;
   return {
-    setup: Math.round(list.setup * multiplier),
-    monthly: Math.round(list.monthly * multiplier),
+    setup: Math.round(amounts.setup * multiplier),
+    monthly: Math.round(amounts.monthly * multiplier),
+    regular: amounts.regularSetup == null ? null : Math.round(amounts.regularSetup * multiplier),
   };
+}
+
+export function formatLaunchDate(endsOn, language = "es") {
+  const [year, month, day] = String(endsOn).split("-").map(Number);
+  return new Intl.DateTimeFormat(language === "es" ? "es-AR" : "en-US", { dateStyle: "long", timeZone: "UTC" }).format(new Date(Date.UTC(year, month - 1, day)));
 }
 
 export function formatAmount(amount, currency, language = "es") {

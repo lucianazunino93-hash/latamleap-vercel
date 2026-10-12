@@ -58,7 +58,7 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
       <label htmlFor={id + "project"} className="block text-sm"><Text value="Contanos sobre tu proyecto" /><textarea id={id + "project"} name="project" required maxLength={1500} rows={4} className={cls} /></label>
       <div className="hidden" aria-hidden="true"><label htmlFor={id + "website"}>Website<input id={id + "website"} name="website" tabIndex={-1} autoComplete="off" /></label></div>
       <p className="text-xs text-muted-foreground"><Text value="Usaremos tus datos para responder tu consulta. Leé nuestra " /><Link to="/privacy-policy" className="underline"><Text value="política de privacidad" /></Link>.</p>
-      <Button type="submit" className="w-full"><Text value={status === "sending" ? "Enviando…" : "Reservar una llamada"} /></Button>
+      <Button type="submit" className="w-full"><Text value={status === "sending" ? "Enviando…" : "Pedir la maqueta gratis"} /></Button>
     </fieldset>
     {status === "error" && <p role="alert" className="text-sm text-destructive"><Text value={error} /></p>}
     {showWhatsAppAlt && <LocalizedAnchor className="block text-sm underline text-center" href="https://wa.me/5493512085644" target="_blank" rel="noopener noreferrer"><Text value="Prefiero escribir directamente" /></LocalizedAnchor>}

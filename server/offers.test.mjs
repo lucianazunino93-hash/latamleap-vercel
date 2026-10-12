@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { formatAmount, languageForCountry, localizePath, quoteTier } from '../shared/geo.mjs';
+import { formatAmount, isLaunchActive, languageForCountry, localizePath, quoteTier } from '../shared/geo.mjs';
 import { clearRateCache, marketPayload } from '../shared/market-data.mjs';
 import { trackingHead } from '../shared/tracking.mjs';
 import middleware from '../middleware.js';
@@ -9,22 +9,31 @@ import middleware from '../middleware.js';
 const offers = JSON.parse(fs.readFileSync(new URL('../shared/offers.json', import.meta.url)));
 const tier = id => offers.tiers.find(item => item.id === id);
 
-test('US prices stay in dollars and Argentina prices convert from the editable dollar amounts', () => {
-  assert.deepEqual(offers.tiers.map(item => item.us), [
-    { setup: 900, monthly: 0 },
-    { setup: 1800, monthly: 150 },
-    { setup: 3000, monthly: 300 },
-  ]);
-  assert.deepEqual(offers.tiers.map(item => item.ar), [
-    { setup: 300, monthly: 0 },
-    { setup: 600, monthly: 50 },
-    { setup: 1000, monthly: 100 },
-  ]);
-  assert.deepEqual(quoteTier(tier('presence'), 'USD', 9999), { setup: 900, monthly: 0 });
-  assert.deepEqual(quoteTier(tier('presence'), 'ARS', 1500), { setup: 450000, monthly: 0 });
-  assert.deepEqual(quoteTier(tier('assistant'), 'ARS', 1500), { setup: 1500000, monthly: 150000 });
-  assert.equal(formatAmount(900, 'USD', 'en'), 'USD 900');
+test('US prices stay in dollars and Argentina prices stay one third, converted to pesos', () => {
+  assert.deepEqual(offers.tiers.map(item => item.us.setup), [497, 797, 1197]);
+  assert.deepEqual(offers.tiers.map(item => item.us.regularSetup), [797, 1197, 1697]);
+  assert.deepEqual(offers.tiers.map(item => item.us.monthly), [0, 147, 247]);
+  assert.deepEqual(offers.tiers.map(item => item.ar.setup), [166, 266, 399]);
+  assert.deepEqual(offers.tiers.map(item => item.ar.regularSetup), [266, 399, 566]);
+  assert.deepEqual(offers.tiers.map(item => item.ar.monthly), [0, 49, 82]);
+  assert.deepEqual(quoteTier(tier('presence'), 'USD', 9999, true), { setup: 497, monthly: 0, regular: 797 });
+  assert.deepEqual(quoteTier(tier('presence'), 'USD', 9999, false), { setup: 797, monthly: 0, regular: null });
+  assert.deepEqual(quoteTier(tier('leads'), 'USD', 1500, true), { setup: 797, monthly: 147, regular: 1197 });
+  assert.deepEqual(quoteTier(tier('assistant'), 'USD', 1500, false), { setup: 1697, monthly: 247, regular: null });
+  assert.deepEqual(quoteTier(tier('presence'), 'ARS', 1500, true), { setup: 249000, monthly: 0, regular: 399000 });
+  assert.deepEqual(quoteTier(tier('assistant'), 'ARS', 1500, true), { setup: 598500, monthly: 123000, regular: 849000 });
+  assert.equal(formatAmount(497, 'USD', 'en'), 'USD 497');
   assert.equal(formatAmount(450000, 'ARS', 'es'), 'ARS 450.000');
+});
+
+test('the launch offer is a fixed date and a manual spot count, not a resetting countdown', () => {
+  const launch = { enabled: true, spotsLeft: 5, endsOn: '2026-12-31' };
+  assert.equal(isLaunchActive(launch, new Date('2026-10-12T15:00:00Z')), true);
+  assert.equal(isLaunchActive(launch, new Date('2026-12-31T23:00:00Z')), true);
+  assert.equal(isLaunchActive(launch, new Date('2027-01-01T00:00:00Z')), false);
+  assert.equal(isLaunchActive({ ...launch, enabled: false }, new Date('2026-10-12T15:00:00Z')), false);
+  assert.equal(isLaunchActive({ ...launch, spotsLeft: 0 }, new Date('2026-10-12T15:00:00Z')), false);
+  assert.equal(isLaunchActive(launch, new Date('2026-12-31T00:30:00Z')), isLaunchActive(launch, new Date('2026-12-31T20:30:00Z')));
 });
 
 test('a failed public rate falls back to the configured pesos per dollar', async () => {

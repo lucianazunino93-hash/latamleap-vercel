@@ -7,9 +7,9 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CurrencySelector from "./CurrencySelector";
 const links = [
+    { label: "Electricistas", href: "/#electricians" },
+    { label: "Plomeros", href: "/#plumbers" },
     { label: "Precios", href: "/#precios" },
-    { label: "Cómo funciona", href: "/#como-trabajamos" },
-    { label: "Proyectos", href: "/#proyectos" },
     { label: "Nosotros", href: "/about" },
 ];
 const Navbar = () => {
@@ -36,7 +36,7 @@ const Navbar = () => {
           {links.map((l) => (<LocalizedAnchor key={l.href} href={l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               <Text value={l.label}/>
             </LocalizedAnchor>))}
-          <Button asChild><LocalizedAnchor href="/#contacto"><Text value="Reservar una llamada" /></LocalizedAnchor></Button>
+          <Button asChild><LocalizedAnchor href="/#contacto"><Text value="Pedir la maqueta gratis" /></LocalizedAnchor></Button>
         </div>
 
         <div className="flex items-center gap-3"><CurrencySelector /><LanguageSwitcher /><button className="lg:hidden text-foreground p-2 -mr-2" onClick={() => setOpen(!open)} aria-label={language === "en" ? (open ? "Close menu" : "Open menu") : (open ? "Cerrar menú" : "Abrir menú")} aria-expanded={open}>
@@ -48,7 +48,7 @@ const Navbar = () => {
           {links.map((l) => (<LocalizedAnchor key={l.href} href={l.href} className="block text-foreground text-base" onClick={() => setOpen(false)}>
               <Text value={l.label}/>
             </LocalizedAnchor>))}
-          <Button asChild className="w-full"><LocalizedAnchor href="/#contacto"><Text value="Reservar una llamada" /></LocalizedAnchor></Button>
+          <Button asChild className="w-full"><LocalizedAnchor href="/#contacto"><Text value="Pedir la maqueta gratis" /></LocalizedAnchor></Button>
         </div>)}
     </nav>);
 };

@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
 import { createSeoModel, getServiceCopy } from '../shared/seo-model.mjs';
+import { isLaunchActive, sellingAmounts } from '../shared/geo.mjs';
 const read = async file => JSON.parse(await fs.readFile(`shared/${file}.json`, 'utf8'));
 const [seo, catalog, english, servicePages, offers] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers'].map(read));
 const model = createSeoModel({ seo, catalog, english, servicePages, offers });
@@ -37,8 +38,9 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     if (String(service['@id']).includes('#offer-')) {
       const tier = offers.tiers.find(item => service['@id'].endsWith(`offer-${item.id}`));
       assert.ok(tier, service['@id']);
-      assert.equal(service.offers.find(offer => offer.name === 'United States').price, tier.us.setup);
-      assert.equal(service.offers.find(offer => offer.name === 'Argentina').price, tier.ar.setup);
+      const active = isLaunchActive(offers.launch);
+      assert.equal(service.offers.find(offer => offer.name === 'United States').price, sellingAmounts(tier.us, active).setup);
+      assert.equal(service.offers.find(offer => offer.name === 'Argentina').price, sellingAmounts(tier.ar, active).setup);
       assert.ok(document.body.textContent.includes('USD'), `${route}: US price visible`);
       continue;
     }

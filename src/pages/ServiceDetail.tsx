@@ -27,7 +27,7 @@ export default function ServiceDetail() {
       <p className="text-lg text-muted-foreground max-w-3xl mb-8">{copy.intro}</p>
       <p className="text-3xl font-bold mb-2"><Text value="Desde " />{formatPrice(plan, currency, language)}</p>
       <p className="text-sm text-muted-foreground mb-6"><Text value="Pago único por el alcance base. Confirmamos el presupuesto antes de empezar." /></p>
-      <PriceComparison item={plan}/><LocalizedAnchor href={plan.id !== "custom" && currency === "ARS" ? `/comprar/${plan.id}` : "/#contacto"} className="inline-flex bg-primary text-primary-foreground rounded-md px-6 py-3 font-bold"><Text value={plan.id === "custom" ? "Definir mi solución" : currency === "ARS" ? "Adquirir ahora" : "Coordinar compra"} /></LocalizedAnchor>
+      <PriceComparison item={plan}/><LocalizedAnchor href="/#contacto" className="inline-flex bg-primary text-primary-foreground rounded-md px-6 py-3 font-bold"><Text value="Pedir la maqueta gratis" /></LocalizedAnchor>
     </section>
     <section className="py-16 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid md:grid-cols-2 gap-12">
       <div><h2 className="text-3xl font-bold mb-5"><Text value="Qué incluye" /></h2><ul className="space-y-3">{plan.features.map(feature => <li key={feature} className="flex gap-3"><span aria-hidden="true" className="text-primary-text">✓</span><Text value={feature} /></li>)}</ul></div>

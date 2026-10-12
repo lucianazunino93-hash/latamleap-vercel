@@ -1,4 +1,5 @@
 import { priceFor } from './pricing.mjs';
+import { isLaunchActive, sellingAmounts } from './geo.mjs';
 
 export function getServiceCopy(service, plan, lang, currency = 'ARS') {
   const price = new Intl.NumberFormat(lang === 'es' ? 'es-AR' : 'en-US').format(priceFor(plan, currency));
@@ -20,8 +21,13 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
   if (offers?.tiers?.length) {
     const tier = id => offers.tiers.find(item => item.id === id);
     const presence = tier('presence'), leads = tier('leads'), assistant = tier('assistant');
-    pages['/'] = [pages['/'][0], `Para clínicas, veterinarias, estudios de yoga, cafés y oficios. Presencia desde USD ${presence.us.setup}, captación automática desde USD ${leads.us.setup} y asistente con IA desde USD ${assistant.us.setup}. En Argentina, Presencia desde USD ${presence.ar.setup}.`];
-    pages['/en'] = [pages['/en'][0], `For clinics, vet practices, yoga studios, cafés and trades. Presence from USD ${presence.us.setup}, automated lead capture from USD ${leads.us.setup} and an AI assistant from USD ${assistant.us.setup}. In Argentina, Presence from USD ${presence.ar.setup}.`];
+    const active = isLaunchActive(offers.launch);
+    const presenceUsd = sellingAmounts(presence.us, active);
+    const leadUsd = sellingAmounts(leads.us, active);
+    const assistantUsd = sellingAmounts(assistant.us, active);
+    const presenceAr = sellingAmounts(presence.ar, active).setup;
+    pages['/'] = [pages['/'][0], `Para electricistas y plomeros en Estados Unidos, empezando por Houston y San Antonio. Cada nivel incluye el anterior. Presencia USD ${presenceUsd.setup}, captación automática USD ${leadUsd.setup} más USD ${leadUsd.monthly} al mes, y recepcionista con IA USD ${assistantUsd.setup} más USD ${assistantUsd.monthly} al mes. En Argentina, Presencia desde USD ${presenceAr}.`];
+    pages['/en'] = [pages['/en'][0], `For electricians and plumbers in the United States, starting with Houston and San Antonio. Each tier includes the one before it. Presence USD ${presenceUsd.setup}, automated lead capture USD ${leadUsd.setup} plus USD ${leadUsd.monthly} per month, and an AI receptionist USD ${assistantUsd.setup} plus USD ${assistantUsd.monthly} per month. In Argentina, Presence from USD ${presenceAr}.`];
     pages['/services'] = [pages['/services'][0], pages['/'][1]];
     pages['/en/services'] = [pages['/en/services'][0], pages['/en'][1]];
   }
@@ -55,7 +61,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
     const plans = servicePage ? catalog.filter(plan => plan.id === servicePage.id) : [];
     if (offers?.tiers && ['/', '/services'].includes(path)) {
       for (const tier of offers.tiers) {
-        const offerFor = (list, name) => ({ '@type': 'Offer', name, price: list.setup, priceCurrency: 'USD', url: `${absolute(localized('/', lang))}#precios`, ...(list.monthly ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: list.monthly, priceCurrency: 'USD', unitText: 'MONTH' } } : {}) });
+        const offerFor = (list, name) => { const price = sellingAmounts(list, isLaunchActive(offers.launch)); return { '@type': 'Offer', name, price: price.setup, priceCurrency: 'USD', url: `${absolute(localized('/', lang))}#precios`, ...(price.monthly ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: price.monthly, priceCurrency: 'USD', unitText: 'MONTH' } } : {}) }; };
         nodes.push({ '@type': 'Service', '@id': `${origin}/#offer-${tier.id}`, name: tier.name[lang], description: tier.summary[lang], serviceType: tier.name.en, provider: { '@id': `${origin}/#local-business` }, areaServed: ['United States', 'Argentina'], offers: [offerFor(tier.us, 'United States'), offerFor(tier.ar, 'Argentina')] });
       }
       nodes.push({ '@type': 'ItemList', '@id': `${url}#offers`, itemListElement: offers.tiers.map((tier, index) => ({ '@type': 'ListItem', position: index + 1, name: tier.name[lang], item: { '@id': `${origin}/#offer-${tier.id}` } })) });

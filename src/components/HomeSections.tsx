@@ -3,7 +3,7 @@ import { LanguageContext } from "@/lib/language-context";
 import { translate } from "@/lib/language-copy";
 import { Text, LocalizedAnchor } from "@/lib/language";
 import CommercialPricing from "./CommercialPricing";
-import { AudienceSection, OfferFAQ, OfferPricing, OutcomesSection } from "./OfferSections";
+import { OfferFAQ, OfferPricing, OutcomesSection, TradesSection } from "./OfferSections";
 import { ArrowUpRight, Check, Code2, Gauge, Globe2, MessageCircle, Network, PenTool, Search, Settings2, Sparkles } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import AuditForm from "./AuditForm";
@@ -14,7 +14,7 @@ import gonzaloAlvarez from "@/assets/projects/gonzalo-alvarez-1200.webp";
 import gonzaloAlvarezSmall from "@/assets/projects/gonzalo-alvarez-600.webp";
 import rifaSolidaria from "@/assets/projects/rifa-solidaria-1200.webp";
 import rifaSolidariaSmall from "@/assets/projects/rifa-solidaria-600.webp";
-export const WHATSAPP_URL = "https://wa.me/5493512085644?text=" + encodeURIComponent("Hola, quiero reservar una llamada para no perder consultas en mi negocio.");
+export const WHATSAPP_URL = "https://wa.me/5493512085644?text=" + encodeURIComponent("Hola, quiero una maqueta gratis para mi negocio de electricista o plomero.");
 const projects = [
     { name: "vet.mavie", type: "Sitio web para especialistas veterinarias", image: vetMavie, smallImage: vetMavieSmall, href: "https://www.vetmavie.com/", alt: "Sitio web de vet.mavie" },
     { name: "Psicólogo Gonzalo Álvarez", type: "Presencia digital y captación de consultas", image: gonzaloAlvarez, smallImage: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", alt: "Sitio web del psicólogo Gonzalo Álvarez" },
@@ -29,26 +29,26 @@ const capabilities = [
     { icon: Gauge, title: "Dashboards", text: "Una vista clara de lo que pasa para decidir sin depender de planillas imposibles." },
 ];
 const process = [
-    { number: "01", title: "Llamada", text: "Nos contás cómo te escriben hoy, qué turnos ofrecés y qué consulta se te escapa." },
-    { number: "02", title: "Lo publicamos", text: "Dejamos online la web, Google y las respuestas automáticas del nivel que elegiste." },
-    { number: "03", title: "Llegan consultas", text: "Los recordatorios, las reseñas y el asistente siguen trabajando cuando vos estás atendiendo." },
+    { number: "01", title: "Llamada", text: "Nos contás si sos electricista o plomero, en qué ciudad trabajás y qué llamadas se te escapan." },
+    { number: "02", title: "Maqueta en 48 horas", text: "Te mostramos una página con tu oficio y tu zona antes de que decidas un nivel." },
+    { number: "03", title: "Lo publicamos", text: "Dejamos online el sitio, Google Maps y la respuesta automática o la recepcionista del nivel que elegiste." },
 ];
 export const ConnectedSystem = () => (<div className="relative min-h-[430px] sm:min-h-[500px]" role="group" aria-label="Connected digital system / Sistema digital conectado">
     <div className="absolute inset-0 rounded-lg bg-secondary border border-border overflow-hidden">
       <div className="absolute inset-0 studio-grid opacity-60"/>
       <div className="absolute left-[8%] top-[13%] bg-card border border-border rounded-lg p-4 shadow-studio w-[44%] animate-float">
-        <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground mb-3"><Search size={15} className="text-primary"/><Text value="Consulta nueva"/></div>
+        <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground mb-3"><Search size={15} className="text-primary"/><Text value="Llamada perdida"/></div>
         <div className="h-2 rounded bg-muted mb-2"/><div className="h-2 w-3/4 rounded bg-muted"/>
       </div>
       <div className="absolute right-[7%] top-[29%] bg-foreground text-background rounded-lg p-4 shadow-studio w-[47%] animate-float-delayed">
-        <div className="flex items-center gap-2 text-xs font-bold mb-3"><PenTool size={15} className="text-primary"/><Text value="Turno confirmado"/></div>
+        <div className="flex items-center gap-2 text-xs font-bold mb-3"><PenTool size={15} className="text-primary"/><Text value="Mensaje enviado"/></div>
         <div className="grid grid-cols-3 gap-2"><span className="h-12 rounded bg-background/15"/><span className="h-12 rounded bg-background/15"/><span className="h-12 rounded bg-primary"/></div>
       </div>
       <div className="absolute left-[12%] bottom-[14%] bg-card border border-border rounded-lg p-4 shadow-studio w-[49%] animate-float-slow">
         <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground mb-3"><Code2 size={15} className="text-primary"/><Text value="Pedido de reseña"/></div>
         <div className="space-y-2"><div className="h-1.5 w-5/6 rounded bg-accent"/><div className="h-1.5 w-2/3 rounded bg-muted"/><div className="h-1.5 w-4/5 rounded bg-primary"/></div>
       </div>
-      <div className="absolute right-[8%] bottom-[7%] bg-primary text-primary-foreground rounded-lg px-4 py-3 shadow-studio flex items-center gap-2 text-xs font-bold"><Check size={16}/><Text value="Respondido"/></div>
+      <div className="absolute right-[8%] bottom-[7%] bg-primary text-primary-foreground rounded-lg px-4 py-3 shadow-studio flex items-center gap-2 text-xs font-bold"><Check size={16}/><Text value="Trabajo agendado"/></div>
       <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 600 500" fill="none" aria-hidden="true"><path d="M220 120C350 120 320 220 420 220M420 280C360 330 300 350 220 380" stroke="currentColor" className="text-primary/50" strokeWidth="2" strokeDasharray="6 8"/></svg>
     </div>
   </div>);
@@ -56,8 +56,9 @@ export const PortfolioSection = () => { const language = useContext(LanguageCont
     <div className="max-w-7xl mx-auto px-5 sm:px-6">
       <AnimatedSection className="grid lg:grid-cols-[0.7fr_1.3fr] gap-8 lg:gap-16 items-end mb-12">
         <p className="section-kicker"><Text value={"Proyectos seleccionados"}/></p>
-        <h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Text value={"Dise\u00F1amos soluciones que ya est\u00E1n trabajando."}/></h2>
+        <h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Text value="Trabajo real, sin reseñas inventadas." /></h2>
       </AnimatedSection>
+      <p className="text-muted-foreground mb-10 max-w-3xl"><Text value="Estos proyectos son reales. No publicamos testimonios de electricistas o plomeros que no tengamos." /></p>
       <div className="space-y-14">
         {projects.map((project, index) => (<AnimatedSection key={project.name} delay={0.08 * index}>
             <LocalizedAnchor href={project.href} target="_blank" rel="noopener noreferrer" className="group block">
@@ -96,7 +97,7 @@ export const CapabilitiesSection = () => (<section id="soluciones" className="py
   </section>);
 export const ProcessSection = () => (<section id="como-trabajamos" className="py-20 lg:py-28 bg-secondary">
     <div className="max-w-7xl mx-auto px-5 sm:px-6">
-      <AnimatedSection className="grid lg:grid-cols-2 gap-8 mb-12"><div><p className="section-kicker"><Text value={"C\u00F3mo trabajamos"}/></p><h2 className="text-4xl md:text-6xl font-bold"><Text value="De la llamada al primer turno." /></h2></div><p className="text-lg text-muted-foreground lg:self-end lg:pb-2 max-w-xl"><Text value="Un proceso corto. Sin misterio técnico y con el precio confirmado antes de empezar." /></p></AnimatedSection>
+      <AnimatedSection className="grid lg:grid-cols-2 gap-8 mb-12"><div><p className="section-kicker"><Text value={"C\u00F3mo trabajamos"}/></p><h2 className="text-4xl md:text-6xl font-bold"><Text value="De la llamada a la maqueta." /></h2></div><p className="text-lg text-muted-foreground lg:self-end lg:pb-2 max-w-xl"><Text value="Sin pago por adelantado. Primero ves la página. El precio se confirma en la llamada." /></p></AnimatedSection>
       <div className="grid md:grid-cols-3 border-t border-border">
         {process.map((step, index) => <AnimatedSection key={step.number} delay={index * 0.06} className="py-7 md:px-5 border-b md:border-r border-border last:border-r-0"><span className="text-xs font-bold text-primary-text">{step.number}</span><h3 className="text-xl font-bold mt-8 mb-3"><Text value={step.title}/></h3><p className="text-sm text-muted-foreground leading-relaxed"><Text value={step.text}/></p></AnimatedSection>)}
       </div>
@@ -108,6 +109,6 @@ export const ProblemsSection = () => {
 };
 export const PricingSection = CommercialPricing;
 export const OfferSection = () => (<section className="py-20 lg:py-28 bg-card"><div className="max-w-7xl mx-auto px-5 sm:px-6"><AnimatedSection className="mb-12"><p className="section-kicker"><Text value={"Dos maneras de empezar"}/></p><h2 className="text-4xl md:text-6xl font-bold"><Text value={"Empecemos por lo que hoy tiene sentido."}/></h2></AnimatedSection><div className="grid md:grid-cols-2 gap-px bg-border border border-border rounded-lg overflow-hidden"><article className="bg-background p-8 md:p-12"><span className="text-sm font-bold text-primary-text"><Text value={"01"}/></span><h3 className="text-3xl font-bold mt-8 mb-4"><Text value={"Un website que haga su trabajo"}/></h3><p className="text-muted-foreground leading-relaxed mb-8"><Text value={"Para ordenar tu propuesta, generar confianza y convertir visitas en conversaciones reales."}/></p><Button asChild variant="outline"><LocalizedAnchor href="/services#base-digital"><Text value={"Conocer la propuesta "}/><ArrowUpRight /></LocalizedAnchor></Button></article><article className="bg-foreground text-background p-8 md:p-12"><span className="text-sm font-bold text-primary-text"><Text value={"02"}/></span><h3 className="text-3xl font-bold mt-8 mb-4"><Text value={"Una soluci\u00F3n a medida"}/></h3><p className="text-background/70 leading-relaxed mb-8"><Text value={"Para conectar procesos, automatizar tareas o construir una herramienta propia alrededor de tu negocio."}/></p><Button asChild><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value={"Contanos tu proyecto "}/><MessageCircle /></LocalizedAnchor></Button></article></div></div></section>);
-export const FinalCTASection = () => (<section id="contacto" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-[1.1fr_.9fr] gap-12 lg:gap-20"><AnimatedSection><p className="section-kicker"><Text value="Reservá una llamada" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.03] mb-6"><Text value="Veinte minutos para ver qué nivel te conviene." /></h2><p className="text-lg text-muted-foreground max-w-xl mb-8"><Text value="Contanos qué negocio tenés y cuántas consultas se te escapan. Te decimos si alcanza con la web o si conviene sumar respuestas automáticas." /></p><Button asChild size="lg"><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value="También por WhatsApp" /><MessageCircle /></LocalizedAnchor></Button></AnimatedSection><AnimatedSection delay={.1} className="bg-card border border-border rounded-lg p-6 md:p-8 shadow-studio"><AuditForm/></AnimatedSection></div></section>);
-export const HomeContent = () => <><OutcomesSection /><AudienceSection /><OfferPricing /><ProcessSection /><PortfolioSection /><OfferFAQ /><FinalCTASection /></>;
+export const FinalCTASection = () => (<section id="contacto" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-[1.1fr_.9fr] gap-12 lg:gap-20"><AnimatedSection><p className="section-kicker"><Text value="Maqueta gratis" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.03] mb-6"><Text value="Tu sitio, en 48 horas, antes de pagar." /></h2><p className="text-lg text-muted-foreground max-w-xl mb-8"><Text value="Contanos si sos electricista o plomero y en qué ciudad trabajás. Te mostramos la página y, si querés, agendamos una llamada en horario de Houston y San Antonio." /></p><Button asChild size="lg"><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value="También por WhatsApp" /><MessageCircle /></LocalizedAnchor></Button></AnimatedSection><AnimatedSection delay={.1} className="bg-card border border-border rounded-lg p-6 md:p-8 shadow-studio"><AuditForm/></AnimatedSection></div></section>);
+export const HomeContent = () => <><OutcomesSection /><TradesSection /><OfferPricing /><ProcessSection /><PortfolioSection /><OfferFAQ /><FinalCTASection /></>;
 const SolutionGuide = () => <section className="py-16 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6"><p className="section-kicker"><Text value={"El pr\u00F3ximo paso de tu negocio"}/></p><h2 className="text-3xl md:text-5xl font-bold mb-8"><Text value={"\u00BFQu\u00E9 quer\u00E9s que pase cuando te encuentran?"}/></h2><div className="grid md:grid-cols-3 gap-6">{[{ title: "Que te consulten", text: "Una landing reúne tu oferta y facilita el contacto. Ideal para un servicio, una campaña o un lanzamiento." }, { title: "Que entiendan por qué elegirte", text: "Una web profesional presenta tu negocio, tus servicios y tu experiencia. Con panel para editar tu contenido." }, { title: "Que compren tus productos", text: "Una tienda organiza tu catálogo, los pedidos y los pagos. Con panel para gestionar tu operación." }].map(item => <article key={item.title} className="bg-card rounded-xl p-6 border border-border"><h3 className="text-xl font-bold mb-3"><Text value={item.title}/></h3><p className="text-muted-foreground mb-5"><Text value={item.text}/></p><LocalizedAnchor href="#precios" className="underline font-bold"><Text value={"Ver opciones y alcance"}/></LocalizedAnchor></article>)}</div><p className="mt-6 text-muted-foreground"><Text value={"Latam Leap combina estrategia de marketing y desarrollo para negocios en Argentina y otros países. Si necesit\u00E1s una soluci\u00F3n diferente, definimos juntos el alcance y el presupuesto."}/></p></div></section>;
