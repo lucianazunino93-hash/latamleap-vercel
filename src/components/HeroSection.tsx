@@ -8,12 +8,12 @@ const HeroSection = () => (<section className="relative pt-8 lg:pt-12 pb-16 lg:p
       <div className="grid lg:grid-cols-[1.02fr_.98fr] gap-12 lg:gap-16 items-center">
         <div className="max-w-2xl">
           <div>
-            <p className="section-kicker"><Text value="Electricistas y plomeros en Estados Unidos" /></p>
+            <p className="section-kicker"><Text value="Negocios de servicios locales en Estados Unidos" /></p>
           </div>
 
           <h1 className="font-bold text-[42px] sm:text-6xl lg:text-[68px] xl:text-[76px] leading-[.98] mb-7"><Text value="Una llamada perdida es un trabajo que no hiciste." /></h1>
 
-          <p className="text-muted-foreground text-lg lg:text-xl leading-relaxed max-w-xl mb-8"><Text value="Latam Leap es un estudio latinoamericano, bilingüe y rápido. Armamos tu sitio, tu lugar en Google Maps y una recepcionista con IA que contesta o escribe cuando estás en una obra. Empezamos por Houston y San Antonio." /></p>
+          <p className="text-muted-foreground text-lg lg:text-xl leading-relaxed max-w-xl mb-8"><Text value="Latam Leap es un estudio latinoamericano, bilingüe y rápido. Armamos tu sitio, tu lugar en Google Maps y una recepcionista con IA que contesta o escribe cuando no podés atender. Trabajamos con negocios de servicios en todo Estados Unidos." /></p>
 
           <div className="flex flex-col sm:flex-row gap-3">
             <Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedir la maqueta gratis" /><CalendarCheck /></LocalizedAnchor></Button>
@@ -21,7 +21,7 @@ const HeroSection = () => (<section className="relative pt-8 lg:pt-12 pb-16 lg:p
             <Button asChild size="lg" variant="outline"><LocalizedAnchor href="/#precios"><Text value="Ver precios" /><ArrowDown /></LocalizedAnchor></Button>
           </div>
 
-          <p className="text-sm text-text-muted leading-relaxed mt-6"><Text value="Maqueta de tu sitio en 48 horas. La llamada se agenda en el horario comercial de Houston y San Antonio." /></p>
+          <p className="text-sm text-text-muted leading-relaxed mt-6"><Text value="Maqueta de tu sitio en 48 horas. La llamada se agenda en tu horario, estés en la ciudad que estés." /></p>
           <SocialLinks />
         </div>
 

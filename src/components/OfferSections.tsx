@@ -9,14 +9,14 @@ import { Button } from "@/components/ui/button";
 import AnimatedSection from "./AnimatedSection";
 
 const outcomes = [
-  ["Una llamada perdida es un trabajo perdido", "Si estás en una obra y no atendés, esa persona llama al siguiente electricista o plomero."],
+  ["Una llamada perdida es un trabajo perdido", "Si estás con un cliente y no atendés, esa persona llama al siguiente."],
   ["Que ninguna llamada quede sin respuesta", "Una recepcionista con IA atiende. Si no podés contestar, sale un mensaje automático."],
   ["Más reseñas y más presencia en Maps", "Después del trabajo se pide la reseña, y tu perfil de Google queda listo para que te encuentren."],
 ];
 const questions = [
   ["¿Cada nivel incluye el anterior?", "Sí. Captación automática incluye todo lo de Presencia. El asistente con IA incluye todo lo de Captación automática, y por lo tanto también Presencia. No se contratan por separado."],
   ["¿El precio depende del país?", "En Estados Unidos ves los precios de Estados Unidos, en dólares. En Argentina ves los precios de Argentina, en pesos, proporcionales a los de Estados Unidos. El resto de los países ve los precios de Estados Unidos."],
-  ["¿Qué es la maqueta gratis?", "En 48 horas te mostramos una página con tu oficio, tu ciudad y tu forma de contacto. La llamada y la maqueta no son un pago."],
+  ["¿Qué es la maqueta gratis?", "En 48 horas te mostramos una página con tu servicio, tu zona y tu forma de contacto. La llamada y la maqueta no son un pago."],
   ["¿El asistente reemplaza a mi equipo?", "No. Atiende cuando estás en un trabajo y toma los datos. Los casos que necesitan una persona siguen llegando a vos."],
   ["¿Hay un costo mensual?", "Presencia es un pago inicial. Captación automática y el asistente suman un abono mensual para mantener el mensaje automático, las reseñas y la recepcionista."],
   ["¿Hasta cuándo duran los precios de lanzamiento?", "Hasta la fecha y la cantidad de lugares publicados en el sitio. Esa fecha no se reinicia sola y el contador no baja solo: lo actualizamos en la configuración cuando entra un cliente."],
@@ -57,12 +57,15 @@ function TradeArticle({ id, kicker, title, text, points }: { id: string; kicker:
 }
 
 export function TradesSection() {
-  return <section className="py-16 lg:py-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="Para quién es" /></p><h2 className="text-4xl md:text-5xl font-bold mb-4"><Text value="Electricistas y plomeros en Estados Unidos." /></h2><p className="text-lg text-muted-foreground"><Text value="Empezamos por Houston y San Antonio. Latam Leap es un estudio latinoamericano: bilingüe, rápido, y armado con IA y automatización. La llamada la agendamos en el horario comercial del centro de Estados Unidos." /></p></AnimatedSection>
+  return <section id="para-quien" className="py-16 lg:py-24 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
+    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="Para quién es" /></p><h2 className="text-4xl md:text-5xl font-bold mb-4"><Text value="Negocios de servicios locales en todo Estados Unidos." /></h2><p className="text-lg text-muted-foreground"><Text value="Oficios del hogar y otros negocios que viven de una llamada o un turno. Latam Leap es un estudio latinoamericano: bilingüe, rápido, y armado con IA y automatización. La llamada la agendamos en tu horario, en cualquier ciudad de Estados Unidos." /></p></AnimatedSection>
     <div className="grid lg:grid-cols-2 gap-6">
-      <TradeArticle id="electricians" kicker="Electricistas" title="Cuando estás en un tablero, el teléfono no puede quedar mudo." text="Una búsqueda de electricista cerca termina en el que atiende. Te armamos la página, el perfil de Maps y la respuesta para cuando estás en el trabajo." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
-      <TradeArticle id="plumbers" kicker="Plomeros" title="Una pérdida no espera a que termines el trabajo anterior." text="El que busca un plomero llama a dos o tres números. Si el tuyo no contesta, se va. La página, Maps y el mensaje automático sirven para que ese trabajo no se pierda." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
+      <TradeArticle id="electricians" kicker="Ejemplo" title="Electricistas" text="Una búsqueda de electricista cerca termina en el que atiende. Te armamos la página, el perfil de Maps y la respuesta para cuando estás en el trabajo." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
+      <TradeArticle id="plumbers" kicker="Ejemplo" title="Plomeros" text="Quien necesita un plomero llama a dos o tres números. Si el tuyo no contesta, se va. La página, Maps y el mensaje automático sirven para que ese trabajo no se pierda." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
+      <TradeArticle id="hvac" kicker="Ejemplo" title="HVAC" text="Si estás en un servicio de aire o calefacción y no atendés, esa llamada sigue. El sitio y el mensaje automático toman los datos del pedido." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
+      <TradeArticle id="cleaning" kicker="Ejemplo" title="Limpieza" text="Quien busca una limpieza quiere un horario. Si no contestás, reserva con otro. La página y la respuesta automática dejan el turno pedido." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
     </div>
+    <p className="text-muted-foreground mt-8 max-w-3xl"><Text value="Estos oficios son ejemplos. También trabajamos con otros negocios locales que viven de turnos, como clínicas, estudios y salones, en cualquier lugar de Estados Unidos." /></p>
   </div></section>;
 }
 
@@ -98,5 +101,5 @@ export function OfferPricing() {
 }
 
 export function OfferFAQ() {
-  return <section className="py-20"><div className="max-w-4xl mx-auto px-5 sm:px-6"><p className="section-kicker"><Text value="Antes de la llamada" /></p><h2 className="text-4xl font-bold mb-8"><Text value="Preguntas de electricistas y plomeros." /></h2>{questions.map(([question, answer]) => <details key={question} className="border-b border-border py-5"><summary className="font-bold cursor-pointer"><Text value={question} /></summary><p className="text-muted-foreground leading-relaxed mt-4"><Text value={answer} /></p></details>)}</div></section>;
+  return <section className="py-20"><div className="max-w-4xl mx-auto px-5 sm:px-6"><p className="section-kicker"><Text value="Antes de la llamada" /></p><h2 className="text-4xl font-bold mb-8"><Text value="Preguntas de negocios de servicios." /></h2>{questions.map(([question, answer]) => <details key={question} className="border-b border-border py-5"><summary className="font-bold cursor-pointer"><Text value={question} /></summary><p className="text-muted-foreground leading-relaxed mt-4"><Text value={answer} /></p></details>)}</div></section>;
 }

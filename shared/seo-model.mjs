@@ -26,8 +26,8 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
     const leadUsd = sellingAmounts(leads.us, active);
     const assistantUsd = sellingAmounts(assistant.us, active);
     const presenceAr = sellingAmounts(presence.ar, active).setup;
-    pages['/'] = [pages['/'][0], `Para electricistas y plomeros en Estados Unidos, empezando por Houston y San Antonio. Cada nivel incluye el anterior. Presencia USD ${presenceUsd.setup}, captación automática USD ${leadUsd.setup} más USD ${leadUsd.monthly} al mes, y recepcionista con IA USD ${assistantUsd.setup} más USD ${assistantUsd.monthly} al mes. En Argentina, Presencia desde USD ${presenceAr}.`];
-    pages['/en'] = [pages['/en'][0], `For electricians and plumbers in the United States, starting with Houston and San Antonio. Each tier includes the one before it. Presence USD ${presenceUsd.setup}, automated lead capture USD ${leadUsd.setup} plus USD ${leadUsd.monthly} per month, and an AI receptionist USD ${assistantUsd.setup} plus USD ${assistantUsd.monthly} per month. In Argentina, Presence from USD ${presenceAr}.`];
+    pages['/'] = [pages['/'][0], `Para negocios de servicios locales en todo Estados Unidos. Cada nivel incluye el anterior. Presencia USD ${presenceUsd.setup}, captación automática USD ${leadUsd.setup} más USD ${leadUsd.monthly} al mes, y recepcionista con IA USD ${assistantUsd.setup} más USD ${assistantUsd.monthly} al mes. En Argentina, Presencia desde USD ${presenceAr}.`];
+    pages['/en'] = [pages['/en'][0], `For local service businesses across the United States. Each tier includes the one before it. Presence USD ${presenceUsd.setup}, automated lead capture USD ${leadUsd.setup} plus USD ${leadUsd.monthly} per month, and an AI receptionist USD ${assistantUsd.setup} plus USD ${assistantUsd.monthly} per month. In Argentina, Presence from USD ${presenceAr}.`];
     pages['/services'] = [pages['/services'][0], pages['/'][1]];
     pages['/en/services'] = [pages['/en/services'][0], pages['/en'][1]];
   }
