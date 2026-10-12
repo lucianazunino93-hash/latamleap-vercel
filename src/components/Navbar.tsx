@@ -7,8 +7,8 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CurrencySelector from "./CurrencySelector";
 const links = [
-    { label: "Electricistas", href: "/#electricians" },
-    { label: "Plomeros", href: "/#plumbers" },
+    { label: "Para quién", href: "/#para-quien" },
+    { label: "Demo", href: "/#demo" },
     { label: "Precios", href: "/#precios" },
     { label: "Nosotros", href: "/about" },
 ];

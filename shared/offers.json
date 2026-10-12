@@ -51,8 +51,8 @@
       },
       "includes": { "es": "Incluye todo lo de Captación automática, y por lo tanto también Presencia.", "en": "Includes everything in Automated lead capture, and therefore Presence too." },
       "features": {
-        "es": ["Incluye todo lo de Captación automática", "Recepcionista con IA las 24 horas", "Responde y toma los datos del trabajo", "Escribe si estás en una obra y no podés atender"],
-        "en": ["Includes everything in Automated lead capture", "24/7 AI receptionist", "Answers and takes the job details", "Texts back when you are on a job and cannot pick up"]
+        "es": ["Incluye todo lo de Captación automática", "Recepcionista con IA las 24 horas", "Responde y toma los datos del trabajo", "Escribe si estás con un cliente y no podés atender"],
+        "en": ["Includes everything in Automated lead capture", "24/7 AI receptionist", "Answers and takes the job details", "Texts back when you are with a customer and cannot pick up"]
       },
       "us": { "setup": 1197, "regularSetup": 1697, "monthly": 247 },
       "ar": { "setup": 399, "regularSetup": 566, "monthly": 82 }
