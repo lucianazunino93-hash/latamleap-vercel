@@ -31,7 +31,8 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
     const payload = {
       name: String(fields.get("name") ?? "").trim(), email: String(fields.get("email") ?? "").trim(),
       phone: String(fields.get("phone") ?? "").trim(), solution: String(fields.get("solution") ?? ""),
-      project: String(fields.get("project") ?? "").trim(), website: String(fields.get("website") ?? ""), language, currency,
+      project: ["Negocio: " + String(fields.get("business") ?? "").trim(), "Sitio web: " + (String(fields.get("currentSite") ?? "").trim() || "No indicado"), "Pide la maqueta gratis en 48 horas."].join("\n"),
+      website: String(fields.get("website") ?? ""), language, currency,
     };
     const fingerprint = JSON.stringify(payload);
     if (submission.current.fingerprint !== fingerprint) submission.current = { fingerprint, id: crypto.randomUUID() };
@@ -52,13 +53,14 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
   return <form onSubmit={submit} className="space-y-5" aria-busy={status === "sending"}>
     <fieldset disabled={status === "sending"} className="space-y-5">
       <label htmlFor={id + "name"} className="block text-sm"><Text value="Nombre" /><input id={id + "name"} name="name" autoComplete="name" required maxLength={100} className={cls} /></label>
-      <label htmlFor={id + "email"} className="block text-sm"><Text value="Tu correo" /><input id={id + "email"} name="email" type="email" autoComplete="email" required maxLength={254} className={cls} /></label>
-      <label htmlFor={id + "phone"} className="block text-sm"><Text value="WhatsApp (opcional)" /><input id={id + "phone"} name="phone" type="tel" autoComplete="tel" maxLength={40} className={cls} /></label>
-      <label htmlFor={id + "solution"} className="block text-sm"><Text value="¿Qué nivel te interesa?" /><select id={id + "solution"} name="solution" value={solution} onChange={event => setSolution(event.target.value)} className={cls}>{["Presencia", "Captación automática", "Asistente con IA", "Necesito orientación"].map(value => <option key={value} value={value}><Text value={value} /></option>)}</select></label>
-      <label htmlFor={id + "project"} className="block text-sm"><Text value="Contanos sobre tu proyecto" /><textarea id={id + "project"} name="project" required maxLength={1500} rows={4} className={cls} /></label>
+      <label htmlFor={id + "business"} className="block text-sm"><Text value="Negocio" /><input id={id + "business"} name="business" autoComplete="organization" required maxLength={120} className={cls} /></label>
+      <label htmlFor={id + "email"} className="block text-sm"><Text value="Correo" /><input id={id + "email"} name="email" type="email" autoComplete="email" required maxLength={254} className={cls} /></label>
+      <label htmlFor={id + "phone"} className="block text-sm"><Text value="Teléfono" /><input id={id + "phone"} name="phone" type="tel" autoComplete="tel" maxLength={40} className={cls} /></label>
+      <label htmlFor={id + "currentSite"} className="block text-sm"><Text value="Sitio web, si tenés" /><input id={id + "currentSite"} name="currentSite" inputMode="url" autoComplete="url" maxLength={200} className={cls} /></label>
+      <input type="hidden" name="solution" value={solution} />
       <div className="hidden" aria-hidden="true"><label htmlFor={id + "website"}>Website<input id={id + "website"} name="website" tabIndex={-1} autoComplete="off" /></label></div>
       <p className="text-xs text-muted-foreground"><Text value="Usaremos tus datos para responder tu consulta. Leé nuestra " /><Link to="/privacy-policy" className="underline"><Text value="política de privacidad" /></Link>.</p>
-      <Button type="submit" className="w-full"><Text value={status === "sending" ? "Enviando…" : "Pedir la maqueta gratis"} /></Button>
+      <Button type="submit" className="w-full"><Text value={status === "sending" ? "Enviando…" : "Pedí tu maqueta gratis en 48 horas"} /></Button>
     </fieldset>
     {status === "error" && <p role="alert" className="text-sm text-destructive"><Text value={error} /></p>}
     {showWhatsAppAlt && <LocalizedAnchor className="block text-sm underline text-center" href="https://wa.me/5493512085644" target="_blank" rel="noopener noreferrer"><Text value="Prefiero escribir directamente" /></LocalizedAnchor>}

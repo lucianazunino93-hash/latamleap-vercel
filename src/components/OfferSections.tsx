@@ -9,18 +9,17 @@ import { Button } from "@/components/ui/button";
 import AnimatedSection from "./AnimatedSection";
 
 const outcomes = [
-  ["Una llamada perdida es un trabajo perdido", "Si estás con un cliente y no atendés, esa persona llama al siguiente."],
-  ["Que ninguna llamada quede sin respuesta", "Una recepcionista con IA atiende. Si no podés contestar, sale un mensaje automático."],
-  ["Más reseñas y más presencia en Maps", "Después del trabajo se pide la reseña, y tu perfil de Google queda listo para que te encuentren."],
+  ["El trabajo se lo queda quien atiende", "Si estás con un cliente y no contestás, esa persona llama al siguiente. No deja un mensaje para esperar."],
+  ["Ya habías pagado por esa llamada", "El aviso, la camioneta o la ficha de Google ya te habían puesto delante. La llamada perdida tira ese costo."],
+  ["La reseña también se va", "Quien hace el trabajo pide la reseña. El siguiente negocio se vuelve más fácil de encontrar que el tuyo."],
 ];
 const questions = [
-  ["¿Cada nivel incluye el anterior?", "Sí. Captación automática incluye todo lo de Presencia. El asistente con IA incluye todo lo de Captación automática, y por lo tanto también Presencia. No se contratan por separado."],
-  ["¿El precio depende del país?", "En Estados Unidos ves los precios de Estados Unidos, en dólares. En Argentina ves los precios de Argentina, en pesos, proporcionales a los de Estados Unidos. El resto de los países ve los precios de Estados Unidos."],
-  ["¿Qué es la maqueta gratis?", "En 48 horas te mostramos una página con tu servicio, tu zona y tu forma de contacto. La llamada y la maqueta no son un pago."],
-  ["¿El asistente reemplaza a mi equipo?", "No. Atiende cuando estás en un trabajo y toma los datos. Los casos que necesitan una persona siguen llegando a vos."],
-  ["¿Hay un costo mensual?", "Presencia es un pago inicial. Captación automática y el asistente suman un abono mensual para mantener el mensaje automático, las reseñas y la recepcionista."],
-  ["¿Hasta cuándo duran los precios de lanzamiento?", "Hasta la fecha y la cantidad de lugares publicados en el sitio. Esa fecha no se reinicia sola y el contador no baja solo: lo actualizamos en la configuración cuando entra un cliente."],
-  ["¿Cómo se paga en Estados Unidos?", "No hay checkout en el sitio. Después de la llamada, si seguimos, te enviamos un enlace de pago de Wise. La maqueta y la llamada no se pagan."],
+  ["¿El precio es el que está publicado?", "Sí. El precio tachado es el de lista. El precio grande es el de lanzamiento, mientras queden lugares y hasta la fecha del banner. Cada nivel incluye el anterior. En Estados Unidos se ve en dólares. En Argentina, en pesos. No hay checkout en el sitio."],
+  ["¿Puedo confiar en un estudio que trabaja desde otro país?", "Latam Leap lo lleva Luciana Zunino desde Argentina. Trabajamos en inglés y en español. Antes de pagar ves la maqueta. La web, el perfil de Google y los accesos quedan a tu nombre. La llamada se agenda en tu horario."],
+  ["¿Cuánto tarda?", "La maqueta está en 48 horas. Si la aprobás, publicamos el sitio, Google Maps y la respuesta del nivel que elegiste. No cobramos el diseño antes de esa aprobación."],
+  ["¿Tengo que saber de tecnología?", "No. Armamos el sitio, el perfil de Google y el mensaje o la recepcionista. Vos nos das el servicio, la zona y cómo te contactan."],
+  ["¿Puedo frenar el abono?", "Sí. Presencia no tiene abono. En los otros niveles el abono mensual se puede frenar cuando quieras. La maqueta no se paga."],
+  ["¿Y si no me gusta la maqueta?", "No pagás. El siguiente paso es ver el diseño. En Estados Unidos, si seguimos, el pago es un enlace de Wise que te enviamos después de la aprobación."],
 ];
 
 function rememberPlan(id: string) {
@@ -40,32 +39,23 @@ export function LaunchBanner() {
 
 export function OutcomesSection() {
   return <section className="py-16 lg:py-24 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="El resultado" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Text value="Menos llamadas perdidas. Más trabajos en la agenda." /></h2></AnimatedSection>
-    <div className="grid md:grid-cols-3 gap-6">{outcomes.map(([title, text], index) => <AnimatedSection key={title} delay={index * 0.05} className="bg-card border border-border rounded-xl p-7"><span className="text-xs font-bold text-primary-text">0{index + 1}</span><h3 className="text-2xl font-bold mt-6 mb-3"><Text value={title} /></h3><p className="text-muted-foreground leading-relaxed"><Text value={text} /></p></AnimatedSection>)}</div>
-    <p className="text-sm text-muted-foreground mt-8 max-w-3xl"><Text value="En 60 cuentas de contratistas, el mensaje automático tras una llamada perdida recuperó en promedio el 22% de esas llamadas como trabajos agendados." /> <a className="underline" href="https://gorapidlocal.com/blog/missed-call-text-back-roi" target="_blank" rel="noopener noreferrer">GoRapidLocal</a>.</p>
+    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="El problema" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Text value="Una llamada perdida es un trabajo que se fue con otro." /></h2></AnimatedSection>
+    <div className="grid md:grid-cols-3 gap-6">{outcomes.map(([title, text], index) => <AnimatedSection key={title} delay={index * 0.05} className="bg-card border border-border rounded-xl p-7"><h3 className="text-2xl font-bold mb-3"><Text value={title} /></h3><p className="text-muted-foreground leading-relaxed"><Text value={text} /></p></AnimatedSection>)}</div>
+    <p className="text-sm text-muted-foreground mt-8 max-w-3xl"><Text value="En 60 cuentas de contratistas, el mensaje automático tras una llamada perdida recuperó en promedio el 22% de esas llamadas como trabajos agendados." /> <a className="underline" href="https://gorapidlocal.com/blog/missed-call-text-back-roi" target="_blank" rel="noopener noreferrer">GoRapidLocal</a>. <Text value="Es un dato publicado por ellos, no un resultado de Latam Leap." /></p>
+    <div className="mt-8"><Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button></div>
   </div></section>;
 }
 
-function TradeArticle({ id, kicker, title, text, points }: { id: string; kicker: string; title: string; text: string; points: string[] }) {
-  return <article id={id} className="scroll-mt-24 border border-border rounded-xl p-7 md:p-10 bg-card">
-    <p className="section-kicker"><Text value={kicker} /></p>
-    <h2 className="text-3xl md:text-5xl font-bold mb-4"><Text value={title} /></h2>
-    <p className="text-muted-foreground leading-relaxed mb-6"><Text value={text} /></p>
-    <ul className="space-y-3 mb-8">{points.map(point => <li key={point} className="flex gap-2"><Check size={18} aria-hidden="true" className="text-primary-text shrink-0" /><span><Text value={point} /></span></li>)}</ul>
-    <Button asChild><LocalizedAnchor href="/#contacto" onClick={() => rememberPlan("presence")}><Text value="Pedir la maqueta gratis" /></LocalizedAnchor></Button>
-  </article>;
-}
-
 export function TradesSection() {
-  return <section id="para-quien" className="py-16 lg:py-24 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="Para quién es" /></p><h2 className="text-4xl md:text-5xl font-bold mb-4"><Text value="Negocios de servicios locales en todo Estados Unidos." /></h2><p className="text-lg text-muted-foreground"><Text value="Oficios del hogar y otros negocios que viven de una llamada o un turno. Latam Leap es un estudio latinoamericano: bilingüe, rápido, y armado con IA y automatización. La llamada la agendamos en tu horario, en cualquier ciudad de Estados Unidos." /></p></AnimatedSection>
-    <div className="grid lg:grid-cols-2 gap-6">
-      <TradeArticle id="electricians" kicker="Ejemplo" title="Electricistas" text="Una búsqueda de electricista cerca termina en el que atiende. Te armamos la página, el perfil de Maps y la respuesta para cuando estás en el trabajo." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
-      <TradeArticle id="plumbers" kicker="Ejemplo" title="Plomeros" text="Quien necesita un plomero llama a dos o tres números. Si el tuyo no contesta, se va. La página, Maps y el mensaje automático sirven para que ese trabajo no se pierda." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
-      <TradeArticle id="hvac" kicker="Ejemplo" title="HVAC" text="Si estás en un servicio de aire o calefacción y no atendés, esa llamada sigue. El sitio y el mensaje automático toman los datos del pedido." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
-      <TradeArticle id="cleaning" kicker="Ejemplo" title="Limpieza" text="Quien busca una limpieza quiere un horario. Si no contestás, reserva con otro. La página y la respuesta automática dejan el turno pedido." points={["Recepcionista con IA y mensaje si no atendés", "Reseñas de Google después de cada trabajo", "Presencia en Google Maps", "Maqueta gratis de tu sitio en 48 horas"]} />
-    </div>
-    <p className="text-muted-foreground mt-8 max-w-3xl"><Text value="Estos oficios son ejemplos. También trabajamos con otros negocios locales que viven de turnos, como clínicas, estudios y salones, en cualquier lugar de Estados Unidos." /></p>
+  const examples = [
+    ["electricians", "Electricistas"],
+    ["plumbers", "Plomeros"],
+    ["hvac", "HVAC"],
+    ["cleaning", "Limpieza"],
+  ];
+  return <section id="para-quien" className="py-12 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
+    <p className="text-lg text-muted-foreground max-w-3xl"><Text value="Oficios del hogar y otros negocios que viven de una llamada o un turno, en cualquier ciudad de Estados Unidos. También clínicas, estudios y salones." /></p>
+    <ul className="flex flex-wrap gap-3 mt-6">{examples.map(([id, label]) => <li key={id} id={id} className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Text value={label} /></li>)}</ul>
   </div></section>;
 }
 
@@ -78,7 +68,7 @@ export function OfferPricing() {
     ? (language === "es" ? "cotización de respaldo" : "fallback rate")
     : (language === "es" ? "cotización del día" : "today's rate");
   return <section id="precios" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <div className="max-w-3xl mb-12"><p className="section-kicker"><Text value="Precios" /></p><h2 className="text-4xl md:text-6xl font-bold mb-5"><Text value="Tres niveles. Cada uno incluye el anterior." /></h2><p className="text-lg text-muted-foreground"><Text value="Captación automática incluye Presencia. El asistente incluye Captación automática. El precio que ves es el de tu país. No hay checkout en el sitio: el siguiente paso es una llamada o la maqueta gratis. En Estados Unidos, el pago se hace después con un enlace de Wise." /></p></div>
+    <div className="max-w-3xl mb-12"><p className="section-kicker"><Text value="La oferta" /></p><h2 className="text-4xl md:text-6xl font-bold mb-5"><Text value="Tres niveles. Cada uno incluye el anterior." /></h2><p className="text-lg text-muted-foreground"><Text value="El precio tachado es el de lista. El precio grande es el de lanzamiento. Captación automática suma el mensaje y la reseña sobre Presencia. El asistente suma la recepcionista sobre Captación automática. Ves la maqueta antes de pagar. En Estados Unidos, el pago es un enlace de Wise." /></p></div>
     <div className="grid lg:grid-cols-3 gap-6">{offers.tiers.map(tier => {
       const quote = quoteTier(tier, currency, arsPerUsd, launch);
       return <article key={tier.id} className={`bg-card rounded-xl p-7 flex flex-col ${tier.recommended ? "border-2 border-primary shadow-studio" : "border border-border"}`}>
@@ -91,7 +81,7 @@ export function OfferPricing() {
         <p className="text-3xl xl:text-4xl font-bold">{formatAmount(quote.setup, currency, language)}</p>
         {quote.monthly > 0 ? <p className="text-lg font-bold mt-1">+ {formatAmount(quote.monthly, currency, language)}<span className="text-base font-medium text-muted-foreground">{language === "es" ? "/mes" : "/month"}</span></p> : <p className="text-sm text-muted-foreground mt-1"><Text value="Pago inicial, sin abono." /></p>}
         <ul className="space-y-3 my-6 flex-1">{tier.features[copy].map(feature => <li key={feature} className="flex gap-2 text-sm"><Check size={18} aria-hidden="true" className="text-primary-text shrink-0" />{feature}</li>)}</ul>
-        <Button asChild size="lg"><LocalizedAnchor href="/#contacto" onClick={() => rememberPlan(tier.id)}><Text value="Pedir la maqueta gratis" /></LocalizedAnchor></Button>
+        <Button asChild size="lg"><LocalizedAnchor href="/#contacto" onClick={() => rememberPlan(tier.id)}><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button>
       </article>;
     })}</div>
     <p className="text-sm text-muted-foreground mt-6">{currency === "ARS"
@@ -100,6 +90,19 @@ export function OfferPricing() {
   </div></section>;
 }
 
+const guarantees = [
+  ["Maqueta gratis", "En 48 horas ves una página con tu servicio y tu zona. Esa entrega no se paga."],
+  ["Pagás si la aprobás", "No hay checkout en el sitio. El pago queda para después de que apruebes el diseño."],
+  ["El abono se puede frenar", "Presencia no tiene mensualidad. En los otros niveles podés frenar el abono cuando quieras."],
+];
+export function RiskReversal() {
+  return <section className="py-16 lg:py-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
+    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="Sin riesgo de entrada" /></p><h2 className="text-4xl md:text-5xl font-bold"><Text value="Primero ves el diseño. Después decidís." /></h2></AnimatedSection>
+    <div className="grid md:grid-cols-3 gap-6">{guarantees.map(([title, text]) => <article key={title} className="border border-border rounded-xl p-7 bg-card"><h3 className="text-2xl font-bold mb-3"><Text value={title} /></h3><p className="text-muted-foreground leading-relaxed"><Text value={text} /></p></article>)}</div>
+    <div className="mt-8"><Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button></div>
+  </div></section>;
+}
+
 export function OfferFAQ() {
-  return <section className="py-20"><div className="max-w-4xl mx-auto px-5 sm:px-6"><p className="section-kicker"><Text value="Antes de la llamada" /></p><h2 className="text-4xl font-bold mb-8"><Text value="Preguntas de negocios de servicios." /></h2>{questions.map(([question, answer]) => <details key={question} className="border-b border-border py-5"><summary className="font-bold cursor-pointer"><Text value={question} /></summary><p className="text-muted-foreground leading-relaxed mt-4"><Text value={answer} /></p></details>)}</div></section>;
+  return <section className="py-20"><div className="max-w-4xl mx-auto px-5 sm:px-6"><p className="section-kicker"><Text value="Objeciones" /></p><h2 className="text-4xl font-bold mb-8"><Text value="Precio, confianza, tiempo y tecnología." /></h2>{questions.map(([question, answer]) => <details key={question} className="border-b border-border py-5"><summary className="font-bold cursor-pointer"><Text value={question} /></summary><p className="text-muted-foreground leading-relaxed mt-4"><Text value={answer} /></p></details>)}</div></section>;
 }

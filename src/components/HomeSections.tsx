@@ -3,11 +3,13 @@ import { LanguageContext } from "@/lib/language-context";
 import { translate } from "@/lib/language-copy";
 import { Text, LocalizedAnchor } from "@/lib/language";
 import CommercialPricing from "./CommercialPricing";
-import { OfferFAQ, OfferPricing, OutcomesSection, TradesSection } from "./OfferSections";
+import { OfferFAQ, OfferPricing, OutcomesSection, RiskReversal, TradesSection } from "./OfferSections";
 import { ArrowUpRight, Check, Code2, Gauge, Globe2, MessageCircle, Network, PenTool, Search, Settings2, Sparkles } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import AuditForm from "./AuditForm";
 import { Button } from "@/components/ui/button";
+import cloudDesktop from "@/assets/cloud-energy/desktop-hero.webp";
+import cloudPhone from "@/assets/cloud-energy/phone-hero.webp";
 import vetMavie from "@/assets/projects/vet-mavie-1200.webp";
 import vetMavieSmall from "@/assets/projects/vet-mavie-600.webp";
 import gonzaloAlvarez from "@/assets/projects/gonzalo-alvarez-1200.webp";
@@ -29,9 +31,9 @@ const capabilities = [
     { icon: Gauge, title: "Dashboards", text: "Una vista clara de lo que pasa para decidir sin depender de planillas imposibles." },
 ];
 const process = [
-    { number: "01", title: "Llamada", text: "Nos contás qué servicio das, en qué zona trabajás y qué llamadas se te escapan." },
-    { number: "02", title: "Maqueta en 48 horas", text: "Te mostramos una página con tu servicio y tu zona antes de que decidas un nivel." },
-    { number: "03", title: "Lo publicamos", text: "Dejamos online el sitio, Google Maps y la respuesta automática o la recepcionista del nivel que elegiste." },
+    { number: "01", title: "Nos contás el servicio", text: "El nombre del negocio, qué hacés, en qué zona y cómo te encuentran hoy. El formulario es corto." },
+    { number: "02", title: "Maqueta en 48 horas", text: "Te mostramos la página antes de que pagues. Ahí ves el mensaje, el botón y cómo se pide el trabajo." },
+    { number: "03", title: "Lo publicamos si lo aprobás", text: "Sitio, Google Maps y la respuesta del nivel que elegiste. Si no te convence la maqueta, no hay pago." },
 ];
 export const ConnectedSystem = () => (<div className="relative min-h-[430px] sm:min-h-[500px]" role="group" aria-label="Connected digital system / Sistema digital conectado">
     <div className="absolute inset-0 rounded-lg bg-secondary border border-border overflow-hidden">
@@ -56,9 +58,9 @@ export const PortfolioSection = () => { const language = useContext(LanguageCont
     <div className="max-w-7xl mx-auto px-5 sm:px-6">
       <AnimatedSection className="grid lg:grid-cols-[0.7fr_1.3fr] gap-8 lg:gap-16 items-end mb-12">
         <p className="section-kicker"><Text value={"Proyectos seleccionados"}/></p>
-        <h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Text value="Trabajo real, sin reseñas inventadas." /></h2>
+        <h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Text value="Otros trabajos, sin reseñas inventadas." /></h2>
       </AnimatedSection>
-      <p className="text-muted-foreground mb-10 max-w-3xl"><Text value="Estos proyectos son reales. No publicamos testimonios de clientes que no tengamos. Cloud Energy, en la sección de demo, es una maqueta de muestra: no es un cliente." /></p>
+      <p className="text-muted-foreground mb-10 max-w-3xl"><Text value="Estos proyectos son reales. No publicamos testimonios que no tengamos. La maqueta de Cloud Energy, más arriba, es un diseño conceptual: no publicamos resultados de ese trabajo." /></p>
       <div className="space-y-14">
         {projects.map((project, index) => (<AnimatedSection key={project.name} delay={0.08 * index}>
             <LocalizedAnchor href={project.href} target="_blank" rel="noopener noreferrer" className="group block">
@@ -97,10 +99,11 @@ export const CapabilitiesSection = () => (<section id="soluciones" className="py
   </section>);
 export const ProcessSection = () => (<section id="como-trabajamos" className="py-20 lg:py-28 bg-secondary">
     <div className="max-w-7xl mx-auto px-5 sm:px-6">
-      <AnimatedSection className="grid lg:grid-cols-2 gap-8 mb-12"><div><p className="section-kicker"><Text value={"C\u00F3mo trabajamos"}/></p><h2 className="text-4xl md:text-6xl font-bold"><Text value="De la llamada a la maqueta." /></h2></div><p className="text-lg text-muted-foreground lg:self-end lg:pb-2 max-w-xl"><Text value="Sin pago por adelantado. Primero ves la página. El precio se confirma en la llamada." /></p></AnimatedSection>
+      <AnimatedSection className="grid lg:grid-cols-2 gap-8 mb-12"><div><p className="section-kicker"><Text value={"C\u00F3mo funciona"}/></p><h2 className="text-4xl md:text-6xl font-bold"><Text value="Tres pasos. El diseño llega antes del pago." /></h2></div><p className="text-lg text-muted-foreground lg:self-end lg:pb-2 max-w-xl"><Text value="El tiempo de espera es 48 horas. El esfuerzo es el formulario. La maqueta es el primer resultado, y no se paga." /></p></AnimatedSection>
       <div className="grid md:grid-cols-3 border-t border-border">
         {process.map((step, index) => <AnimatedSection key={step.number} delay={index * 0.06} className="py-7 md:px-5 border-b md:border-r border-border last:border-r-0"><span className="text-xs font-bold text-primary-text">{step.number}</span><h3 className="text-xl font-bold mt-8 mb-3"><Text value={step.title}/></h3><p className="text-sm text-muted-foreground leading-relaxed"><Text value={step.text}/></p></AnimatedSection>)}
       </div>
+      <div className="mt-8"><Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button></div>
     </div>
   </section>);
 export const ProblemsSection = () => {
@@ -109,7 +112,34 @@ export const ProblemsSection = () => {
 };
 export const PricingSection = CommercialPricing;
 export const OfferSection = () => (<section className="py-20 lg:py-28 bg-card"><div className="max-w-7xl mx-auto px-5 sm:px-6"><AnimatedSection className="mb-12"><p className="section-kicker"><Text value={"Dos maneras de empezar"}/></p><h2 className="text-4xl md:text-6xl font-bold"><Text value={"Empecemos por lo que hoy tiene sentido."}/></h2></AnimatedSection><div className="grid md:grid-cols-2 gap-px bg-border border border-border rounded-lg overflow-hidden"><article className="bg-background p-8 md:p-12"><span className="text-sm font-bold text-primary-text"><Text value={"01"}/></span><h3 className="text-3xl font-bold mt-8 mb-4"><Text value={"Un website que haga su trabajo"}/></h3><p className="text-muted-foreground leading-relaxed mb-8"><Text value={"Para ordenar tu propuesta, generar confianza y convertir visitas en conversaciones reales."}/></p><Button asChild variant="outline"><LocalizedAnchor href="/services#base-digital"><Text value={"Conocer la propuesta "}/><ArrowUpRight /></LocalizedAnchor></Button></article><article className="bg-foreground text-background p-8 md:p-12"><span className="text-sm font-bold text-primary-text"><Text value={"02"}/></span><h3 className="text-3xl font-bold mt-8 mb-4"><Text value={"Una soluci\u00F3n a medida"}/></h3><p className="text-background/70 leading-relaxed mb-8"><Text value={"Para conectar procesos, automatizar tareas o construir una herramienta propia alrededor de tu negocio."}/></p><Button asChild><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value={"Contanos tu proyecto "}/><MessageCircle /></LocalizedAnchor></Button></article></div></div></section>);
-export const SampleWorkSection = () => (<section id="demo" className="py-20 lg:py-28 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6"><div className="max-w-3xl"><p className="section-kicker"><Text value="Demo / Trabajo de muestra" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.02] mb-6"><Text value="Cloud Energy, una maqueta de muestra." /></h2><p className="text-lg text-muted-foreground mb-4"><Text value="Cloud Energy es un electricista ficticio. El sitio muestra cómo puede verse la maqueta de un oficio. Es una demo, no un cliente real y no un testimonio." /></p><p className="text-sm font-bold uppercase tracking-wide text-primary-text mb-8"><Text value="Muestra · no es un cliente" /></p><Button asChild size="lg"><LocalizedAnchor href="https://cloudenergy.latamleap.com" target="_blank" rel="noopener noreferrer"><Text value="Ver la demo de Cloud Energy" /><ArrowUpRight /></LocalizedAnchor></Button></div></div></section>);
-export const FinalCTASection = () => (<section id="contacto" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-[1.1fr_.9fr] gap-12 lg:gap-20"><AnimatedSection><p className="section-kicker"><Text value="Maqueta gratis" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.03] mb-6"><Text value="Tu sitio, en 48 horas, antes de pagar." /></h2><p className="text-lg text-muted-foreground max-w-xl mb-8"><Text value="Contanos qué servicio das y en qué zona trabajás. Te mostramos la página y, si querés, agendamos una llamada en tu horario." /></p><Button asChild size="lg"><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value="También por WhatsApp" /><MessageCircle /></LocalizedAnchor></Button></AnimatedSection><AnimatedSection delay={.1} className="bg-card border border-border rounded-lg p-6 md:p-8 shadow-studio"><AuditForm/></AnimatedSection></div></section>);
-export const HomeContent = () => <><OutcomesSection /><TradesSection /><SampleWorkSection /><OfferPricing /><ProcessSection /><PortfolioSection /><OfferFAQ /><FinalCTASection /></>;
+const improvements = [
+  ["Un titular con el resultado", "La persona entiende en un segundo si este negocio resuelve lo que busca. Si tiene que leer de más, llama a otro."],
+  ["Un solo paso siguiente", "Hay un botón para pedir la cotización. No tiene que cazar un teléfono mientras está apurada."],
+  ["Servicios que se leen de un vistazo", "Puede elegir el tipo de trabajo antes de llamar. La llamada, cuando llega, ya trae el pedido."],
+  ["Un camino si no atendés", "El mismo criterio lo aplicamos en los niveles con mensaje automático o recepcionista: la visita no depende de que contestes en el momento."],
+];
+export const SampleWorkSection = () => { const language = useContext(LanguageContext); return (<section id="demo" className="py-20 lg:py-28 scroll-mt-24 bg-card"><div className="max-w-7xl mx-auto px-5 sm:px-6">
+  <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="Maqueta conceptual" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.02] mb-5"><Text value="Así diseñamos la página de Cloud Energy." /></h2><p className="text-lg text-muted-foreground"><Text value="Cloud Energy es una empresa real. Esta es la maqueta conceptual que diseñamos para ellos: una promesa clara y un solo paso para pedir la cotización. No publicamos resultados ni testimonios de ese trabajo." /></p></AnimatedSection>
+  <div className="grid lg:grid-cols-[.85fr_1.15fr] gap-8 items-start">
+    <article className="border border-border rounded-xl p-7 bg-background"><p className="text-xs font-bold uppercase text-primary-text"><Text value="Antes" /></p><h3 className="text-2xl font-bold mt-3 mb-3"><Text value="Sin un paso siguiente, la llamada se va." /></h3><p className="text-muted-foreground leading-relaxed"><Text value="Esto no es una foto del sitio anterior de Cloud Energy. Es el problema que la maqueta tiene que resolver: alguien busca el servicio, no ve qué hacer, y llama al siguiente." /></p></article>
+    <figure>
+      <div className="relative">
+        <div className="rounded-2xl border border-border bg-foreground p-2 shadow-studio">
+          <img src={cloudDesktop} width={1400} height={897} alt={translate("Maqueta conceptual del sitio de Cloud Energy en una computadora", language)} className="w-full rounded-xl" />
+        </div>
+        <div className="hidden md:block absolute -bottom-8 -right-2 w-36 lg:w-44 overflow-hidden rounded-[1.6rem] border-4 border-foreground shadow-studio bg-background">
+          <img src={cloudPhone} width={780} height={1688} alt={translate("Maqueta conceptual del sitio de Cloud Energy en un teléfono", language)} className="h-64 lg:h-72 w-full object-cover object-top" />
+        </div>
+      </div>
+      <figcaption className="text-sm text-muted-foreground mt-4 max-w-xl"><Text value="Maqueta conceptual para Cloud Energy. Los textos de esa página son del diseño. No son resultados medidos por Latam Leap." /></figcaption>
+    </figure>
+  </div>
+  <div className="grid md:grid-cols-2 gap-6 mt-16">{improvements.map(([title, text]) => <article key={title} className="border border-border rounded-xl p-6 bg-background"><h3 className="text-xl font-bold mb-2"><Text value={title} /></h3><p className="text-muted-foreground leading-relaxed"><Text value={text} /></p></article>)}</div>
+  <div className="mt-8 flex flex-col sm:flex-row gap-3">
+    <Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button>
+    <Button asChild size="lg" variant="outline"><LocalizedAnchor href="https://cloudenergy.latamleap.com" target="_blank" rel="noopener noreferrer"><Text value="Abrir la maqueta de Cloud Energy" /><ArrowUpRight /></LocalizedAnchor></Button>
+  </div>
+</div></section>); };
+export const FinalCTASection = () => (<section id="contacto" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-[1.1fr_.9fr] gap-12 lg:gap-20"><AnimatedSection><p className="section-kicker"><Text value="Maqueta gratis" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.03] mb-6"><Text value="Tu página, en 48 horas, antes de pagar." /></h2><p className="text-lg text-muted-foreground max-w-xl mb-8"><Text value="Dejanos el nombre, el negocio y cómo contactarte. Te mostramos la maqueta. Si no la aprobás, no hay pago." /></p><Button asChild size="lg"><LocalizedAnchor href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer"><Text value="También por WhatsApp" /><MessageCircle /></LocalizedAnchor></Button></AnimatedSection><AnimatedSection delay={.1} className="bg-card border border-border rounded-lg p-6 md:p-8 shadow-studio"><AuditForm/></AnimatedSection></div></section>);
+export const HomeContent = () => <><OutcomesSection /><TradesSection /><ProcessSection /><SampleWorkSection /><OfferPricing /><RiskReversal /><OfferFAQ /><FinalCTASection /><PortfolioSection /></>;
 const SolutionGuide = () => <section className="py-16 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6"><p className="section-kicker"><Text value={"El pr\u00F3ximo paso de tu negocio"}/></p><h2 className="text-3xl md:text-5xl font-bold mb-8"><Text value={"\u00BFQu\u00E9 quer\u00E9s que pase cuando te encuentran?"}/></h2><div className="grid md:grid-cols-3 gap-6">{[{ title: "Que te consulten", text: "Una landing reúne tu oferta y facilita el contacto. Ideal para un servicio, una campaña o un lanzamiento." }, { title: "Que entiendan por qué elegirte", text: "Una web profesional presenta tu negocio, tus servicios y tu experiencia. Con panel para editar tu contenido." }, { title: "Que compren tus productos", text: "Una tienda organiza tu catálogo, los pedidos y los pagos. Con panel para gestionar tu operación." }].map(item => <article key={item.title} className="bg-card rounded-xl p-6 border border-border"><h3 className="text-xl font-bold mb-3"><Text value={item.title}/></h3><p className="text-muted-foreground mb-5"><Text value={item.text}/></p><LocalizedAnchor href="#precios" className="underline font-bold"><Text value={"Ver opciones y alcance"}/></LocalizedAnchor></article>)}</div><p className="mt-6 text-muted-foreground"><Text value={"Latam Leap combina estrategia de marketing y desarrollo para negocios en Argentina y otros países. Si necesit\u00E1s una soluci\u00F3n diferente, definimos juntos el alcance y el presupuesto."}/></p></div></section>;

@@ -6,8 +6,8 @@ export default function About() {
     <section className="pt-12 pb-20 px-6 max-w-7xl mx-auto">
       <p className="section-kicker"><Text value="La mirada detrás de tu proyecto" /></p>
       <h1 className="text-4xl md:text-6xl font-bold max-w-4xl mb-6"><Text value="Un estudio latinoamericano para negocios de servicios locales." /></h1>
-      <p className="text-lg text-muted-foreground max-w-3xl mb-8"><Text value="Latam Leap lo lleva Luciana Zunino desde Argentina. Trabajamos en inglés y en español, rápido, con IA y automatización. El foco son negocios de servicios en todo Estados Unidos: oficios del hogar, como electricistas, plomeros, HVAC y limpieza, y otros negocios que viven de turnos. La llamada se agenda en tu horario." /></p>
-      <Link to="/#contacto" className="underline font-bold"><Text value="Pedir la maqueta gratis →" /></Link>
+      <p className="text-lg text-muted-foreground max-w-3xl mb-8"><Text value="Latam Leap lo lleva Luciana Zunino desde Argentina. Trabajamos en inglés y en español, rápido, con IA y automatización, para negocios de servicios en todo Estados Unidos. Ves la maqueta antes de pagar. La llamada se agenda en tu horario." /></p>
+      <Link to="/#contacto" className="underline font-bold"><Text value="Pedí tu maqueta gratis en 48 horas →" /></Link>
     </section>
     <section className="py-20 bg-card"><div className="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-8">
       <article><h2 className="text-2xl font-bold mb-4"><Text value="Primero, el trabajo que querés" /></h2><p className="text-muted-foreground"><Text value="Definimos qué trabajos querés recibir, en qué zona, y cómo se entiende eso en una página y en Google Maps." /></p></article>
