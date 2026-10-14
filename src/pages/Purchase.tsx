@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import catalog from "../../shared/catalog.json";
 import care from "../../shared/care.json";
@@ -9,10 +9,11 @@ import { formatPrice } from "../../shared/pricing.mjs";
 import { Button } from "@/components/ui/button";
 
 export default function Purchase() {
-  const { currency } = useCurrency();
+  const { currency, selectCurrency } = useCurrency();
   const { planId } = useParams();
   const [search] = useSearchParams();
   const argentina = search.get("market") === "AR";
+  useEffect(() => { if (argentina && currency !== "ARS") selectCurrency("ARS"); }, [argentina, currency, selectCurrency]);
   const plan = catalog.find(p => p.id === planId);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
