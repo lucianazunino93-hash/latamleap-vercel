@@ -7,6 +7,7 @@ export function createCheckoutHandler({ token = process.env.MP_ACCESS_TOKEN, ori
   if(req.url !== '/api/checkout') return send(404,{error:'not_found'});
   if(req.method !== 'POST') return send(405,{error:'method_not_allowed'});
   const allowedOrigins = [origin];
+  if(process.env.VERCEL_ENV === 'preview' && process.env.VERCEL_URL) allowedOrigins.push(new URL('https://' + process.env.VERCEL_URL).origin);
   if (process.env.NODE_ENV !== 'production') allowedOrigins.push('http://localhost:8080','http://127.0.0.1:8080','http://127.0.0.1:8081');
   if(req.headers.origin && !allowedOrigins.includes(req.headers.origin)) return send(403,{error:'invalid_origin'});
   if(!req.headers['content-type']?.startsWith('application/json')) return send(415,{error:'json_required'});

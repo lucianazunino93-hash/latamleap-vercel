@@ -27,11 +27,11 @@
     },
     {
       "source": "/comprar/:planId",
-      "destination": "/index.html"
+      "destination": "/checkout-app.html"
     },
     {
       "source": "/pago",
-      "destination": "/index.html"
+      "destination": "/checkout-app.html"
     }
   ],
   "headers": [
