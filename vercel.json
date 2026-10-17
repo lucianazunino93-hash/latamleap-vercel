@@ -12,15 +12,16 @@
       "maxDuration": 30
     }
   },
+  "redirects": [
+    { "source": "/test", "destination": "/", "permanent": true },
+    { "source": "/services", "destination": "/#oferta", "permanent": true },
+    { "source": "/services/:path*", "destination": "/#oferta", "permanent": true },
+    { "source": "/en/services", "destination": "/en#oferta", "permanent": true },
+    { "source": "/en/services/:path*", "destination": "/en#oferta", "permanent": true },
+    { "source": "/comprar/:path*", "destination": "/#oferta", "permanent": true },
+    { "source": "/en/comprar/:path*", "destination": "/en#oferta", "permanent": true }
+  ],
   "rewrites": [
-    {
-      "source": "/test",
-      "destination": "https://create-your-heart-28.lovable.app"
-    },
-    {
-      "source": "/comprar/:planId",
-      "destination": "/index.html"
-    },
     {
       "source": "/pago",
       "destination": "/index.html"

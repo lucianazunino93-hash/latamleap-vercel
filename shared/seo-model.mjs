@@ -1,5 +1,4 @@
 import { priceFor } from './pricing.mjs';
-import { isLaunchActive, sellingAmounts } from './geo.mjs';
 
 export function getServiceCopy(service, plan, lang, currency = 'ARS') {
   const price = new Intl.NumberFormat(lang === 'es' ? 'es-AR' : 'en-US').format(priceFor(plan, currency));
@@ -17,29 +16,17 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
   const basePath = route => route === '/en' ? '/' : route.startsWith('/en/') ? route.slice(3) : route;
   const language = route => route === '/en' || route.startsWith('/en/') ? 'en' : 'es';
   const pages = { ...seo.pages };
-  const amount = (id, lang, currency = 'ARS') => new Intl.NumberFormat(lang === 'es' ? 'es-AR' : 'en-US').format(priceFor(catalog.find(plan => plan.id === id), currency));
-  if (offers?.tiers?.length) {
-    const tier = id => offers.tiers.find(item => item.id === id);
-    const presence = tier('presence'), leads = tier('leads'), assistant = tier('assistant');
-    const active = isLaunchActive(offers.launch);
-    const presenceUsd = sellingAmounts(presence.us, active);
-    const leadUsd = sellingAmounts(leads.us, active);
-    const assistantUsd = sellingAmounts(assistant.us, active);
-    const presenceAr = sellingAmounts(presence.ar, active).setup;
-    pages['/'] = [pages['/'][0], `Para negocios de servicios locales en todo Estados Unidos. Cada nivel incluye el anterior. Presencia USD ${presenceUsd.setup}, captación automática USD ${leadUsd.setup} más USD ${leadUsd.monthly} al mes, y recepcionista con IA USD ${assistantUsd.setup} más USD ${assistantUsd.monthly} al mes. En Argentina, Presencia desde USD ${presenceAr}.`];
-    pages['/en'] = [pages['/en'][0], `For local service businesses across the United States. Each tier includes the one before it. Presence USD ${presenceUsd.setup}, automated lead capture USD ${leadUsd.setup} plus USD ${leadUsd.monthly} per month, and an AI receptionist USD ${assistantUsd.setup} plus USD ${assistantUsd.monthly} per month. In Argentina, Presence from USD ${presenceAr}.`];
-    pages['/services'] = [pages['/services'][0], pages['/'][1]];
-    pages['/en/services'] = [pages['/en/services'][0], pages['/en'][1]];
+  if (offers?.us?.price) {
+    pages['/'] = [pages['/'][0], `Web bilingüe para plomeros, electricistas y HVAC en EE. UU. Cinco secciones, formulario a WhatsApp y Google Business Profile. Precio fijo USD ${offers.us.price}.`];
+    pages['/en'] = [pages['/en'][0], `Bilingual websites for plumbers, electricians and HVAC businesses in the U.S. Five sections, form to WhatsApp, Google Business Profile setup. Fixed price USD ${offers.us.price}.`];
   }
-  for (const service of servicePages) for (const lang of ['es', 'en']) {
-    const copy = getServiceCopy(service, catalog.find(plan => plan.id === service.id), lang);
-    const usd = getServiceCopy(service, catalog.find(plan => plan.id === service.id), lang, 'USD');
-    const priceNote = lang === 'es' ? ` Internacional: USD ${amount(service.id, lang, 'USD')}.` : ` Argentina: ARS ${amount(service.id, lang)}.`;
-    pages[localized(service.path, lang)] = [copy.title, (lang === 'es' ? copy.description : usd.description) + priceNote];
+  if (offers?.ar?.price && pages['/argentina']) {
+    pages['/argentina'] = [pages['/argentina'][0], `Web de 5 secciones para negocios en Argentina. Precio cerrado ARS ${new Intl.NumberFormat('es-AR').format(offers.ar.price)}. Seña del 50% y saldo al publicar.`];
   }
   const isIndexable = route => Boolean(pages[route]) && !['/privacy-policy', '/terms-of-service', '/data-deletion'].includes(basePath(route));
   const alternates = route => {
     const path = basePath(route);
+    if (path === '/argentina') return { es: absolute('/argentina'), 'x-default': absolute('/argentina') };
     return { es: absolute(path), en: absolute(localized(path, 'en')), 'x-default': absolute(path) };
   };
   function schema(route) {
@@ -59,12 +46,37 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
       nodes.push({ '@type': 'BreadcrumbList', '@id': `${url}#breadcrumbs`, itemListElement: crumbs });
     }
     const plans = servicePage ? catalog.filter(plan => plan.id === servicePage.id) : [];
-    if (offers?.tiers && ['/', '/services'].includes(path)) {
-      for (const tier of offers.tiers) {
-        const offerFor = (list, name) => { const price = sellingAmounts(list, isLaunchActive(offers.launch)); return { '@type': 'Offer', name, price: price.setup, priceCurrency: 'USD', url: `${absolute(localized('/', lang))}#precios`, ...(price.monthly ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: price.monthly, priceCurrency: 'USD', unitText: 'MONTH' } } : {}) }; };
-        nodes.push({ '@type': 'Service', '@id': `${origin}/#offer-${tier.id}`, name: tier.name[lang], description: tier.summary[lang], serviceType: tier.name.en, provider: { '@id': `${origin}/#local-business` }, areaServed: ['United States', 'Argentina'], offers: [offerFor(tier.us, 'United States'), offerFor(tier.ar, 'Argentina')] });
-      }
-      nodes.push({ '@type': 'ItemList', '@id': `${url}#offers`, itemListElement: offers.tiers.map((tier, index) => ({ '@type': 'ListItem', position: index + 1, name: tier.name[lang], item: { '@id': `${origin}/#offer-${tier.id}` } })) });
+    if (offers?.us && path === '/') {
+      const offerUrl = `${absolute(localized('/', lang))}#oferta`;
+      nodes.push({
+        '@type': 'Service',
+        '@id': `${origin}/#offer-bilingual`,
+        name: offers.us.name[lang],
+        description: pages[route][1],
+        serviceType: offers.us.name.en,
+        provider: { '@id': `${origin}/#local-business` },
+        areaServed: 'United States',
+        offers: [
+          { '@type': 'Offer', name: lang === 'es' ? 'Precio fijo' : 'Fixed price', price: offers.us.price, priceCurrency: 'USD', url: offerUrl },
+          { '@type': 'Offer', name: lang === 'es' ? 'Mantenimiento opcional' : 'Optional maintenance', price: offers.us.maintenance, priceCurrency: 'USD', url: offerUrl, priceSpecification: { '@type': 'UnitPriceSpecification', price: offers.us.maintenance, priceCurrency: 'USD', unitText: 'MONTH' } },
+        ],
+      });
+    }
+    if (offers?.ar && path === '/argentina') {
+      const offerUrl = `${absolute('/argentina')}#oferta`;
+      nodes.push({
+        '@type': 'Service',
+        '@id': `${origin}/#offer-argentina`,
+        name: offers.ar.name,
+        description: pages[route][1],
+        serviceType: 'Website',
+        provider: { '@id': `${origin}/#local-business` },
+        areaServed: 'Argentina',
+        offers: [
+          { '@type': 'Offer', name: 'Precio cerrado', price: offers.ar.price, priceCurrency: 'ARS', url: offerUrl },
+          { '@type': 'Offer', name: 'Mantenimiento opcional', price: offers.ar.maintenance, priceCurrency: 'ARS', url: offerUrl, priceSpecification: { '@type': 'UnitPriceSpecification', price: offers.ar.maintenance, priceCurrency: 'ARS', unitText: 'MONTH' } },
+        ],
+      });
     }
     for (const plan of plans) {
       const service = servicePages.find(item => item.id === plan.id);

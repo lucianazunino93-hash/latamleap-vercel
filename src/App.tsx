@@ -1,15 +1,13 @@
 import { LanguageContext } from "./lib/language-context";
 import { CurrencyProvider } from "./lib/currency";
-import Purchase from "./pages/Purchase";
 import PaymentReturn from "./pages/PaymentReturn";
 import SEO from "./components/SEO";
 import { StaticRouter } from "react-router-dom/server";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
-import Services from "./pages/Services";
-import ServiceDetail from "./pages/ServiceDetail";
 import CaseStudies from "./pages/CaseStudies";
+import Argentina from "./pages/Argentina";
 import About from "./pages/About";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
@@ -25,9 +23,12 @@ const App = ({ url = "/" }: { url?: string }) => {
         <SEO /><Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
-            <Route path="/comprar/:planId" element={<Purchase />} /><Route path="/pago" element={<PaymentReturn />} /><Route path="/services" element={<Services />} />
+            <Route path="/argentina" element={<Argentina />} />
+            <Route path="/comprar/:planId" element={<Navigate to="/#oferta" replace />} />
+            <Route path="/pago" element={<PaymentReturn />} />
+            <Route path="/services" element={<Navigate to="/#oferta" replace />} />
+            <Route path="/services/:serviceSlug" element={<Navigate to="/#oferta" replace />} />
             <Route path="/case-studies" element={<CaseStudies />} />
-            <Route path="/services/:serviceSlug" element={<ServiceDetail />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />

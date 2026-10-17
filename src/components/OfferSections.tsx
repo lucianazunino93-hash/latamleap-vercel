@@ -1,108 +1,133 @@
-import { useContext } from "react";
 import { Check } from "lucide-react";
 import offers from "../../shared/offers.json";
-import { formatAmount, formatLaunchDate, isLaunchActive, quoteTier } from "../../shared/geo.mjs";
-import { LanguageContext } from "@/lib/language-context";
-import { useCurrency } from "@/lib/currency-context";
-import { Text, LocalizedAnchor } from "@/lib/language";
-import { Button } from "@/components/ui/button";
+import { Copy } from "@/lib/copy";
+import { BookButton } from "./SalesActions";
 import AnimatedSection from "./AnimatedSection";
 
-const outcomes = [
-  ["El trabajo se lo queda quien atiende", "Si estás con un cliente y no contestás, esa persona llama al siguiente. No deja un mensaje para esperar."],
-  ["Ya habías pagado por esa llamada", "El aviso, la camioneta o la ficha de Google ya te habían puesto delante. La llamada perdida tira ese costo."],
-  ["La reseña también se va", "Quien hace el trabajo pide la reseña. El siguiente negocio se vuelve más fácil de encontrar que el tuyo."],
+const includes = {
+  es: [
+    "5 secciones: inicio, servicios, zona, sobre tu negocio, contacto.",
+    "Versión en español y en inglés.",
+    "Formulario que abre WhatsApp con los datos del pedido y te avisa por email.",
+    "Configuración inicial de tu perfil de Google Business.",
+    "Dos rondas de cambios.",
+    "Publicación en tu dominio.",
+  ],
+  en: [
+    "5 sections: home, services, service area, about, contact.",
+    "English and Spanish versions.",
+    "A form that opens WhatsApp with the job details and emails you an alert.",
+    "Initial Google Business Profile setup.",
+    "Two rounds of changes.",
+    "Launch on your domain.",
+  ],
+};
+
+const questions: { esQ: string; enQ: string; esA: string; enA: string }[] = [
+  {
+    esQ: "¿Cómo pago?",
+    enQ: "How do I pay?",
+    esA: "Te envío una solicitud de pago de Wise en dólares. Pagas con los métodos que te muestre el enlace. Son dos pagos: 50% para empezar y 50% antes de publicar.",
+    enA: "I send you a Wise payment request in U.S. dollars. You pay with the options shown in the link. Two payments: 50% to start and 50% before launch.",
+  },
+  {
+    esQ: "¿Dónde estás?",
+    enQ: "Where are you based?",
+    esA: "En Córdoba, Argentina. Trabajo a distancia con negocios en Estados Unidos y respondo en tu horario de trabajo. No tengo oficina en Estados Unidos.",
+    enA: "In Córdoba, Argentina. I work remotely with U.S. businesses and reply during your business hours. I do not have an office in the United States.",
+  },
+  {
+    esQ: "¿Cuánto tarda?",
+    enQ: "How long does it take?",
+    esA: "Primera versión en 2 días hábiles desde que tengo la seña y todos tus materiales. La segunda revisión, 2 días hábiles desde que recibo los comentarios juntos. Publicación en 1 día hábil desde la aprobación y el saldo. Si respondes rápido, la mayoría de las webs se publica en 1 a 2 semanas.",
+    enA: "First version in 2 business days after I receive the deposit and all your materials. The second revision is 2 business days after I receive your comments together. Launch is 1 business day after approval and the final payment. If you reply quickly, most sites launch in 1 to 2 weeks.",
+  },
+  {
+    esQ: "¿Qué necesitas de mí?",
+    enQ: "What do you need from me?",
+    esA: "Tu logo, tus servicios, la zona donde trabajas, horarios, algunas fotos de tus trabajos y acceso a tu dominio y a tu perfil de Google. Te mando la lista completa.",
+    enA: "Your logo, services, service area, hours, a few photos of your work, and access to your domain and Google profile. I'll send you the full list.",
+  },
+  {
+    esQ: "¿De quién son las cuentas?",
+    enQ: "Who owns the accounts?",
+    esA: "Tuyas. Dominio, hosting, Google y cualquier herramienta están a tu nombre y los pagas tú. Yo trabajo con el acceso que me des.",
+    enA: "You do. Domain, hosting, Google and any tools are in your name and paid by you. I work with the access you give me.",
+  },
+  {
+    esQ: "¿Tengo que pagar mantenimiento?",
+    enQ: "Do I have to pay for maintenance?",
+    esA: "No. Es opcional: USD 49 al mes por soporte técnico, 2 cambios menores y una revisión mensual. Si algo que entregué no funciona como lo aprobaste, lo arreglo sin costo.",
+    enA: "No. It's optional: USD 49/month for technical support, 2 minor changes and a monthly check. If something I delivered doesn't work as approved, I fix it at no cost.",
+  },
+  {
+    esQ: "¿Me vas a poner primero en Google?",
+    enQ: "Will you get me to the top of Google?",
+    esA: "No puedo prometer eso. Dejo la web y tu perfil bien configurados; la posición depende de tu competencia, tus reseñas y otros factores.",
+    enA: "I can't promise that. I set up your site and profile properly; ranking depends on competition, reviews and other factors.",
+  },
+  {
+    esQ: "¿Y si no me gusta?",
+    enQ: "What if I don't like it?",
+    esA: "Antes de pagar ves un ejemplo visual con tu negocio. No es una web que funcione. Después hay dos rondas de cambios incluidas.",
+    enA: "Before paying, you see a visual example with your business. It is not a working website. After that, two rounds of changes are included.",
+  },
 ];
-const questions = [
-  ["¿El precio es el que está publicado?", "Sí. El precio tachado es el de lista. El precio grande es el de lanzamiento, mientras queden lugares y hasta la fecha del banner. Cada nivel incluye el anterior. En Estados Unidos se ve en dólares. En Argentina, en pesos. No hay checkout en el sitio."],
-  ["¿Puedo confiar en un estudio que trabaja desde otro país?", "Latam Leap lo lleva Luciana Zunino desde Argentina. Trabajamos en inglés y en español. Antes de pagar ves la maqueta. La web, el perfil de Google y los accesos quedan a tu nombre. La llamada se agenda en tu horario."],
-  ["¿Cuánto tarda?", "La maqueta está en 48 horas. Si la aprobás, publicamos el sitio, Google Maps y la respuesta del nivel que elegiste. No cobramos el diseño antes de esa aprobación."],
-  ["¿Tengo que saber de tecnología?", "No. Armamos el sitio, el perfil de Google y el mensaje o la recepcionista. Vos nos das el servicio, la zona y cómo te contactan."],
-  ["¿Puedo frenar el abono?", "Sí. Presencia no tiene abono. En los otros niveles el abono mensual se puede frenar cuando quieras. La maqueta no se paga."],
-  ["¿Y si no me gusta la maqueta?", "No pagás. El siguiente paso es ver el diseño. En Estados Unidos, si seguimos, el pago es un enlace de Wise que te enviamos después de la aprobación."],
-];
-
-function rememberPlan(id: string) {
-  try { sessionStorage.setItem("latamleap.plan", id); } catch { /* The form still offers every tier. */ }
-}
-
-export function LaunchBanner() {
-  const language = useContext(LanguageContext);
-  const launch = offers.launch;
-  if (!isLaunchActive(launch)) return null;
-  const date = formatLaunchDate(launch.endsOn, language);
-  const copy = language === "en"
-    ? `Founding client offer: first ${launch.spotsTotal} clients. Launch prices until ${date}. ${launch.spotsLeft} spots left.`
-    : `Oferta de clientes fundadores: los primeros ${launch.spotsTotal}. Precios de lanzamiento hasta el ${date}. Quedan ${launch.spotsLeft} lugares.`;
-  return <aside className="bg-foreground text-background px-5 py-3 text-center text-sm font-bold" aria-label={language === "en" ? "Launch offer" : "Oferta de lanzamiento"}>{copy}</aside>;
-}
-
-export function OutcomesSection() {
-  return <section className="py-16 lg:py-24 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="El problema" /></p><h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Text value="Una llamada perdida es un trabajo que se fue con otro." /></h2></AnimatedSection>
-    <div className="grid md:grid-cols-3 gap-6">{outcomes.map(([title, text], index) => <AnimatedSection key={title} delay={index * 0.05} className="bg-card border border-border rounded-xl p-7"><h3 className="text-2xl font-bold mb-3"><Text value={title} /></h3><p className="text-muted-foreground leading-relaxed"><Text value={text} /></p></AnimatedSection>)}</div>
-    <p className="text-sm text-muted-foreground mt-8 max-w-3xl"><Text value="En 60 cuentas de contratistas, el mensaje automático tras una llamada perdida recuperó en promedio el 22% de esas llamadas como trabajos agendados." /> <a className="underline" href="https://gorapidlocal.com/blog/missed-call-text-back-roi" target="_blank" rel="noopener noreferrer">GoRapidLocal</a>. <Text value="Es un dato publicado por ellos, no un resultado de Latam Leap." /></p>
-    <div className="mt-8"><Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button></div>
-  </div></section>;
-}
 
 export function TradesSection() {
   const examples = [
-    ["electricians", "Electricistas"],
-    ["plumbers", "Plomeros"],
-    ["hvac", "HVAC"],
-    ["cleaning", "Limpieza"],
+    ["electricians", "Electricistas", "Electricians"],
+    ["plumbers", "Plomeros", "Plumbers"],
+    ["hvac", "HVAC", "HVAC"],
   ];
-  return <section id="para-quien" className="py-12 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <p className="text-lg text-muted-foreground max-w-3xl"><Text value="Oficios del hogar y otros negocios que viven de una llamada o un turno, en cualquier ciudad de Estados Unidos. También clínicas, estudios y salones." /></p>
-    <ul className="flex flex-wrap gap-3 mt-6">{examples.map(([id, label]) => <li key={id} id={id} className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Text value={label} /></li>)}</ul>
+  return <section id="para-quien" className="py-16 lg:py-20 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
+    <p className="section-kicker"><Copy es="Para quién" en="Who it's for" /></p>
+    <h2 className="text-4xl md:text-5xl font-bold leading-[1.05] max-w-3xl"><Copy es="Plomeros, electricistas y técnicos de HVAC que atienden en español y en inglés." en="Plumbers, electricians and HVAC pros who serve customers in Spanish and English." /></h2>
+    <p className="text-lg text-muted-foreground max-w-3xl mt-5"><Copy es="El dueño atiende el teléfono. Cuando alguien quiere ver qué haces y en qué zona trabajas, la web lo explica y manda el pedido a WhatsApp." en="The owner answers the phone. When someone wants to see what you do and where you work, the site explains it and sends the request to WhatsApp." /></p>
+    <ul className="flex flex-wrap gap-3 mt-6">{examples.map(([id, es, en]) => <li key={id} id={id} className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Copy es={es} en={en} /></li>)}</ul>
   </div></section>;
 }
 
 export function OfferPricing() {
-  const language = useContext(LanguageContext);
-  const { currency, arsPerUsd, rateSource } = useCurrency();
-  const launch = isLaunchActive(offers.launch);
-  const copy = language === "en" ? "en" : "es";
-  const rateLabel = rateSource === "fallback"
-    ? (language === "es" ? "cotización de respaldo" : "fallback rate")
-    : (language === "es" ? "cotización del día" : "today's rate");
-  return <section id="precios" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <div className="max-w-3xl mb-12"><p className="section-kicker"><Text value="La oferta" /></p><h2 className="text-4xl md:text-6xl font-bold mb-5"><Text value="Tres niveles. Cada uno incluye el anterior." /></h2><p className="text-lg text-muted-foreground"><Text value="El precio tachado es el de lista. El precio grande es el de lanzamiento. Captación automática suma el mensaje y la reseña sobre Presencia. El asistente suma la recepcionista sobre Captación automática. Ves la maqueta antes de pagar. En Estados Unidos, el pago es un enlace de Wise." /></p></div>
-    <div className="grid lg:grid-cols-3 gap-6">{offers.tiers.map(tier => {
-      const quote = quoteTier(tier, currency, arsPerUsd, launch);
-      return <article key={tier.id} className={`bg-card rounded-xl p-7 flex flex-col ${tier.recommended ? "border-2 border-primary shadow-studio" : "border border-border"}`}>
-        <div className="min-h-6 mb-4">{tier.recommended ? <span className="text-xs font-bold uppercase text-primary-text"><Text value="Recomendado" /></span> : null}</div>
-        <h3 className="text-2xl font-bold">{tier.name[copy]}</h3>
-        <p className="font-bold mt-4">{tier.includes[copy]}</p>
-        <p className="text-muted-foreground my-4">{tier.summary[copy]}</p>
-        <p className="text-sm text-muted-foreground">{launch && quote.regular != null ? <Text value="Precio de lanzamiento" /> : <Text value="Precio" />}</p>
-        {quote.regular != null ? <p className="text-lg text-muted-foreground line-through">{formatAmount(quote.regular, currency, language)}</p> : null}
-        <p className="text-3xl xl:text-4xl font-bold">{formatAmount(quote.setup, currency, language)}</p>
-        {quote.monthly > 0 ? <p className="text-lg font-bold mt-1">+ {formatAmount(quote.monthly, currency, language)}<span className="text-base font-medium text-muted-foreground">{language === "es" ? "/mes" : "/month"}</span></p> : <p className="text-sm text-muted-foreground mt-1"><Text value="Pago inicial, sin abono." /></p>}
-        <ul className="space-y-3 my-6 flex-1">{tier.features[copy].map(feature => <li key={feature} className="flex gap-2 text-sm"><Check size={18} aria-hidden="true" className="text-primary-text shrink-0" />{feature}</li>)}</ul>
-        <Button asChild size="lg"><LocalizedAnchor href="/#contacto" onClick={() => rememberPlan(tier.id)}><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button>
-      </article>;
-    })}</div>
-    <p className="text-sm text-muted-foreground mt-6">{currency === "ARS"
-      ? (language === "es" ? `Pesos proporcionales a los dólares de Argentina, a ${new Intl.NumberFormat("es-AR", { maximumFractionDigits: 2 }).format(arsPerUsd)} ARS por dólar (${rateLabel}).` : `Pesos proportional to Argentina's dollar amounts, at ${new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(arsPerUsd)} ARS per US dollar (${rateLabel}).`)
-      : <Text value="Precios de Estados Unidos, en dólares. El pago, cuando corresponda, es un enlace de Wise: no hay checkout en el sitio. En Argentina vas a ver el equivalente proporcional en pesos." />}</p>
-  </div></section>;
-}
-
-const guarantees = [
-  ["Maqueta gratis", "En 48 horas ves una página con tu servicio y tu zona. Esa entrega no se paga."],
-  ["Pagás si la aprobás", "No hay checkout en el sitio. El pago queda para después de que apruebes el diseño."],
-  ["El abono se puede frenar", "Presencia no tiene mensualidad. En los otros niveles podés frenar el abono cuando quieras."],
-];
-export function RiskReversal() {
-  return <section className="py-16 lg:py-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <AnimatedSection className="max-w-3xl mb-10"><p className="section-kicker"><Text value="Sin riesgo de entrada" /></p><h2 className="text-4xl md:text-5xl font-bold"><Text value="Primero ves el diseño. Después decidís." /></h2></AnimatedSection>
-    <div className="grid md:grid-cols-3 gap-6">{guarantees.map(([title, text]) => <article key={title} className="border border-border rounded-xl p-7 bg-card"><h3 className="text-2xl font-bold mb-3"><Text value={title} /></h3><p className="text-muted-foreground leading-relaxed"><Text value={text} /></p></article>)}</div>
-    <div className="mt-8"><Button asChild size="lg"><LocalizedAnchor href="/#contacto"><Text value="Pedí tu maqueta gratis en 48 horas" /></LocalizedAnchor></Button></div>
+  return <section id="oferta" className="py-20 lg:py-28 bg-secondary scroll-mt-24"><div id="precios" className="max-w-7xl mx-auto px-5 sm:px-6 scroll-mt-24">
+    <div className="max-w-3xl mb-10">
+      <p className="section-kicker"><Copy es="La oferta" en="The offer" /></p>
+      <h2 className="text-4xl md:text-6xl font-bold mb-5"><Copy es="Un precio fijo, escrito." en="One fixed price, in writing." /></h2>
+      <p className="text-lg text-muted-foreground"><Copy es="Sin precios tachados y sin lugares limitados. Dominio, hosting y herramientas los pagas tú, en tus propias cuentas." en="No crossed-out prices and no limited spots. You pay for the domain, hosting and tools yourself, in your own accounts." /></p>
+    </div>
+    <article className="max-w-3xl bg-card border border-border rounded-xl p-7 md:p-10 shadow-studio">
+      <h3 className="text-2xl md:text-3xl font-bold"><Copy es={offers.us.name.es} en={offers.us.name.en} /></h3>
+      <p className="text-4xl md:text-5xl font-bold mt-4">USD {offers.us.price}</p>
+      <p className="text-sm font-bold text-primary-text mt-1"><Copy es="Precio fijo" en="Fixed price" /></p>
+      <ul className="space-y-3 my-6">{includes.es.map((feature, index) => <li key={feature} className="flex gap-2 text-sm md:text-base"><Check size={18} aria-hidden="true" className="text-primary-text shrink-0 mt-0.5" /><Copy es={feature} en={includes.en[index]} /></li>)}</ul>
+      <p className="text-sm text-muted-foreground leading-relaxed"><Copy es="Alcance del perfil de Google: crear o reclamar la ficha en tu cuenta, categorías, zona de servicio, horarios, descripción en español y en inglés, y el enlace a la web. Las fotos las traes tú. La verificación la haces tú, según lo que pida Google. No garantizo aparecer ni quedar primero." en="Google profile scope: create or claim the listing in your account, categories, service area, hours, an English and Spanish description, and the link to the site. You provide the photos. You complete verification, however Google asks for it. I don't guarantee that you will show up or rank first." /></p>
+      <p className="text-sm text-muted-foreground leading-relaxed mt-4"><Copy es="Pagas aparte, en tus propias cuentas: dominio, hosting y cualquier herramienta. Todo queda a tu nombre." en="You pay separately, in your own accounts: domain, hosting and any tools. Everything stays in your name." /></p>
+      <p className="font-bold mt-4"><Copy es="Pago: 50% para empezar, 50% antes de publicar, por solicitud de pago de Wise." en="Payment: 50% to start, 50% before launch, by Wise payment request." /></p>
+      <div className="mt-8 border-t border-border pt-6">
+        <h4 className="text-xl font-bold"><Copy es={`Mantenimiento opcional — USD ${offers.us.maintenance}/mes`} en={`Optional maintenance — USD ${offers.us.maintenance}/month`} /></h4>
+        <p className="text-muted-foreground mt-2 leading-relaxed"><Copy es="Soporte técnico, 2 cambios menores por mes y una revisión mensual de que la web, el formulario y el dominio sigan en orden. Lo cancelas cuando quieras. Tu web funciona igual sin este plan." en="Technical support, 2 minor changes per month and a monthly check that the site, the form and the domain are in order. Cancel anytime. Your site works without this plan." /></p>
+      </div>
+      <p className="mt-6 text-sm font-bold"><Copy es="Recepcionista con IA: próximamente" en="AI receptionist: coming soon" /></p>
+      <p className="text-sm text-muted-foreground mt-1"><Copy es="La estamos probando para clientes que ya tienen web. Todavía no está a la venta y no atiende llamadas." en="We're testing it for clients who already have a website. It is not for sale yet and it does not answer calls." /></p>
+      <div className="mt-8"><BookButton /></div>
+    </article>
   </div></section>;
 }
 
 export function OfferFAQ() {
-  return <section className="py-20"><div className="max-w-4xl mx-auto px-5 sm:px-6"><p className="section-kicker"><Text value="Objeciones" /></p><h2 className="text-4xl font-bold mb-8"><Text value="Precio, confianza, tiempo y tecnología." /></h2>{questions.map(([question, answer]) => <details key={question} className="border-b border-border py-5"><summary className="font-bold cursor-pointer"><Text value={question} /></summary><p className="text-muted-foreground leading-relaxed mt-4"><Text value={answer} /></p></details>)}</div></section>;
+  return <section id="preguntas" className="py-20 scroll-mt-24"><div className="max-w-4xl mx-auto px-5 sm:px-6">
+    <p className="section-kicker"><Copy es="Preguntas" en="Questions" /></p>
+    <h2 className="text-4xl font-bold mb-8"><Copy es="Antes de agendar." en="Before you book." /></h2>
+    {questions.map(item => <details key={item.esQ} className="border-b border-border py-5"><summary className="font-bold cursor-pointer"><Copy es={item.esQ} en={item.enQ} /></summary><p className="text-muted-foreground leading-relaxed mt-4"><Copy es={item.esA} en={item.enA} /></p></details>)}
+  </div></section>;
+}
+
+export function FounderSection() {
+  return <section className="py-20 lg:py-28"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-12 gap-8">
+    <AnimatedSection className="lg:col-span-4"><p className="section-kicker"><Copy es="Quién está detrás" en="Who's behind this" /></p></AnimatedSection>
+    <AnimatedSection delay={0.05} className="lg:col-span-8">
+      <h2 className="text-4xl md:text-5xl font-bold leading-[1.05] mb-6"><Copy es="Hablas con la persona que hace la web." en="You talk to the person who builds the site." /></h2>
+      <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl"><Copy es="Soy Luciana Zunino. Trabajo desde Córdoba, Argentina, y hago webs para negocios de servicios. Estudié programación en el INTI y me formé en marketing digital con los cursos de Google, entre otros. Cuando trabajamos juntos, hablas conmigo: yo hago tu web, la configuro en tus cuentas y respondo tus mensajes." en="I'm Luciana Zunino. I work from Córdoba, Argentina, building websites for service businesses. I studied programming at INTI and trained in digital marketing through Google's courses, among others. When we work together, you talk to me: I build your site, set it up in your accounts and answer your messages." /></p>
+    </AnimatedSection>
+  </div></section>;
 }

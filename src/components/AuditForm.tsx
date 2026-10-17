@@ -1,28 +1,23 @@
 import { Text, LocalizedAnchor } from "@/lib/language";
+import { Copy } from "@/lib/copy";
 import { useCurrency } from "@/lib/currency-context";
 import { LanguageContext } from "@/lib/language-context";
-import { useContext, useEffect, useId, useRef, useState, FormEvent } from "react";
+import { useContext, useId, useRef, useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { CALENDAR_URL } from "@/lib/sales";
 
 interface Props { showIndustry?: boolean; buttonText?: string; showWhatsAppAlt?: boolean; }
-const plans: Record<string, string> = { presence: "Presencia", leads: "Captación automática", assistant: "Asistente con IA" };
 
 export default function AuditForm({ showWhatsAppAlt = true }: Props) {
   const { currency } = useCurrency();
   const language = useContext(LanguageContext);
   const id = useId();
-  const [solution, setSolution] = useState("Necesito orientación");
+  const solution = "Necesito orientación";
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [error, setError] = useState("");
   const sending = useRef(false);
   const submission = useRef({ fingerprint: "", id: "" });
-  useEffect(() => {
-    try {
-      const saved = sessionStorage.getItem("latamleap.plan");
-      if (saved && plans[saved]) setSolution(plans[saved]);
-    } catch { /* The visitor can still choose a tier. */ }
-  }, []);
   const cls = "block w-full mt-2 p-3 border border-border rounded-lg bg-card text-foreground";
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -31,7 +26,7 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
     const payload = {
       name: String(fields.get("name") ?? "").trim(), email: String(fields.get("email") ?? "").trim(),
       phone: String(fields.get("phone") ?? "").trim(), solution: String(fields.get("solution") ?? ""),
-      project: ["Negocio: " + String(fields.get("business") ?? "").trim(), "Sitio web: " + (String(fields.get("currentSite") ?? "").trim() || "No indicado"), "Pide la maqueta gratis en 48 horas."].join("\n"),
+      project: ["Negocio: " + String(fields.get("business") ?? "").trim(), "Sitio web: " + (String(fields.get("currentSite") ?? "").trim() || "No indicado"), "Quiere contarnos de su negocio para coordinar una reunión de 10 minutos."].join("\n"),
       website: String(fields.get("website") ?? ""), language, currency,
     };
     const fingerprint = JSON.stringify(payload);
@@ -49,20 +44,20 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
       setError("No pudimos enviar tu consulta. Tus datos siguen acá: intentá nuevamente o escribinos por WhatsApp."); setStatus("error");
     } finally { sending.current = false; }
   };
-  if (status === "success") return <div role="status" className="space-y-4"><h3 className="text-xl font-bold"><Text value="¡Recibimos tu consulta!" /></h3><p><Text value="Gracias por contarnos sobre tu negocio. Te vamos a contactar por el correo que nos dejaste." /></p><LocalizedAnchor className="underline" href="https://wa.me/5493512085644" target="_blank" rel="noopener noreferrer"><Text value="También podés escribirnos por WhatsApp →" /></LocalizedAnchor></div>;
+  if (status === "success") return <div role="status" className="space-y-4"><h3 className="text-xl font-bold"><Copy es="Recibimos tu mensaje." en="We got your message." /></h3><p><Copy es="Te vamos a escribir al correo que dejaste. Si prefieres, agenda 10 minutos." en="We'll write to the email you left. If you prefer, book 10 minutes." /></p><a className="underline font-bold" href={CALENDAR_URL}><Copy es="Agendar 10 minutos" en="Book 10 minutes" /></a></div>;
   return <form onSubmit={submit} className="space-y-5" aria-busy={status === "sending"}>
     <fieldset disabled={status === "sending"} className="space-y-5">
       <label htmlFor={id + "name"} className="block text-sm"><Text value="Nombre" /><input id={id + "name"} name="name" autoComplete="name" required maxLength={100} className={cls} /></label>
       <label htmlFor={id + "business"} className="block text-sm"><Text value="Negocio" /><input id={id + "business"} name="business" autoComplete="organization" required maxLength={120} className={cls} /></label>
       <label htmlFor={id + "email"} className="block text-sm"><Text value="Correo" /><input id={id + "email"} name="email" type="email" autoComplete="email" required maxLength={254} className={cls} /></label>
       <label htmlFor={id + "phone"} className="block text-sm"><Text value="Teléfono" /><input id={id + "phone"} name="phone" type="tel" autoComplete="tel" maxLength={40} className={cls} /></label>
-      <label htmlFor={id + "currentSite"} className="block text-sm"><Text value="Sitio web, si tenés" /><input id={id + "currentSite"} name="currentSite" inputMode="url" autoComplete="url" maxLength={200} className={cls} /></label>
+      <label htmlFor={id + "currentSite"} className="block text-sm"><Copy es="Sitio web, si tienes" en="Website, if you have one" /><input id={id + "currentSite"} name="currentSite" inputMode="url" autoComplete="url" maxLength={200} className={cls} /></label>
       <input type="hidden" name="solution" value={solution} />
       <div className="hidden" aria-hidden="true"><label htmlFor={id + "website"}>Website<input id={id + "website"} name="website" tabIndex={-1} autoComplete="off" /></label></div>
-      <p className="text-xs text-muted-foreground"><Text value="Usaremos tus datos para responder tu consulta. Leé nuestra " /><Link to="/privacy-policy" className="underline"><Text value="política de privacidad" /></Link>.</p>
-      <Button type="submit" className="w-full"><Text value={status === "sending" ? "Enviando…" : "Pedí tu maqueta gratis en 48 horas"} /></Button>
+      <p className="text-xs text-muted-foreground"><Copy es="Usaremos tus datos para responder tu consulta. Lee nuestra " en="We'll use your details to reply. Read our " /><Link to="/privacy-policy" className="underline"><Copy es="política de privacidad" en="privacy policy" /></Link>.</p>
+      <Button type="submit" className="w-full"><Copy es={status === "sending" ? "Enviando…" : "Enviar"} en={status === "sending" ? "Sending…" : "Send"} /></Button>
     </fieldset>
     {status === "error" && <p role="alert" className="text-sm text-destructive"><Text value={error} /></p>}
-    {showWhatsAppAlt && <LocalizedAnchor className="block text-sm underline text-center" href="https://wa.me/5493512085644" target="_blank" rel="noopener noreferrer"><Text value="Prefiero escribir directamente" /></LocalizedAnchor>}
+    {showWhatsAppAlt && <LocalizedAnchor className="block text-sm underline text-center" href="https://wa.me/5493512085644" target="_blank" rel="noopener noreferrer"><Copy es="Prefiero escribir por WhatsApp" en="I'd rather message on WhatsApp" /></LocalizedAnchor>}
   </form>;
 }
