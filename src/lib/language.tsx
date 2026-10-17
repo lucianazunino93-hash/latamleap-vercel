@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { LanguageContext } from "./language-context";
 import { useCurrency } from "./currency-context";
 import { translate } from "./language-copy";
+import { WHATSAPP_TEXT, rememberLanguage } from "./sales";
 export function Text({value}: {value: string | number | ReactNode}) {
   const language = useContext(LanguageContext);
   const { currency } = useCurrency();
@@ -12,19 +13,11 @@ export function Text({value}: {value: string | number | ReactNode}) {
 
 export const LocalizedAnchor = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function LocalizedAnchor({href, ...props}, ref) {
   const language = useContext(LanguageContext);
-  const { currency } = useCurrency();
   let target = language === "en" && href?.startsWith("/") && !href.startsWith("//") && !href.startsWith("/en")
     ? `/en${href === "/" ? "" : href}` : href;
-  if(language === "en" && target?.startsWith("https://wa.me/") && target.includes("?text=")) {
-    const url = new URL(target);
-    const text = url.searchParams.get("text");
-    if(text) url.searchParams.set("text", translate(text, language));
-    target = url.href;
-  }
   if (target?.startsWith("https://wa.me/")) {
     const url = new URL(target);
-    const text = url.searchParams.get("text") || (language === "es" ? "Hola, quiero consultar por un proyecto." : "Hi, I would like to discuss a project.");
-    url.searchParams.set("text", text + (language === "es" ? " Moneda de referencia: " : " Pricing currency: ") + currency + ".");
+    url.searchParams.set("text", WHATSAPP_TEXT[language]);
     target = url.href;
   }
   return <a {...props} href={target} ref={ref}/>;
@@ -33,11 +26,12 @@ export const LocalizedAnchor = forwardRef<HTMLAnchorElement, AnchorHTMLAttribute
 export function LanguageSwitcher() {
   const language = useContext(LanguageContext);
   const {pathname, hash, search} = useLocation();
-  const suffix = `${pathname === "/" ? "" : pathname}${search}${hash}`;
-  const choose = (value: "es" | "en") => { document.cookie = `latamleap.lang=${value}; Path=/; Max-Age=31536000; SameSite=Lax`; };
-  return <div role="group" className="flex items-center gap-2 text-xs font-bold" aria-label={language === "es" ? "Idioma" : "Language"}>
-    <a href={`${pathname}${search}${hash}`} hrefLang="es" lang="es" aria-current={language === "es" ? "page" : undefined} onClick={() => choose("es")} className={language === "es" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}>ES</a>
+  const bare = `${pathname === "/" ? "" : pathname}${search}${hash}`;
+  const esHref = language === "en" ? `/es${bare}` : `${pathname}${search}${hash}`;
+  const enHref = language === "en" ? `${pathname}${search}${hash}` : `/en${bare}`;
+  return <div role="group" className="flex items-center text-sm font-bold" aria-label={language === "es" ? "Idioma" : "Language"}>
+    <a href={esHref} hrefLang="es" lang="es" aria-current={language === "es" ? "page" : undefined} onClick={() => rememberLanguage("es")} className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${language === "es" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}`}>ES</a>
     <span aria-hidden="true" className="text-muted-foreground">/</span>
-    <a href={`/en${suffix}`} hrefLang="en" lang="en" aria-current={language === "en" ? "page" : undefined} onClick={() => choose("en")} className={language === "en" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}>EN</a>
+    <a href={enHref} hrefLang="en" lang="en" aria-current={language === "en" ? "page" : undefined} onClick={() => rememberLanguage("en")} className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${language === "en" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}`}>EN</a>
   </div>;
 }

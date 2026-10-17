@@ -25,7 +25,10 @@ for (const route of ['/pago', '/api/leads', '/comprar/landing']) {
 const image = await fetch(`${model.origin}/og-latamleap.png`);
 assert.equal(image.status, 200); assert.ok(image.headers.get('content-type').includes('image/png'));
 const sitemap = await fetch(`${model.origin}/sitemap.xml`);
-assert.equal(sitemap.status, 200); assert.ok((await sitemap.text()).includes('/services/online-stores'));
+const sitemapText = await sitemap.text();
+assert.equal(sitemap.status, 200);
+assert.ok(sitemapText.includes('/argentina'));
+assert.equal(sitemapText.includes('/services/'), false);
 const missing = await fetch(`${model.origin}/pagina-inexistente-verificacion-seo`);
 assert.equal(missing.status, 404, 'Unknown URL must return a real 404');
 console.log('Production pages, headers, social image, sitemap and HTTP 404 verified.');

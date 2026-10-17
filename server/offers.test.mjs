@@ -7,23 +7,20 @@ import { trackingHead } from '../shared/tracking.mjs';
 import middleware from '../middleware.js';
 
 const offers = JSON.parse(fs.readFileSync(new URL('../shared/offers.json', import.meta.url)));
-const tier = id => offers.tiers.find(item => item.id === id);
 
-test('US prices stay in dollars and Argentina prices stay one third, converted to pesos', () => {
-  assert.deepEqual(offers.tiers.map(item => item.us.setup), [497, 797, 1197]);
-  assert.deepEqual(offers.tiers.map(item => item.us.regularSetup), [797, 1197, 1697]);
-  assert.deepEqual(offers.tiers.map(item => item.us.monthly), [0, 147, 247]);
-  assert.deepEqual(offers.tiers.map(item => item.ar.setup), [166, 266, 399]);
-  assert.deepEqual(offers.tiers.map(item => item.ar.regularSetup), [266, 399, 566]);
-  assert.deepEqual(offers.tiers.map(item => item.ar.monthly), [0, 49, 82]);
-  assert.deepEqual(quoteTier(tier('presence'), 'USD', 9999, true), { setup: 497, monthly: 0, regular: 797 });
-  assert.deepEqual(quoteTier(tier('presence'), 'USD', 9999, false), { setup: 797, monthly: 0, regular: null });
-  assert.deepEqual(quoteTier(tier('leads'), 'USD', 1500, true), { setup: 797, monthly: 147, regular: 1197 });
-  assert.deepEqual(quoteTier(tier('assistant'), 'USD', 1500, false), { setup: 1697, monthly: 247, regular: null });
-  assert.deepEqual(quoteTier(tier('presence'), 'ARS', 1500, true), { setup: 249000, monthly: 0, regular: 399000 });
-  assert.deepEqual(quoteTier(tier('assistant'), 'ARS', 1500, true), { setup: 598500, monthly: 123000, regular: 849000 });
-  assert.equal(formatAmount(497, 'USD', 'en'), 'USD 497');
-  assert.equal(formatAmount(450000, 'ARS', 'es'), 'ARS 450.000');
+test('the public offer is one fixed price in each market, with optional maintenance', () => {
+  assert.equal(offers.us.price, 597);
+  assert.equal(offers.us.maintenance, 49);
+  assert.equal(offers.us.currency, 'USD');
+  assert.equal(offers.ar.price, 549000);
+  assert.equal(offers.ar.maintenance, 49000);
+  assert.equal(offers.ar.currency, 'ARS');
+  assert.equal(offers.tiers, undefined);
+  assert.equal(offers.launch, undefined);
+  assert.equal(formatAmount(597, 'USD', 'en'), 'USD 597');
+  assert.equal(formatAmount(549000, 'ARS', 'es'), 'ARS 549.000');
+  const sample = { us: { setup: 10, regularSetup: 20, monthly: 1 }, ar: { setup: 3, regularSetup: 6, monthly: 1 } };
+  assert.deepEqual(quoteTier(sample, 'USD', 1500, false), { setup: 20, monthly: 1, regular: null });
 });
 
 test('the launch offer is a fixed date and a manual spot count, not a resetting countdown', () => {
@@ -64,6 +61,21 @@ test('language follows the country and an explicit choice is kept', async () => 
   assert.equal(new URL(argentina.headers.get('location')).pathname, '/');
   assert.equal(middleware(new Request('https://www.latamleap.com/', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Googlebot' } })), undefined);
   assert.equal(middleware(new Request('https://www.latamleap.com/', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0', cookie: 'latamleap.lang=es' } })), undefined);
+  const spanishChoice = await middleware(new Request('https://www.latamleap.com/es', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0' } }));
+  assert.equal(spanishChoice.status, 307);
+  assert.equal(new URL(spanishChoice.headers.get('location')).pathname, '/');
+  assert.match(spanishChoice.headers.get('set-cookie'), /latamleap\.lang=es/);
+  const argentinaPage = await middleware(new Request('https://www.latamleap.com/argentina', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0' } }));
+  assert.equal(argentinaPage.status, 307);
+  assert.equal(new URL(argentinaPage.headers.get('location')).pathname, '/argentina');
+  assert.equal(new URL(argentinaPage.headers.get('location')).searchParams.get('lang'), 'es');
+  assert.match(argentinaPage.headers.get('set-cookie'), /latamleap\.lang=es/);
+  const argentinaClean = await middleware(new Request('https://www.latamleap.com/argentina?lang=es', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0', cookie: 'latamleap.lang=es' } }));
+  assert.equal(new URL(argentinaClean.headers.get('location')).pathname, '/argentina');
+  assert.equal(new URL(argentinaClean.headers.get('location')).search, '');
+  assert.equal(middleware(new Request('https://www.latamleap.com/argentina', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0', cookie: 'latamleap.lang=es' } })), undefined);
+  const englishArgentina = await middleware(new Request('https://www.latamleap.com/en/argentina', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0', cookie: 'latamleap.lang=en' } }));
+  assert.equal(new URL(englishArgentina.headers.get('location')).pathname, '/argentina');
 });
 
 test('search console and the Meta pixel stay disabled until their config values are set', () => {

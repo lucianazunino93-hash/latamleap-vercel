@@ -1,4 +1,4 @@
-import { languageForCountry, localizePath, pathLanguage } from "./shared/geo.mjs";
+import { languageDecision } from "./shared/geo.mjs";
 
 const bots = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegram|preview|lighthouse/i;
 
@@ -16,18 +16,15 @@ export default function middleware(request) {
   if (bots.test(userAgent)) return;
   const url = new URL(request.url);
   if (url.pathname.startsWith("/api/")) return;
-  const saved = cookie(request.headers.get("cookie"), "latamleap.lang");
-  const preferred = saved === "es" || saved === "en" ? saved : languageForCountry(request.headers.get("x-vercel-ip-country"));
-  if (!preferred || pathLanguage(url.pathname) === preferred) return;
-  const target = new URL(request.url);
-  target.pathname = localizePath(url.pathname, preferred);
-  if (target.pathname === url.pathname) return;
-  return new Response(null, {
-    status: 307,
-    headers: {
-      Location: target.href,
-      "Set-Cookie": `latamleap.lang=${preferred}; Path=/; Max-Age=31536000; SameSite=Lax`,
-      Vary: "X-Vercel-IP-Country",
-    },
+  const decision = languageDecision(url, {
+    cookie: cookie(request.headers.get("cookie"), "latamleap.lang"),
+    country: request.headers.get("x-vercel-ip-country"),
   });
+  if (!decision) return;
+  const headers = {
+    "Set-Cookie": `latamleap.lang=${decision.setCookie}; Path=/; Max-Age=31536000; SameSite=Lax`,
+    Vary: "X-Vercel-IP-Country",
+  };
+  if (!decision.location) return new Response(null, { headers: { ...headers, "x-middleware-next": "1" } });
+  return new Response(null, { status: 307, headers: { ...headers, Location: new URL(decision.location, request.url).href } });
 }

@@ -30,6 +30,46 @@ export function localizePath(pathname, language) {
   return pathname.slice(3) || "/";
 }
 
+/** `/es` is an explicit Spanish choice. It is not a public page: callers redirect it to the unprefixed Spanish URL. */
+export function unwrapSpanishAlias(pathname) {
+  if (pathname === "/es") return "/";
+  if (pathname.startsWith("/es/")) return pathname.slice(3) || "/";
+  return null;
+}
+
+/**
+ * Geo redirect only when the visitor has not chosen a language.
+ * `/es` and `/argentina` are explicit Spanish. `/en` stays English.
+ * Returns a redirect, a cookie to set while continuing, or null.
+ */
+export function languageDecision(input, { cookie = "", country = "" } = {}) {
+  const url = input instanceof URL ? new URL(input.href) : new URL(input, "https://www.latamleap.com");
+  const pathname = url.pathname;
+  const redirect = (nextPath, setCookie) => {
+    url.pathname = nextPath;
+    return { location: `${url.pathname}${url.search}`, setCookie };
+  };
+  if (pathname === "/en/argentina" || pathname.startsWith("/en/argentina/")) return redirect(pathname.slice(3) || "/argentina", "es");
+  const alias = unwrapSpanishAlias(pathname);
+  if (alias) return redirect(alias, "es");
+  if (pathname === "/argentina" || pathname.startsWith("/argentina/")) {
+    if (cookie === "es" && url.searchParams.has("lang")) {
+      url.searchParams.delete("lang");
+      const search = url.searchParams.toString();
+      return { location: `${pathname}${search ? `?${search}` : ""}`, setCookie: "es" };
+    }
+    if (cookie === "es" || url.searchParams.get("lang") === "es") return null;
+    url.searchParams.set("lang", "es");
+    return { location: `${pathname}?${url.searchParams.toString()}`, setCookie: "es" };
+  }
+  const saved = cookie === "es" || cookie === "en" ? cookie : "";
+  const preferred = saved || languageForCountry(country);
+  if (!preferred || pathLanguage(pathname) === preferred) return null;
+  const nextPath = localizePath(pathname, preferred);
+  if (nextPath === pathname) return null;
+  return redirect(nextPath, preferred);
+}
+
 /** Inclusive calendar date from config. No ticking countdown, and a past date turns the offer off. */
 export function isLaunchActive(launch, now = new Date()) {
   if (!launch || launch.enabled !== true) return false;

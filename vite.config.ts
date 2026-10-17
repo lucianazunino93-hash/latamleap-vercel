@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { languageForCountry, localizePath, pathLanguage } from "./shared/geo.mjs";
+import { languageDecision } from "./shared/geo.mjs";
 import { marketPayload } from "./shared/market-data.mjs";
 
 const bots = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegram|preview|lighthouse/i;
@@ -28,13 +28,11 @@ function geoPreview() {
     if (pathname.startsWith("/api") || pathname.startsWith("/@") || pathname.startsWith("/src") || pathname.includes(".")) return next();
     const userAgent = String(req.headers["user-agent"] || "");
     if (bots.test(userAgent)) return next();
-    const saved = cookie(String(req.headers.cookie || ""), "latamleap.lang");
-    const preferred = saved === "es" || saved === "en" ? saved : languageForCountry(country);
-    if (!preferred || pathLanguage(pathname) === preferred) return next();
-    const search = url.includes("?") ? url.slice(url.indexOf("?")) : "";
+    const decision = languageDecision(new URL(url, "http://127.0.0.1"), { cookie: cookie(String(req.headers.cookie || ""), "latamleap.lang"), country });
+    if (!decision?.location) return next();
     res.statusCode = 307;
-    res.setHeader("Location", `${localizePath(pathname, preferred)}${search}`);
-    res.setHeader("Set-Cookie", `latamleap.lang=${preferred}; Path=/; Max-Age=31536000; SameSite=Lax`);
+    res.setHeader("Location", decision.location);
+    res.setHeader("Set-Cookie", `latamleap.lang=${decision.setCookie}; Path=/; Max-Age=31536000; SameSite=Lax`);
     res.end();
   };
   return { name: "latamleap-geo", configureServer(server: { middlewares: { use: (fn: typeof handler) => void } }) { server.middlewares.use(handler); }, configurePreviewServer(server: { middlewares: { use: (fn: typeof handler) => void } }) { server.middlewares.use(handler); } };

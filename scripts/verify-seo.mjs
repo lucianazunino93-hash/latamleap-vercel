@@ -2,7 +2,6 @@ import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
 import { createSeoModel, getServiceCopy } from '../shared/seo-model.mjs';
-import { isLaunchActive, sellingAmounts } from '../shared/geo.mjs';
 const read = async file => JSON.parse(await fs.readFile(`shared/${file}.json`, 'utf8'));
 const [seo, catalog, english, servicePages, offers] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers'].map(read));
 const model = createSeoModel({ seo, catalog, english, servicePages, offers });
@@ -34,23 +33,24 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   assert.equal(document.querySelector('meta[name="twitter:card"]').content, 'summary_large_image');
   assert.equal(document.querySelector('meta[name="google-site-verification"]'), null, `${route}: verification token stays empty`);
   assert.equal(document.getElementById('meta-pixel'), null, `${route}: pixel stays disabled`);
-  for (const service of graph.filter(item => item['@type'] === 'Service')) {
-    if (String(service['@id']).includes('#offer-')) {
-      const tier = offers.tiers.find(item => service['@id'].endsWith(`offer-${item.id}`));
-      assert.ok(tier, service['@id']);
-      const active = isLaunchActive(offers.launch);
-      assert.equal(service.offers.find(offer => offer.name === 'United States').price, sellingAmounts(tier.us, active).setup);
-      assert.equal(service.offers.find(offer => offer.name === 'Argentina').price, sellingAmounts(tier.ar, active).setup);
-      assert.ok(document.body.textContent.includes('USD'), `${route}: US price visible`);
-      continue;
+  const alt = document.querySelector('meta[property="og:image:alt"]').content;
+  assert.match(alt, model.language(route) === 'es' ? /webs bilingües para negocios de servicios/ : /bilingual websites for service businesses/);
+  if (route === '/' || route === '/en') {
+    const service = graph.find(item => item['@id'] === `${model.origin}/#offer-bilingual`);
+    assert.equal(service.offers.find(offer => offer.price === offers.us.price).priceCurrency, 'USD');
+    assert.equal(service.offers.find(offer => offer.priceSpecification).priceSpecification.price, offers.us.maintenance);
+    assert.equal(graph.filter(item => item['@type'] === 'Service').length, 1, `${route}: one offer`);
+    assert.ok(document.body.textContent.includes('USD 597'), `${route}: fixed price visible`);
+    for (const phrase of ['maqueta gratis', '48 horas', '48 hours', 'Quedan 5', 'spots left', 'cloudenergy', 'TikTok']) {
+      assert.equal(html.toLowerCase().includes(phrase.toLowerCase()), false, `${route}: leftover ${phrase}`);
     }
-    const plan = catalog.find(item => service['@id'].includes(servicePages.find(entry => entry.id === item.id).path));
-    assert.equal(service.offers.find(offer => offer.priceCurrency === 'ARS').lowPrice, plan.price);
-    assert.equal(service.offers.find(offer => offer.priceCurrency === 'USD').lowPrice, plan.priceUSD);
-    assert.ok(document.body.textContent.includes('USD'), `${route}: international price visible in comparison`);
+    assert.equal(html.includes('line-through'), false, `${route}: strikethrough price`);
   }
-  if (route === '/' || route === '/services' || route === '/en' || route === '/en/services') {
-    assert.equal(graph.filter(item => item['@type'] === 'Service' && String(item['@id']).includes('#offer-')).length, 3, `${route}: three offers`);
+  if (route === '/argentina') {
+    const service = graph.find(item => item['@id'] === `${model.origin}/#offer-argentina`);
+    assert.equal(service.offers.find(offer => offer.price === offers.ar.price).priceCurrency, 'ARS');
+    assert.equal(html.includes('admin-rifa.latamleap.com'), false, 'rifa login stays unlinked');
+    assert.ok(document.body.textContent.includes('ARS'), `${route}: peso price visible`);
   }
   assert.ok(!html.includes('storage.googleapis.com/gpt-engineer-file-uploads'));
   assert.ok(!document.body.textContent.includes('{price}'), `${route}: expanded prices`);
