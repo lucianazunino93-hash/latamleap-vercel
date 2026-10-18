@@ -17,8 +17,9 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
   const language = route => route === '/en' || route.startsWith('/en/') ? 'en' : 'es';
   const pages = { ...seo.pages };
   if (offers?.us?.price) {
-    pages['/'] = [pages['/'][0], `Web bilingüe para plomeros, electricistas y HVAC en EE. UU. Cinco secciones, formulario a WhatsApp y Google Business Profile. Precio fijo USD ${offers.us.price}.`];
-    pages['/en'] = [pages['/en'][0], `Bilingual websites for plumbers, electricians and HVAC businesses in the U.S. Five sections, form to WhatsApp, Google Business Profile setup. Fixed price USD ${offers.us.price}.`];
+    const later = offers.us.regularPrice ? ` USD ${offers.us.regularPrice}` : '';
+    pages['/'] = [pages['/'][0], `Web bilingüe para plomeros, electricistas y HVAC en EE. UU. Que te encuentren y te llamen. Precio de lanzamiento: USD ${offers.us.price} para los primeros 5 clientes; después,${later}.`];
+    pages['/en'] = [pages['/en'][0], `Bilingual websites for plumbers, electricians and HVAC businesses in the U.S. Get found and get the call. Launch price: USD ${offers.us.price} for the first 5 clients; then${later}.`];
   }
   if (offers?.ar?.price && pages['/argentina']) {
     pages['/argentina'] = [pages['/argentina'][0], `Web de 5 secciones para negocios en Argentina. Precio cerrado ARS ${new Intl.NumberFormat('es-AR').format(offers.ar.price)}. Seña del 50% y saldo al publicar.`];
@@ -48,6 +49,14 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
     const plans = servicePage ? catalog.filter(plan => plan.id === servicePage.id) : [];
     if (offers?.us && path === '/') {
       const offerUrl = `${absolute(localized('/', lang))}#oferta`;
+      const launchDescription = lang === 'es'
+        ? `USD ${offers.us.price} para los primeros 5 clientes, a cambio de un testimonio y permiso para mostrar el sitio.${offers.us.regularPrice ? ` Después, USD ${offers.us.regularPrice}.` : ''}`
+        : `USD ${offers.us.price} for the first 5 clients, in exchange for a testimonial and permission to show the site.${offers.us.regularPrice ? ` After that, USD ${offers.us.regularPrice}.` : ''}`;
+      const listed = [
+        { '@type': 'Offer', name: lang === 'es' ? 'Precio de lanzamiento' : 'Launch price', price: offers.us.price, priceCurrency: 'USD', url: offerUrl, description: launchDescription },
+      ];
+      if (offers.us.regularPrice) listed.push({ '@type': 'Offer', name: lang === 'es' ? 'Precio después de los primeros 5 clientes' : 'Price after the first 5 clients', price: offers.us.regularPrice, priceCurrency: 'USD', url: offerUrl });
+      listed.push({ '@type': 'Offer', name: lang === 'es' ? 'Mantenimiento opcional' : 'Optional maintenance', price: offers.us.maintenance, priceCurrency: 'USD', url: offerUrl, priceSpecification: { '@type': 'UnitPriceSpecification', price: offers.us.maintenance, priceCurrency: 'USD', unitText: 'MONTH' } });
       nodes.push({
         '@type': 'Service',
         '@id': `${origin}/#offer-bilingual`,
@@ -56,10 +65,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
         serviceType: offers.us.name.en,
         provider: { '@id': `${origin}/#local-business` },
         areaServed: 'United States',
-        offers: [
-          { '@type': 'Offer', name: lang === 'es' ? 'Precio fijo' : 'Fixed price', price: offers.us.price, priceCurrency: 'USD', url: offerUrl },
-          { '@type': 'Offer', name: lang === 'es' ? 'Mantenimiento opcional' : 'Optional maintenance', price: offers.us.maintenance, priceCurrency: 'USD', url: offerUrl, priceSpecification: { '@type': 'UnitPriceSpecification', price: offers.us.maintenance, priceCurrency: 'USD', unitText: 'MONTH' } },
-        ],
+        offers: listed,
       });
     }
     if (offers?.ar && path === '/argentina') {

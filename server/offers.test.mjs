@@ -8,8 +8,20 @@ import middleware from '../middleware.js';
 
 const offers = JSON.parse(fs.readFileSync(new URL('../shared/offers.json', import.meta.url)));
 
+test('retired payment URLs redirect to the offer', () => {
+  const vercel = JSON.parse(fs.readFileSync(new URL('../vercel.json', import.meta.url)));
+  const pago = vercel.redirects.find(rule => rule.source === '/pago');
+  const english = vercel.redirects.find(rule => rule.source === '/en/pago');
+  assert.equal(pago.destination, '/#oferta');
+  assert.equal(pago.permanent, true);
+  assert.equal(english.destination, '/en#oferta');
+  assert.equal(english.permanent, true);
+  assert.equal(vercel.rewrites, undefined);
+});
+
 test('the public offer is one fixed price in each market, with optional maintenance', () => {
-  assert.equal(offers.us.price, 597);
+  assert.equal(offers.us.price, 497);
+  assert.equal(offers.us.regularPrice, 597);
   assert.equal(offers.us.maintenance, 49);
   assert.equal(offers.us.currency, 'USD');
   assert.equal(offers.ar.price, 549000);
@@ -17,6 +29,8 @@ test('the public offer is one fixed price in each market, with optional maintena
   assert.equal(offers.ar.currency, 'ARS');
   assert.equal(offers.tiers, undefined);
   assert.equal(offers.launch, undefined);
+  assert.equal(offers.us.spotsLeft, undefined);
+  assert.equal(formatAmount(497, 'USD', 'en'), 'USD 497');
   assert.equal(formatAmount(597, 'USD', 'en'), 'USD 597');
   assert.equal(formatAmount(549000, 'ARS', 'es'), 'ARS 549.000');
   const sample = { us: { setup: 10, regularSetup: 20, monthly: 1 }, ar: { setup: 3, regularSetup: 6, monthly: 1 } };

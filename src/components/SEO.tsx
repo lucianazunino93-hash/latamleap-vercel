@@ -15,7 +15,7 @@ export default function SEO() {
   const route = model.localized(pathname, language);
   useEffect(() => {
     const page = model.pages[route];
-    const [title, description] = page || (language === "es" ? ["Página no disponible | Latam Leap", "Consultá nuestros servicios o volvé al inicio."] : ["Page unavailable | Latam Leap", "Explore our services or return to the home page."]);
+    const [title, description] = page || (language === "es" ? ["Página no disponible | Latam Leap", "Consulta nuestros servicios o vuelve al inicio."] : ["Page unavailable | Latam Leap", "Explore our services or return to the home page."]);
     document.title = title;
     document.documentElement.lang = language;
     const meta = (selector: string, value: string) => document.querySelector(selector)?.setAttribute("content", value);
@@ -26,8 +26,13 @@ export default function SEO() {
     meta('meta[property="og:locale"]', language === "es" ? "es_AR" : "en_US");
     meta('meta[name="twitter:title"]', title);
     meta('meta[name="twitter:description"]', description);
+    const imageAlt = language === "es"
+      ? "LatamLeap: que te encuentren y te llamen. Webs en español e inglés para plomeros, electricistas y HVAC."
+      : "LatamLeap: get found and get the call. Websites in English and Spanish for plumbers, electricians and HVAC.";
     meta('meta[property="og:image"]', `${model.origin}/og-latamleap.png`);
+    meta('meta[property="og:image:alt"]', imageAlt);
     meta('meta[name="twitter:image"]', `${model.origin}/og-latamleap.png`);
+    meta('meta[name="twitter:image:alt"]', imageAlt);
     meta('meta[name="twitter:card"]', "summary_large_image");
     meta('meta[name="robots"]', model.isIndexable(route) ? "index,follow,max-image-preview:large" : "noindex,follow");
     const google = String(seo.googleSiteVerification || "").trim();

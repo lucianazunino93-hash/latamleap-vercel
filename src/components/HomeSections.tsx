@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { LanguageContext } from "@/lib/language-context";
+import offers from "../../shared/offers.json";
 import { Copy } from "@/lib/copy";
 import { LocalizedAnchor } from "@/lib/language";
 import { EXAMPLE_URL, INSTAGRAM_URL, whatsAppUrl } from "@/lib/sales";
@@ -16,8 +17,8 @@ import gonzaloAlvarezSmall from "@/assets/projects/gonzalo-alvarez-600.webp";
 export const WHATSAPP_URL = whatsAppUrl("es");
 
 const projects = [
-  { name: "vet.mavie", es: "Sitio web para especialistas veterinarias", en: "Website for veterinary specialists", image: vetMavie, smallImage: vetMavieSmall, href: "https://www.vetmavie.com/", altEs: "Sitio web de vet.mavie", altEn: "vet.mavie website" },
-  { name: "Psicólogo Gonzalo Álvarez", es: "Sitio para un consultorio en Argentina", en: "Website for a practice in Argentina", image: gonzaloAlvarez, smallImage: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", altEs: "Sitio web del psicólogo Gonzalo Álvarez", altEn: "Website of psychologist Gonzalo Álvarez" },
+  { name: "vet.mavie", nameEn: "vet.mavie", es: "Sitio web para especialistas veterinarias", en: "Website for veterinary specialists", image: vetMavie, smallImage: vetMavieSmall, href: "https://www.vetmavie.com/", altEs: "Sitio web de vet.mavie", altEn: "vet.mavie website" },
+  { name: "Psicólogo Gonzalo Álvarez", nameEn: "Psychologist Gonzalo Álvarez", es: "Sitio para un consultorio en Argentina", en: "Website for a practice in Argentina", image: gonzaloAlvarez, smallImage: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", altEs: "Sitio web del psicólogo Gonzalo Álvarez", altEn: "Website of psychologist Gonzalo Álvarez" },
 ];
 
 const steps = [
@@ -41,10 +42,10 @@ export const ConnectedSystem = () => (<div className="relative min-h-[430px] sm:
       <div className="grid grid-cols-3 gap-2"><span className="h-12 rounded bg-background/15"/><span className="h-12 rounded bg-background/15"/><span className="h-12 rounded bg-primary"/></div>
     </div>
     <div className="absolute left-[12%] bottom-[14%] bg-card border border-border rounded-lg p-4 shadow-studio w-[49%] animate-float-slow">
-      <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground mb-3"><Code2 size={15} className="text-primary"/><Copy es="Precio fijo" en="Fixed price" /></div>
+      <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground mb-3"><Code2 size={15} className="text-primary"/><Copy es="Lanzamiento" en="Launch price" /></div>
       <div className="space-y-2"><div className="h-1.5 w-5/6 rounded bg-accent"/><div className="h-1.5 w-2/3 rounded bg-muted"/><div className="h-1.5 w-4/5 rounded bg-primary"/></div>
     </div>
-    <div className="absolute right-[8%] bottom-[7%] bg-primary text-primary-foreground rounded-lg px-4 py-3 shadow-studio flex items-center gap-2 text-xs font-bold"><Check size={16}/><span>USD 597</span></div>
+    <div className="absolute right-[8%] bottom-[7%] bg-primary text-primary-foreground rounded-lg px-4 py-3 shadow-studio flex items-center gap-2 text-xs font-bold"><Check size={16}/><span>USD {offers.us.price}</span></div>
     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 600 500" fill="none" aria-hidden="true"><path d="M220 120C350 120 320 220 420 220M420 280C360 330 300 350 220 380" stroke="currentColor" className="text-primary/50" strokeWidth="2" strokeDasharray="6 8"/></svg>
   </div>
 </div>);
@@ -65,7 +66,7 @@ export const PortfolioSection = () => { const language = useContext(LanguageCont
             </div>
             <div className="lg:col-span-4 lg:px-5">
               <span className="text-xs font-bold text-primary-text">0{index + 1}</span>
-              <h3 className="text-2xl md:text-3xl font-bold mt-3 mb-3 group-hover:text-primary-text transition-colors">{project.name}</h3>
+              <h3 className="text-2xl md:text-3xl font-bold mt-3 mb-3 group-hover:text-primary-text transition-colors">{language === "en" ? project.nameEn : project.name}</h3>
               <p className="text-muted-foreground leading-relaxed mb-5"><Copy es={project.es} en={project.en} /></p>
               <span className="inline-flex items-center gap-2 text-sm font-bold"><Copy es="Ver proyecto" en="View project" /><ArrowUpRight size={16}/></span>
             </div>
@@ -82,7 +83,7 @@ export const ExampleSection = () => (<section id="ejemplo" className="py-20 lg:p
       <p className="section-kicker"><Copy es="Ejemplo" en="Example" /></p>
       <h2 className="text-4xl md:text-6xl font-bold leading-[1.02] mb-5"><Copy es="Así puede verse un negocio de servicios." en="This is what a service business can look like." /></h2>
       <p className="text-lg text-muted-foreground mb-4"><Copy es="Ejemplo de diseño. Negocio ficticio." en="Sample design. Fictional business." /></p>
-      <p className="text-muted-foreground leading-relaxed mb-6"><Copy es="Prime Home Solutions no es un cliente. Es una muestra de plomería, electricidad y HVAC. Lo que incluye el precio está en la oferta de abajo: no todo lo que aparece en el ejemplo forma parte de los USD 597." en="Prime Home Solutions is not a client. It is a sample for plumbing, electrical and HVAC work. What the price includes is in the offer below: not everything on the example is part of the USD 597." /></p>
+      <p className="text-muted-foreground leading-relaxed mb-6"><Copy es={`Prime Home Solutions no es un cliente. Es una muestra de plomería, electricidad y HVAC. Lo que incluye el precio está en la oferta de abajo: no todo lo que aparece en el ejemplo forma parte de los USD ${offers.us.price} de lanzamiento ni de los USD ${offers.us.regularPrice} de después.`} en={`Prime Home Solutions is not a client. It is a sample for plumbing, electrical and HVAC work. What the price includes is in the offer below: not everything on the example is part of the USD ${offers.us.price} launch price or the USD ${offers.us.regularPrice} price after that.`} /></p>
       <ExampleButton />
     </AnimatedSection>
     <figure className="mx-auto w-full max-w-sm">
@@ -121,7 +122,7 @@ export const FinalCTASection = () => (<section id="contacto" className="py-20 lg
     </div>
   </AnimatedSection>
   <AnimatedSection delay={.1} className="bg-card border border-border rounded-lg p-6 md:p-8 shadow-studio">
-    <h3 className="text-2xl font-bold mb-2"><Copy es="Contanos de tu negocio" en="Tell us about your business" /></h3>
+    <h3 className="text-2xl font-bold mb-2"><Copy es="Cuéntame de tu negocio" en="Tell me about your business" /></h3>
     <p className="text-sm text-muted-foreground mb-5"><Copy es="Esto no reserva un diseño. Si encaja, el siguiente paso es la reunión de 10 minutos." en="This does not reserve a design. If it's a fit, the next step is the 10-minute meeting." /></p>
     <AuditForm />
   </AnimatedSection>

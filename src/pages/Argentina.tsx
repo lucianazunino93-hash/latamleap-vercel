@@ -51,7 +51,7 @@ export default function Argentina() {
         </article>
       </div>
     </section>
-    <section className="py-16">
+    <section id="trabajos" className="py-16 scroll-mt-24">
       <div className="max-w-5xl mx-auto px-5 sm:px-6">
         <h2 className="text-3xl md:text-5xl font-bold mb-4">Trabajos</h2>
         <p className="text-muted-foreground mb-8 max-w-3xl">Proyectos reales en Argentina. No publicamos testimonios que no tengamos.</p>
@@ -71,7 +71,7 @@ export default function Argentina() {
         </figure>
       </div>
     </section>
-    <section className="py-16 bg-card">
+    <section id="a-medida" className="py-16 bg-card scroll-mt-24">
       <div className="max-w-3xl mx-auto px-5 sm:px-6">
         <h2 className="text-3xl font-bold mb-3">Proyectos a medida</h2>
         <p className="text-muted-foreground">Tiendas, sistemas y rifas: consultá. Se cotizan aparte y no forman parte de la web de 5 secciones.</p>

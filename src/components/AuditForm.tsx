@@ -36,12 +36,12 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
       const response = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, submissionId: submission.current.id }), signal: AbortSignal.timeout(20000) });
       const result = await response.json();
       if (!response.ok || !result.ok) {
-        setError(response.status === 429 ? "Esperá un minuto antes de volver a enviar. También podés escribirnos por WhatsApp." : "No pudimos enviar tu consulta. Tus datos siguen acá: intentá nuevamente o escribinos por WhatsApp.");
+        setError(response.status === 429 ? "Espera un minuto antes de volver a enviar. También puedes escribirme por WhatsApp." : "No pudimos enviar tu consulta. Tus datos siguen aquí: intenta de nuevo o escríbeme por WhatsApp.");
         setStatus("error"); return;
       }
       setStatus("success");
     } catch {
-      setError("No pudimos enviar tu consulta. Tus datos siguen acá: intentá nuevamente o escribinos por WhatsApp."); setStatus("error");
+      setError("No pudimos enviar tu consulta. Tus datos siguen aquí: intenta de nuevo o escríbeme por WhatsApp."); setStatus("error");
     } finally { sending.current = false; }
   };
   if (status === "success") return <div role="status" className="space-y-4"><h3 className="text-xl font-bold"><Copy es="Recibimos tu mensaje." en="We got your message." /></h3><p><Copy es="Te vamos a escribir al correo que dejaste. Si prefieres, agenda 10 minutos." en="We'll write to the email you left. If you prefer, book 10 minutes." /></p><a className="underline font-bold" href={CALENDAR_URL}><Copy es="Agendar 10 minutos" en="Book 10 minutes" /></a></div>;
