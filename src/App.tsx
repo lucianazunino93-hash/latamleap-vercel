@@ -1,6 +1,5 @@
 import { LanguageContext } from "./lib/language-context";
 import { CurrencyProvider } from "./lib/currency";
-import PaymentReturn from "./pages/PaymentReturn";
 import SEO from "./components/SEO";
 import { StaticRouter } from "react-router-dom/server";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
@@ -25,7 +24,7 @@ const App = ({ url = "/" }: { url?: string }) => {
             <Route path="/" element={<Index />} />
             <Route path="/argentina" element={<Argentina />} />
             <Route path="/comprar/:planId" element={<Navigate to="/#oferta" replace />} />
-            <Route path="/pago" element={<PaymentReturn />} />
+            <Route path="/pago" element={<Navigate to="/#oferta" replace />} />
             <Route path="/services" element={<Navigate to="/#oferta" replace />} />
             <Route path="/services/:serviceSlug" element={<Navigate to="/#oferta" replace />} />
             <Route path="/case-studies" element={<CaseStudies />} />

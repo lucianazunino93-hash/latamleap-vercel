@@ -18,7 +18,12 @@ const results = await Promise.allSettled(Object.keys(model.pages).map(async rout
 let failed = false;
 for (const result of results) { if (result.status === 'fulfilled') console.log(result.value); else { failed = true; console.error(result.reason.message); } }
 if (failed) process.exitCode = 1;
-for (const route of ['/pago', '/api/leads', '/comprar/landing']) {
+for (const route of ['/pago', '/en/pago']) {
+  const response = await fetch(`${model.origin}${route}`, { redirect: 'manual', signal: AbortSignal.timeout(20000) });
+  assert.equal(response.status, 308, `${route}: permanent redirect`);
+  assert.match(response.headers.get('location') || '', /#oferta$/, `${route}: sends people to the offer`);
+}
+for (const route of ['/api/leads', '/comprar/landing']) {
   const response = await fetch(`${model.origin}${route}`, { signal: AbortSignal.timeout(20000) });
   assert.ok(response.headers.get('x-robots-tag')?.includes('noindex'), `${route}: private pages excluded`);
 }

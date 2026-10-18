@@ -26,6 +26,7 @@ export const LocalizedAnchor = forwardRef<HTMLAnchorElement, AnchorHTMLAttribute
 export function LanguageSwitcher() {
   const language = useContext(LanguageContext);
   const {pathname, hash, search} = useLocation();
+  if (pathname === "/argentina") return null;
   const bare = `${pathname === "/" ? "" : pathname}${search}${hash}`;
   const esHref = language === "en" ? `/es${bare}` : `${pathname}${search}${hash}`;
   const enHref = language === "en" ? `${pathname}${search}${hash}` : `/en${bare}`;

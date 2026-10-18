@@ -26,7 +26,9 @@ try {
     setMeta('name', 'description', description);
     setMeta('property', 'og:title', title); setMeta('property', 'og:description', description); setMeta('property', 'og:url', url);
     setMeta('property', 'og:locale', language === 'es' ? 'es_AR' : 'en_US');
-    setMeta('property', 'og:image:alt', language === 'es' ? 'LatamLeap: webs bilingües para negocios de servicios.' : 'LatamLeap: bilingual websites for service businesses.');
+    const imageAlt = language === 'es' ? 'LatamLeap: que te encuentren y te llamen. Webs en español e inglés para plomeros, electricistas y HVAC.' : 'LatamLeap: get found and get the call. Websites in English and Spanish for plumbers, electricians and HVAC.';
+    setMeta('property', 'og:image:alt', imageAlt);
+    setMeta('name', 'twitter:image:alt', imageAlt);
     setMeta('name', 'twitter:title', title); setMeta('name', 'twitter:description', description);
     setMeta('name', 'robots', model.isIndexable(route) ? 'index,follow,max-image-preview:large' : 'noindex,follow');
     html = html.replace(/<link rel="canonical" href="[^"]*"\s*\/?>/, `<link rel="canonical" href="${url}" />`);

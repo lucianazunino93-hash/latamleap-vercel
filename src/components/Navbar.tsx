@@ -6,11 +6,16 @@ import { useContext, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-const links = [
+const usLinks = [
   { es: "Ejemplo", en: "Example", href: "/#ejemplo" },
   { es: "Precio", en: "Price", href: "/#oferta" },
   { es: "Proceso", en: "Process", href: "/#proceso" },
   { es: "Preguntas", en: "Questions", href: "/#preguntas" },
+];
+const argentinaLinks = [
+  { es: "Precio", en: "Precio", href: "#oferta" },
+  { es: "Trabajos", en: "Trabajos", href: "#trabajos" },
+  { es: "A medida", en: "A medida", href: "#a-medida" },
 ];
 
 const Navbar = () => {
@@ -18,6 +23,8 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const onArgentina = location.pathname === "/argentina";
+  const links = onArgentina ? argentinaLinks : usLinks;
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -33,17 +40,17 @@ const Navbar = () => {
         <span className="font-display font-bold text-foreground text-xl">Latam<span className="text-primary">Leap</span></span>
       </Link>
       <div className="hidden lg:flex items-center gap-6 xl:gap-8">
-        {links.map((l) => (<a key={l.href} href={location.pathname === "/argentina" && l.href === "/#oferta" ? "#oferta" : language === "en" ? `/en${l.href}` : l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+        {links.map((l) => (<a key={l.href} href={onArgentina ? l.href : language === "en" ? `/en${l.href}` : l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           <Copy es={l.es} en={l.en} />
         </a>))}
         <BookButton />
       </div>
-      <div className="flex items-center gap-3"><LanguageSwitcher /><button className="lg:hidden text-foreground p-2 -mr-2 min-h-11 min-w-11 inline-flex items-center justify-center" onClick={() => setOpen(!open)} aria-label={language === "en" ? (open ? "Close menu" : "Open menu") : (open ? "Cerrar menú" : "Abrir menú")} aria-expanded={open}>
+      <div className="flex items-center gap-3">{onArgentina ? null : <LanguageSwitcher />}<button className="lg:hidden text-foreground p-2 -mr-2 min-h-11 min-w-11 inline-flex items-center justify-center" onClick={() => setOpen(!open)} aria-label={language === "en" ? (open ? "Close menu" : "Open menu") : (open ? "Cerrar menú" : "Abrir menú")} aria-expanded={open}>
         {open ? <X size={24}/> : <Menu size={24}/>}
       </button></div>
     </div>
     {open && (<div className="lg:hidden bg-card border-t border-border px-6 py-6 space-y-4">
-      {links.map((l) => (<a key={l.href} href={location.pathname === "/argentina" && l.href === "/#oferta" ? "#oferta" : language === "en" ? `/en${l.href}` : l.href} className="block text-foreground text-base min-h-11" onClick={() => setOpen(false)}>
+      {links.map((l) => (<a key={l.href} href={onArgentina ? l.href : language === "en" ? `/en${l.href}` : l.href} className="inline-flex items-center text-foreground text-base min-h-11" onClick={() => setOpen(false)}>
         <Copy es={l.es} en={l.en} />
       </a>))}
       <BookButton className="w-full" />

@@ -19,13 +19,9 @@
     { "source": "/en/services", "destination": "/en#oferta", "permanent": true },
     { "source": "/en/services/:path*", "destination": "/en#oferta", "permanent": true },
     { "source": "/comprar/:path*", "destination": "/#oferta", "permanent": true },
-    { "source": "/en/comprar/:path*", "destination": "/en#oferta", "permanent": true }
-  ],
-  "rewrites": [
-    {
-      "source": "/pago",
-      "destination": "/index.html"
-    }
+    { "source": "/en/comprar/:path*", "destination": "/en#oferta", "permanent": true },
+    { "source": "/pago", "destination": "/#oferta", "permanent": true },
+    { "source": "/en/pago", "destination": "/en#oferta", "permanent": true }
   ],
   "headers": [
     {
@@ -51,25 +47,7 @@
       ]
     },
     {
-      "source": "/pago",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
       "source": "/en/comprar/:path*",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        }
-      ]
-    },
-    {
-      "source": "/en/pago",
       "headers": [
         {
           "key": "X-Robots-Tag",

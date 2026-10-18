@@ -34,13 +34,17 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   assert.equal(document.querySelector('meta[name="google-site-verification"]'), null, `${route}: verification token stays empty`);
   assert.equal(document.getElementById('meta-pixel'), null, `${route}: pixel stays disabled`);
   const alt = document.querySelector('meta[property="og:image:alt"]').content;
-  assert.match(alt, model.language(route) === 'es' ? /webs bilingües para negocios de servicios/ : /bilingual websites for service businesses/);
+  assert.match(alt, model.language(route) === 'es' ? /que te encuentren y te llamen/i : /get found and get the call/i);
+  assert.match(document.querySelector('meta[name="twitter:image:alt"]').content, model.language(route) === 'es' ? /que te encuentren y te llamen/i : /get found and get the call/i);
   if (route === '/' || route === '/en') {
     const service = graph.find(item => item['@id'] === `${model.origin}/#offer-bilingual`);
     assert.equal(service.offers.find(offer => offer.price === offers.us.price).priceCurrency, 'USD');
     assert.equal(service.offers.find(offer => offer.priceSpecification).priceSpecification.price, offers.us.maintenance);
     assert.equal(graph.filter(item => item['@type'] === 'Service').length, 1, `${route}: one offer`);
-    assert.ok(document.body.textContent.includes('USD 597'), `${route}: fixed price visible`);
+    assert.ok(document.body.textContent.includes(`USD ${offers.us.price}`), `${route}: launch price visible`);
+    assert.ok(document.body.textContent.includes(`USD ${offers.us.regularPrice}`), `${route}: regular price visible`);
+    assert.equal(service.offers.find(offer => offer.price === offers.us.regularPrice).priceCurrency, 'USD');
+    assert.match(document.body.textContent, route === '/en' ? /first 5 clients/ : /primeros 5 clientes/);
     for (const phrase of ['maqueta gratis', '48 horas', '48 hours', 'Quedan 5', 'spots left', 'cloudenergy', 'TikTok']) {
       assert.equal(html.toLowerCase().includes(phrase.toLowerCase()), false, `${route}: leftover ${phrase}`);
     }

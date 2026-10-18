@@ -1,14 +1,15 @@
 {
   "fallbackArsPerUsd": 1500,
   "rateUrl": "https://open.er-api.com/v6/latest/USD",
-  "notes": "One fixed US offer and one fixed Argentina offer. No strikethrough, no scarcity, no currency conversion between them. Maintenance is optional and can be declined. The client pays domain, hosting and tools in their own accounts.",
+  "notes": "US launch price is USD 497 for the first 5 clients, in exchange for a testimonial and permission to show the site. After those 5, the price is USD 597. The condition is written in the copy. There is no strikethrough, countdown, or spot counter. Argentina is a separate ARS price and is not derived from the US price. Maintenance is optional and can be declined. The client pays domain, hosting and tools in their own accounts.",
   "us": {
     "id": "bilingual-service-website",
     "name": {
       "es": "Web bilingüe para negocios de servicios",
       "en": "Bilingual website for service businesses"
     },
-    "price": 597,
+    "price": 497,
+    "regularPrice": 597,
     "currency": "USD",
     "maintenance": 49
   },
