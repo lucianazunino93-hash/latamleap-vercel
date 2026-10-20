@@ -39,7 +39,7 @@ const Navbar = () => {
   return (<nav className={`fixed top-0 left-0 right-0 z-50 transition-all ${scrolled ? "border-b border-border backdrop-blur-xl bg-background/95" : "bg-background/70 backdrop-blur-md"}`}>
     <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
       <Link to="/" className="flex items-center gap-2.5">
-        <span className="font-display font-bold text-foreground text-xl">Latam<span className="text-primary">Leap</span></span>
+        <span className="font-display font-bold text-foreground text-xl">Latam<span className="text-primary-text">Leap</span></span>
       </Link>
       <div className="hidden lg:flex items-center gap-6 xl:gap-8">
         {links.map((l) => (<a key={l.href} href={onArgentina ? l.href : language === "en" ? `/en${l.href}` : l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
