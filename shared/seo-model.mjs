@@ -1,4 +1,5 @@
 import { priceFor } from './pricing.mjs';
+import { homeFaq } from './home-faq.mjs';
 
 export function getServiceCopy(service, plan, lang, currency = 'ARS') {
   const price = new Intl.NumberFormat(lang === 'es' ? 'es-AR' : 'en-US').format(priceFor(plan, currency));
@@ -23,6 +24,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
   const absolute = path => `${origin}${path}`;
   const basePath = route => route === '/en' ? '/' : route.startsWith('/en/') ? route.slice(3) : route;
   const language = route => route === '/en' || route.startsWith('/en/') ? 'en' : 'es';
+  const htmlLang = route => basePath(route) === '/argentina' ? 'es-AR' : language(route);
   const pages = { ...seo.pages };
   if (offers?.us?.price) {
     pages['/'] = [pages['/'][0], `Webs en español e inglés para plomeros, electricistas y HVAC en Estados Unidos y Latinoamérica. Pedidos por WhatsApp. USD ${offers.us.price}, precio fijo.`];
@@ -34,18 +36,23 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
   const isIndexable = route => Boolean(pages[route]) && !['/privacy-policy', '/terms-of-service', '/data-deletion'].includes(basePath(route));
   const alternates = route => {
     const path = basePath(route);
-    if (path === '/argentina') return { es: absolute('/argentina'), 'x-default': absolute('/argentina') };
-    return { es: absolute(path), en: absolute(localized(path, 'en')), 'x-default': absolute(path) };
+    if (path === '/argentina') {
+      return { es: absolute('/'), en: absolute('/en'), 'es-AR': absolute('/argentina'), 'x-default': absolute('/') };
+    }
+    const links = { es: absolute(path), en: absolute(localized(path, 'en')), 'x-default': absolute(path) };
+    if (path === '/') links['es-AR'] = absolute('/argentina');
+    return links;
   };
   function schema(route) {
     if (!pages[route]) return null;
     const lang = language(route), path = basePath(route), url = absolute(route);
     const phone = contactPhone || '';
+    const founderId = `${origin}/#founder`;
     const nodes = [
-      { '@type': 'Organization', '@id': organizationId, name: 'Latam Leap', url: `${origin}/`, email: 'hola@latamleap.com', telephone: phone, image: `${origin}/og-latamleap.png`, sameAs: ['https://www.instagram.com/latam.leap/'], areaServed: organizationAreaServed, founder: { '@type': 'Person', name: 'Luciana' }, contactPoint: { '@type': 'ContactPoint', contactType: 'sales', telephone: phone, email: 'hola@latamleap.com', availableLanguage: ['Spanish', 'English'] } },
-      { '@type': ['ProfessionalService', 'LocalBusiness'], '@id': `${origin}/#local-business`, name: 'Latam Leap', url: `${origin}/`, image: `${origin}/og-latamleap.png`, email: 'hola@latamleap.com', telephone: phone, priceRange: '$$', currenciesAccepted: 'USD, ARS', areaServed: organizationAreaServed, sameAs: ['https://www.instagram.com/latam.leap/'], founder: { '@type': 'Person', name: 'Luciana' } },
-      { '@type': 'WebSite', '@id': websiteId, name: 'Latam Leap', url: `${origin}/`, publisher: { '@id': organizationId }, inLanguage: ['es-AR', 'en'] },
-      { '@type': path === '/about' ? 'AboutPage' : path === '/case-studies' || path === '/services' ? 'CollectionPage' : 'WebPage', '@id': `${url}#webpage`, url, name: pages[route][0], description: pages[route][1], inLanguage: lang === 'es' ? 'es-AR' : 'en', isPartOf: { '@id': websiteId }, about: { '@id': organizationId }, ...(path !== '/' ? { breadcrumb: { '@id': `${url}#breadcrumbs` } } : {}) },
+      { '@type': 'Organization', '@id': organizationId, name: 'Latam Leap', url: `${origin}/`, email: 'hola@latamleap.com', telephone: phone, image: `${origin}/og-latamleap.png`, logo: { '@type': 'ImageObject', url: `${origin}/og-latamleap.png`, width: 1200, height: 630 }, sameAs: ['https://www.instagram.com/latam.leap/'], areaServed: organizationAreaServed, founder: { '@id': founderId }, contactPoint: { '@type': 'ContactPoint', contactType: 'sales', telephone: phone, email: 'hola@latamleap.com', availableLanguage: ['Spanish', 'English'] } },
+      { '@type': 'Person', '@id': founderId, name: 'Luciana', jobTitle: lang === 'en' ? 'Founder' : 'Fundadora', image: `${origin}/luciana-800.webp`, worksFor: { '@id': organizationId } },
+      { '@type': 'WebSite', '@id': websiteId, name: 'Latam Leap', url: `${origin}/`, publisher: { '@id': organizationId }, inLanguage: ['es', 'en', 'es-AR'] },
+      { '@type': path === '/about' ? 'AboutPage' : path === '/case-studies' || path === '/services' ? 'CollectionPage' : 'WebPage', '@id': `${url}#webpage`, url, name: pages[route][0], description: pages[route][1], inLanguage: htmlLang(route), isPartOf: { '@id': websiteId }, about: { '@id': organizationId }, ...(path !== '/' ? { breadcrumb: { '@id': `${url}#breadcrumbs` } } : {}) },
     ];
     const servicePage = servicePages.find(service => service.path === path);
     if (path !== '/') {
@@ -67,7 +74,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
         name: offers.us.name[lang],
         description: pages[route][1],
         serviceType: offers.us.name.en,
-        provider: { '@id': `${origin}/#local-business` },
+        provider: { '@id': organizationId },
         areaServed: organizationAreaServed,
         offers: listed,
       });
@@ -80,7 +87,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
         name: offers.ar.name,
         description: pages[route][1],
         serviceType: 'Website',
-        provider: { '@id': `${origin}/#local-business` },
+        provider: { '@id': organizationId },
         areaServed: 'Argentina',
         offers: [
           { '@type': 'Offer', name: 'Precio cerrado', price: offers.ar.price, priceCurrency: 'ARS', url: offerUrl },
@@ -94,9 +101,20 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
       nodes.push({ '@type': 'Service', '@id': `${serviceUrl}#service`, url: serviceUrl, name: translate(plan.name, lang), description: translate(plan.description, lang), serviceType: service[lang].title.split(' | ')[0], provider: { '@id': organizationId }, areaServed: 'Worldwide', offers: ['ARS', 'USD'].map(currency => ({ '@type': 'AggregateOffer', lowPrice: priceFor(plan, currency), priceCurrency: currency, offerCount: 1, url: serviceUrl })) });
     }
     if (plans.length > 1) nodes.push({ '@type': 'ItemList', '@id': `${url}#services`, itemListElement: plans.map((plan, index) => ({ '@type': 'ListItem', position: index + 1, item: { '@id': `${absolute(localized(servicePages.find(item => item.id === plan.id).path, lang))}#service` } })) });
+    if (path === '/' && offers) {
+      nodes.push({
+        '@type': 'FAQPage',
+        '@id': `${url}#faq`,
+        mainEntity: homeFaq(offers).map(item => ({
+          '@type': 'Question',
+          name: item[lang === 'en' ? 'enQ' : 'esQ'],
+          acceptedAnswer: { '@type': 'Answer', text: item[lang === 'en' ? 'enA' : 'esA'] },
+        })),
+      });
+    }
     return { '@context': 'https://schema.org', '@graph': nodes };
   }
-  return { origin, pages, localized, basePath, language, isIndexable, alternates, schema };
+  return { origin, pages, localized, basePath, language, htmlLang, isIndexable, alternates, schema };
 }
 
 export const serializeSchema = value => JSON.stringify(value).replaceAll('<', '\\u003c');

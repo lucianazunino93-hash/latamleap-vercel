@@ -18,13 +18,14 @@ export default function SEO() {
     const page = model.pages[route];
     const [title, description] = page || (language === "es" ? ["Página no disponible | Latam Leap", "Consulta nuestros servicios o vuelve al inicio."] : ["Page unavailable | Latam Leap", "Explore our services or return to the home page."]);
     document.title = title;
-    document.documentElement.lang = language;
+    document.documentElement.lang = model.htmlLang(route);
     const meta = (selector: string, value: string) => document.querySelector(selector)?.setAttribute("content", value);
     meta('meta[name="description"]', description);
     meta('meta[property="og:title"]', title);
     meta('meta[property="og:description"]', description);
     meta('meta[property="og:url"]', `${model.origin}${route}`);
-    meta('meta[property="og:locale"]', language === "es" ? "es_AR" : "en_US");
+    const htmlLang = model.htmlLang(route);
+    meta('meta[property="og:locale"]', htmlLang === "en" ? "en_US" : htmlLang === "es-AR" ? "es_AR" : "es_ES");
     meta('meta[name="twitter:title"]', title);
     meta('meta[name="twitter:description"]', description);
     const imageAlt = shareImageAlt(language);

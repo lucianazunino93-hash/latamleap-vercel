@@ -29,6 +29,7 @@ function geoPreview() {
     const userAgent = String(req.headers["user-agent"] || "");
     if (bots.test(userAgent)) return next();
     const decision = languageDecision(new URL(url, "http://127.0.0.1"), { cookie: cookie(String(req.headers.cookie || ""), "latamleap.lang"), country });
+    if (decision?.setCookie) res.setHeader("Set-Cookie", `latamleap.lang=${decision.setCookie}; Path=/; Max-Age=31536000; SameSite=Lax`);
     const location = decision?.location && safeRedirect(decision.location, "http://127.0.0.1");
     if (!location) return next();
     res.statusCode = 307;

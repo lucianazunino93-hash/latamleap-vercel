@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { LanguageContext } from "@/lib/language-context";
 import offers from "../../shared/offers.json";
 import decisions from "../../shared/decisions.json";
@@ -13,6 +13,7 @@ import { ArrowUpRight, Check, Code2, PenTool, Search } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import AuditForm from "./AuditForm";
 import { portfolioProjects } from "@/lib/portfolio";
+import demoPoster from "@/assets/demo-prime.webp";
 
 const steps = [
   { n: "01", esT: "Hablamos 10 minutos.", enT: "We talk for 10 minutes.", es: "Nos cuentas cómo te encuentran hoy tus clientes.", en: "You tell us how customers find you today." },
@@ -55,7 +56,7 @@ export const PainSection = () => {
     <h2 className="max-w-3xl text-4xl font-bold leading-[1.05] md:text-5xl"><Copy es="Tú estás en el trabajo. Tu próximo cliente te está buscando." en="You're on the job. Your next customer is looking for you." /></h2>
     <p className="mt-5 max-w-3xl text-lg text-muted-foreground"><Copy es="Estás bajo un fregadero, en un ático a 40 grados o cambiando un tablero. En ese momento, alguien busca en Google “plomero cerca de mí”, en inglés o en español, y quiere saber tres cosas: qué haces, si llegas a su zona y cómo pedirte el trabajo." en="You're under a sink, in a 100-degree attic or swapping a panel. Right then, someone searches “plumber near me”, in English or in Spanish, and wants three answers: what you do, whether you cover their area and how to book you." /></p>
     <p className="mt-4 max-w-3xl text-lg"><Copy es="Con tu web, esa respuesta ya está lista, en los dos idiomas, y el pedido te espera en WhatsApp para cuando termines." en="With your website, those answers are ready in both languages, and the job request waits on your WhatsApp for when you're done." /></p>
-    {language === "en" && <p className="mt-4 max-w-3xl text-sm text-muted-foreground">In the U.S., more than 43 million people speak Spanish at home.<sup><a className="underline" href="https://data.census.gov/table/ACSDT1Y2023.C16001" target="_blank" rel="noopener noreferrer">1</a></sup></p>}
+    {language === "en" && <p className="mt-4 max-w-3xl text-sm text-muted-foreground">In the U.S., more than 43 million people speak Spanish at home. <a className="inline-flex min-h-11 items-center text-xs underline" href="https://data.census.gov/table/ACSDT1Y2023.C16001" target="_blank" rel="noopener noreferrer">Source: U.S. Census Bureau</a></p>}
     <ul className="mt-6 flex flex-wrap gap-3">
       <li id="plumbers" className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Copy es="Plomeros" en="Plumbers" /></li>
       <li id="electricians" className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Copy es="Electricistas" en="Electricians" /></li>
@@ -75,8 +76,22 @@ export const SolutionSection = () => {
   </div></section>;
 };
 
-export const DemoSection = () => {
+function DemoFrame() {
   const language = useContext(LanguageContext);
+  const [open, setOpen] = useState(false);
+  const title = language === "en" ? "Prime Home Solutions demo" : "Demo de Prime Home Solutions";
+  const alt = language === "en" ? "Preview of the Prime Home Solutions demo" : "Vista previa de la demo de Prime Home Solutions";
+  return <figure className="mx-auto w-full max-w-sm">
+    <div className="overflow-hidden rounded-[2rem] border-8 border-foreground bg-background shadow-studio">
+      {open
+        ? <iframe title={title} src={DEMO_URL} className="h-[34rem] w-full bg-card" />
+        : <img src={demoPoster} width={390} height={780} alt={alt} decoding="async" loading="lazy" className="h-[34rem] w-full object-cover object-top" />}
+    </div>
+    {!open && <button type="button" className="mt-4 inline-flex min-h-11 w-full items-center justify-center rounded-md bg-primary px-4 font-bold text-primary-foreground" onClick={() => setOpen(true)}><Copy es="Ver la demo" en="View the demo" /></button>}
+  </figure>;
+}
+
+export const DemoSection = () => {
   const rob = decisions.robComingSoon
     ? { es: "y Rob, nuestra recepcionista con IA para llamadas entrantes (disponible pronto para clientes).", en: "and Rob, the AI receptionist for incoming calls (coming soon for clients)." }
     : { es: "y Rob, la recepcionista con IA que atiende las llamadas entrantes.", en: "and Rob, the AI receptionist who answers incoming calls." };
@@ -89,11 +104,7 @@ export const DemoSection = () => {
         <DemoButton ctaLocation="demo" />
         <p className="mt-4 text-sm text-muted-foreground"><Copy es={`Tu web de USD ${offers.us.price} incluye las 5 secciones y el pedido a WhatsApp. El calendario y Rob se suman como extras.`} en={`Your USD ${offers.us.price} site includes the 5 sections and the WhatsApp request form. The calendar and Rob are add-ons.`} /></p>
       </AnimatedSection>
-      <figure className="mx-auto w-full max-w-sm">
-        <div className="overflow-hidden rounded-[2rem] border-8 border-foreground bg-background shadow-studio">
-          <iframe title={language === "en" ? "Prime Home Solutions demo" : "Demo de Prime Home Solutions"} src={DEMO_URL} className="h-[34rem] w-full bg-card" loading="lazy" />
-        </div>
-      </figure>
+      <DemoFrame />
     </div>
   </div></section>;
 };
@@ -113,14 +124,17 @@ export const PortfolioSection = () => {
           <ProjectCard project={project} index={index} language={language} />
         </AnimatedSection>)}
       </div>
-      <div className="mt-10"><BookButton ctaLocation="proyectos" /></div>
+      <div className="mt-10 flex flex-col items-start gap-3">
+        <LocalizedAnchor href="/case-studies" className="inline-flex min-h-11 items-center font-bold underline underline-offset-4"><Copy es="Ver todos los proyectos" en="See all projects" /></LocalizedAnchor>
+        <BookButton ctaLocation="proyectos" />
+      </div>
     </div>
   </section>;
 };
 
 function ProjectCard({ project, index, language }: { project: typeof portfolioProjects[number]; index: number; language: "es" | "en" }) {
   const media = <div className="aspect-[16/9] overflow-hidden rounded-lg border border-border bg-muted lg:col-span-8">
-    <img src={project.image} srcSet={`${project.smallImage} 600w, ${project.image} 1200w`} sizes="(min-width: 1024px) 800px, calc(100vw - 40px)" width={1200} height={675} decoding="async" alt={language === "en" ? project.altEn : project.altEs} loading="lazy" className="h-full w-full object-cover object-top" />
+    <img src={project.image} srcSet={`${project.smallImage} 600w, ${project.mediumImage} 800w, ${project.image} 1200w`} sizes="(min-width: 1024px) 800px, calc(100vw - 40px)" width={1200} height={675} decoding="async" alt={language === "en" ? project.altEn : project.altEs} loading="lazy" className="h-full w-full object-cover object-top" />
   </div>;
   const copy = <div className="lg:col-span-4 lg:px-5">
     <span className="text-xs font-bold text-primary-text">0{index + 1}</span>

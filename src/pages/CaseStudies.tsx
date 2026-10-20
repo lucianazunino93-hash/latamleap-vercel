@@ -39,7 +39,7 @@ export default function CaseStudies() {
           const text = descriptions[project.name];
           if (!text) return null;
           const media = <div className="aspect-[16/9] overflow-hidden rounded-lg border border-border bg-muted lg:col-span-8">
-            <img src={project.image} srcSet={`${project.smallImage} 600w, ${project.image} 1200w`} sizes="(min-width: 1024px) 800px, calc(100vw - 48px)" width={1200} height={675} decoding="async" alt={language === "en" ? project.altEn : project.altEs} loading="lazy" className="h-full w-full object-cover object-top" />
+            <img src={project.image} srcSet={`${project.smallImage} 600w, ${project.mediumImage} 800w, ${project.image} 1200w`} sizes="(min-width: 1024px) 800px, calc(100vw - 48px)" width={1200} height={675} decoding="async" alt={language === "en" ? project.altEn : project.altEs} loading="lazy" className="h-full w-full object-cover object-top" />
           </div>;
           const body = <div className="lg:col-span-4 lg:px-5">
             <h3 className="mb-3 text-2xl font-bold md:text-3xl">{language === "en" ? project.nameEn : project.name}</h3>

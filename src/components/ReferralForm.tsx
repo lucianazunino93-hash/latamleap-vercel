@@ -19,7 +19,7 @@ export default function ReferralForm({ market = "us" }: { market?: "us" | "ar" }
   const [refCode, setRefCode] = useState("");
   const sending = useRef(false);
   const submission = useRef({ fingerprint: "", id: "" });
-  const cls = "mt-2 block min-h-11 w-full rounded-lg border border-border bg-card p-3 text-foreground";
+  const cls = "mt-2 block min-h-11 w-full rounded-lg border border-border bg-card p-3 text-base text-foreground sm:text-sm";
   useEffect(() => { setRefCode(getRef()); }, []);
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {

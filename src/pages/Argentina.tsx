@@ -4,18 +4,21 @@ import offers from "../../shared/offers.json";
 import { CALENDAR_URL, INSTAGRAM_URL, rememberLanguage, whatsAppUrl } from "@/lib/sales";
 import { track } from "@/lib/track";
 import vetMavie from "@/assets/projects/vet-mavie-1200.webp";
+import vetMavieMedium from "@/assets/projects/vet-mavie-800.webp";
 import vetMavieSmall from "@/assets/projects/vet-mavie-600.webp";
 import gonzaloAlvarez from "@/assets/projects/gonzalo-alvarez-1200.webp";
+import gonzaloAlvarezMedium from "@/assets/projects/gonzalo-alvarez-800.webp";
 import gonzaloAlvarezSmall from "@/assets/projects/gonzalo-alvarez-600.webp";
 import rifaSolidaria from "@/assets/projects/rifa-solidaria-1200.webp";
+import rifaSolidariaMedium from "@/assets/projects/rifa-solidaria-800.webp";
 import rifaSolidariaSmall from "@/assets/projects/rifa-solidaria-600.webp";
 
 const pesos = new Intl.NumberFormat("es-AR").format(offers.ar.price);
 const care = new Intl.NumberFormat("es-AR").format(offers.ar.maintenance);
 
 const works = [
-  { name: "vet.mavie", text: "Sitio web para especialistas veterinarias.", image: vetMavie, small: vetMavieSmall, href: "https://www.vetmavie.com/", alt: "Sitio web de vet.mavie" },
-  { name: "Psicólogo Gonzalo Álvarez", text: "Sitio para un consultorio.", image: gonzaloAlvarez, small: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", alt: "Sitio web del psicólogo Gonzalo Álvarez" },
+  { name: "vet.mavie", text: "Sitio web para especialistas veterinarias.", image: vetMavie, medium: vetMavieMedium, small: vetMavieSmall, href: "https://www.vetmavie.com/", alt: "Sitio web de vet.mavie" },
+  { name: "Psicólogo Gonzalo Álvarez", text: "Sitio para un consultorio.", image: gonzaloAlvarez, medium: gonzaloAlvarezMedium, small: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", alt: "Sitio web del psicólogo Gonzalo Álvarez" },
 ];
 
 export default function Argentina() {
@@ -60,13 +63,13 @@ export default function Argentina() {
         <p className="text-muted-foreground mb-8 max-w-3xl">Proyectos reales en Argentina. No publicamos testimonios que no tengamos.</p>
         <div className="grid md:grid-cols-2 gap-8">
           {works.map(work => <a key={work.name} href={work.href} target="_blank" rel="noopener noreferrer" className="block">
-            <img src={work.image} srcSet={`${work.small} 600w, ${work.image} 1200w`} sizes="(min-width: 768px) 480px, 100vw" width={1200} height={675} alt={work.alt} className="rounded-lg border border-border aspect-video object-cover object-top" />
+            <img src={work.image} srcSet={`${work.small} 600w, ${work.medium} 800w, ${work.image} 1200w`} sizes="(min-width: 768px) 480px, calc(100vw - 40px)" width={1200} height={675} alt={work.alt} loading="lazy" decoding="async" className="rounded-lg border border-border aspect-video object-cover object-top" />
             <h3 className="text-xl font-bold mt-3">{work.name}</h3>
             <p className="text-muted-foreground">{work.text}</p>
           </a>)}
         </div>
         <figure className="mt-8 max-w-xl">
-          <img src={rifaSolidaria} srcSet={`${rifaSolidariaSmall} 600w, ${rifaSolidaria} 1200w`} sizes="(min-width: 768px) 480px, 100vw" width={1200} height={675} alt="Captura de Rifa Solidaria con información de demostración" className="rounded-lg border border-border aspect-video object-cover object-top" />
+          <img src={rifaSolidaria} srcSet={`${rifaSolidariaSmall} 600w, ${rifaSolidariaMedium} 800w, ${rifaSolidaria} 1200w`} sizes="(min-width: 768px) 480px, calc(100vw - 40px)" width={1200} height={675} alt="Captura de Rifa Solidaria con información de demostración" loading="lazy" decoding="async" className="rounded-lg border border-border aspect-video object-cover object-top" />
           <figcaption className="mt-3">
             <h3 className="text-xl font-bold">Rifa Solidaria</h3>
             <p className="text-muted-foreground">Sistema a medida para números, reservas y comprobantes. Esta imagen es una captura. No es un acceso al sistema.</p>

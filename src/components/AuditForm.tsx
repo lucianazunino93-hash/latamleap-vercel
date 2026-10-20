@@ -22,7 +22,7 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
   const [error, setError] = useState("");
   const sending = useRef(false);
   const submission = useRef({ fingerprint: "", id: "" });
-  const cls = "block w-full mt-2 p-3 border border-border rounded-lg bg-card text-foreground";
+  const cls = "mt-2 block min-h-11 w-full rounded-lg border border-border bg-card p-3 text-base text-foreground sm:text-sm";
   useEffect(() => { setRefCode(getRef()); }, []);
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -62,7 +62,7 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
       <input type="hidden" name="ref" value={refCode} />
       <div className="hidden" aria-hidden="true"><label htmlFor={id + "website"}>Website<input id={id + "website"} name="website" tabIndex={-1} autoComplete="off" /></label></div>
       <p className="text-xs text-muted-foreground"><Copy es="Usaremos tus datos para responder tu consulta. Lee nuestra " en="We'll use your details to reply. Read our " /><Link to="/privacy-policy" className="underline"><Copy es="política de privacidad" en="privacy policy" /></Link>.</p>
-      <Button type="submit" className="w-full"><Copy es={status === "sending" ? "Enviando…" : "Enviar"} en={status === "sending" ? "Sending…" : "Send"} /></Button>
+      <Button type="submit" className="min-h-11 w-full"><Copy es={status === "sending" ? "Enviando…" : "Enviar"} en={status === "sending" ? "Sending…" : "Send"} /></Button>
     </fieldset>
     {status === "error" && <p role="alert" className="text-sm text-destructive">{error === "rate"
       ? <Copy es="Espera un minuto antes de volver a enviar. También puedes escribirnos por WhatsApp." en="Wait a minute before sending again. You can also message us on WhatsApp." />

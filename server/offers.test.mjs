@@ -73,8 +73,9 @@ test('language follows the country and an explicit choice is kept', async () => 
   assert.equal(unitedStates.status, 307);
   assert.equal(located(unitedStates.headers.get('location')).pathname, '/en/services');
   assert.equal(located(unitedStates.headers.get('location')).host, 'www.latamleap.com');
-  const argentina = await middleware(new Request('https://www.latamleap.com/en', { headers: { 'x-vercel-ip-country': 'AR', 'user-agent': 'Mozilla/5.0' } }));
-  assert.equal(located(argentina.headers.get('location')).pathname, '/');
+  const explicitEnglish = await middleware(new Request('https://www.latamleap.com/en', { headers: { 'x-vercel-ip-country': 'AR', 'user-agent': 'Mozilla/5.0', cookie: 'latamleap.lang=es' } }));
+  assert.equal(explicitEnglish.headers.get('location'), null);
+  assert.match(explicitEnglish.headers.get('set-cookie'), /latamleap\.lang=en/);
   assert.equal(middleware(new Request('https://www.latamleap.com/', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Googlebot' } })), undefined);
   assert.equal(middleware(new Request('https://www.latamleap.com/', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0', cookie: 'latamleap.lang=es' } })), undefined);
   const spanishChoice = await middleware(new Request('https://www.latamleap.com/es', { headers: { 'x-vercel-ip-country': 'US', 'user-agent': 'Mozilla/5.0' } }));
