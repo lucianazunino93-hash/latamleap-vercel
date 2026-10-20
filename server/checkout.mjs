@@ -2,16 +2,16 @@ import http from 'node:http';
 import fs from 'node:fs';
 const catalog = JSON.parse(fs.readFileSync(new URL('../shared/catalog.json', import.meta.url)));
 const decisions = JSON.parse(fs.readFileSync(new URL('../shared/decisions.json', import.meta.url)));
-export function createCheckoutHandler({ token = process.env.MP_ACCESS_TOKEN, origin = process.env.SITE_URL || 'https://www.latamleap.com', fetcher = fetch } = {}) {
+export function createCheckoutHandler({ token = process.env.MP_ACCESS_TOKEN, origin = process.env.SITE_URL || 'https://www.latamleap.com', fetcher = fetch, retired = decisions.checkoutRetired } = {}) {
  return async (req,res) => {
   const send=(status,data)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
   const path = String(req.url || '').split('?')[0];
   if(path !== '/api/checkout') return send(404,{error:'not_found'});
-  if(decisions.checkoutRetired) return send(410,{error:'checkout_retired'});
+  if(retired) return send(410,{error:'checkout_retired'});
   if(req.method !== 'POST') return send(405,{error:'method_not_allowed'});
   const allowedOrigins = [origin];
   if (process.env.NODE_ENV !== 'production') allowedOrigins.push('http://localhost:8080','http://127.0.0.1:8080','http://127.0.0.1:8081');
-  if(req.headers.origin && !allowedOrigins.includes(req.headers.origin)) return send(403,{error:'invalid_origin'});
+  if(!allowedOrigins.includes(req.headers.origin)) return send(403,{error:'invalid_origin'});
   if(!req.headers['content-type']?.startsWith('application/json')) return send(415,{error:'json_required'});
   if(!token) return send(503,{error:'checkout_unavailable'});
   try {
