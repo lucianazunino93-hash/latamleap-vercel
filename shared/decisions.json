@@ -10,25 +10,15 @@
   "consentBanner": true,
   "usSpanish": "tu",
   "bonus": {
-    "wordingPending": true,
-    "note": "Bonus wording is still pending. The spec default (option A, through 2026-11-30, America/Chicago) is the copy in shared/offers.json → us.bonus. Edit that object to change the date, the sentences, or enabled. wordingPending does not hide the spec default."
+    "wordingPending": false,
+    "note": "Option A only: full Google Business Profile optimization for projects that start before 2026-11-30 (America/Chicago). Copy and the date live in shared/offers.json → us.bonus. Option B is the referral reward, not a public bonus."
   },
   "referral": {
-    "enabled": false,
-    "pending": true,
-    "note": "Referral copy is pending. This block stays hidden until enabled is true. Replace the placeholder sentences, then set enabled to true.",
-    "es": {
-      "kicker": "Referidos",
-      "title": "Texto de referidos pendiente",
-      "body": "Este bloque está apagado hasta que llegue el copy. Editar shared/decisions.json → referral."
-    },
-    "en": {
-      "kicker": "Referrals",
-      "title": "Referral copy pending",
-      "body": "This block stays off until the copy arrives. Edit shared/decisions.json → referral."
-    }
+    "enabled": true,
+    "argentinaPending": true,
+    "note": "Amounts and rules live in shared/offers.json → referral. The US home section is live. The Argentina page stays unchanged until Luciana confirms the voseo copy (D10)."
   },
   "analytics": {
-    "note": "Placeholders live in shared/seo.json: ga4MeasurementId (example G-XXXXXXXXXX; empty or all-X does not load), metaPixelId (digits only; empty does not load), googleSiteVerification (empty does not print the meta tag). GA4 and the pixel load only after the visitor accepts the consent banner. Consent Mode v2 defaults to denied in index.html and updates to granted on accept. The choice is stored in localStorage under latamleap.consent."
+    "note": "Placeholders live in shared/seo.json: ga4MeasurementId (example G-XXXXXXXXXX; empty or all-X does not load), metaPixelId (digits only; empty does not load), googleSiteVerification (empty does not print the meta tag). GA4 and the pixel load only after the visitor accepts the consent banner. Consent Mode v2 defaults to denied in index.html and updates to granted on accept. The choice is stored in localStorage under latamleap.consent. referral_submit is a GA4 key event: mark it in Admin when the property exists. referral_link_landing, referral_share_click and referral_section_view stay regular events."
   }
 }

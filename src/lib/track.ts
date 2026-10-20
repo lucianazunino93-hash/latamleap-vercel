@@ -1,3 +1,5 @@
+// referral_submit is a GA4 key event. Mark it in GA4 Admin when the property exists.
+// When the Meta pixel is active, that event is sent as Lead with content_category "referral".
 type TrackValue = string | number | boolean | undefined;
 
 const META: Record<string, string> = {
@@ -13,6 +15,10 @@ export function track(name: string, params: Record<string, TrackValue> = {}) {
     if (value !== undefined) payload[key] = value;
   }
   window.gtag?.("event", name, payload);
+  if (name === "referral_submit") {
+    window.fbq?.("track", "Lead", { content_category: "referral" });
+    return;
+  }
   const meta = META[name];
   if (meta) window.fbq?.("track", meta);
 }

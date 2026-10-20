@@ -12,6 +12,7 @@ const usLinks = [
   { es: "Demo", en: "Demo", href: "/#demo" },
   { es: "Precio", en: "Pricing", href: "/#oferta" },
   { es: "Proceso", en: "Process", href: "/#proceso" },
+  { es: "Recomienda", en: "Refer", href: "/#referidos" },
   { es: "Preguntas", en: "FAQ", href: "/#preguntas" },
 ];
 const argentinaLinks = [

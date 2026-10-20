@@ -4,6 +4,7 @@ import { Text, LocalizedAnchor } from "@/lib/language";
 import { LanguageContext } from "@/lib/language-context";
 import { Copy } from "@/lib/copy";
 import { CALENDAR_URL } from "@/lib/sales";
+import { readRefFromUrl } from "@/lib/referral";
 import { track } from "@/lib/track";
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
@@ -19,6 +20,13 @@ const Layout = () => {
   const language = useContext(LanguageContext);
   const [params] = useSearchParams();
   const tracked = useRef(false);
+  const refTracked = useRef(false);
+  useEffect(() => {
+    const code = readRefFromUrl(window.location.search);
+    if (!code || refTracked.current) return;
+    refTracked.current = true;
+    track("referral_link_landing", { lang: language, ref_code: code });
+  }, [language]);
   useEffect(() => {
     const preview = params.get("preview");
     const cold = params.get("utm_source") === "cold_email";

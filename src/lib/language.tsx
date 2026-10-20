@@ -5,6 +5,7 @@ import { LanguageContext } from "./language-context";
 import { useCurrency } from "./currency-context";
 import { translate } from "./language-copy";
 import { WHATSAPP_TEXT, rememberLanguage } from "./sales";
+import { contactWhatsAppText } from "./referral";
 import { track } from "./track";
 export function Text({value}: {value: string | number | ReactNode}) {
   const language = useContext(LanguageContext);
@@ -12,16 +13,27 @@ export function Text({value}: {value: string | number | ReactNode}) {
   return typeof value === "string" ? translate(value, language, currency) : value;
 }
 
-export const LocalizedAnchor = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function LocalizedAnchor({href, ...props}, ref) {
+export const LocalizedAnchor = forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function LocalizedAnchor({href, onClick, ...props}, ref) {
   const language = useContext(LanguageContext);
   let target = language === "en" && href?.startsWith("/") && !href.startsWith("//") && !href.startsWith("/en")
     ? `/en${href === "/" ? "" : href}` : href;
   if (target?.startsWith("https://wa.me/")) {
     const url = new URL(target);
-    url.searchParams.set("text", WHATSAPP_TEXT[language]);
-    target = url.href;
+    if (url.pathname.replace(/\//g, "")) {
+      url.searchParams.set("text", WHATSAPP_TEXT[language]);
+      target = url.href;
+    }
   }
-  return <a {...props} href={target} ref={ref}/>;
+  return <a {...props} href={target} ref={ref} onClick={event => {
+    if (event.currentTarget.href.startsWith("https://wa.me/")) {
+      const url = new URL(event.currentTarget.href);
+      if (url.pathname.replace(/\//g, "")) {
+        url.searchParams.set("text", contactWhatsAppText(language));
+        event.currentTarget.href = url.href;
+      }
+    }
+    onClick?.(event);
+  }} />;
 });
 
 export function LanguageSwitcher() {

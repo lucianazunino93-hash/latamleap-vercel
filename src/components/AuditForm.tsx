@@ -2,10 +2,11 @@ import { Text } from "@/lib/language";
 import { Copy } from "@/lib/copy";
 import { useCurrency } from "@/lib/currency-context";
 import { LanguageContext } from "@/lib/language-context";
-import { useContext, useId, useRef, useState, FormEvent } from "react";
+import { useContext, useEffect, useId, useRef, useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CALENDAR_URL } from "@/lib/sales";
+import { getRef } from "@/lib/referral";
 import { track } from "@/lib/track";
 import { WhatsAppLink } from "@/components/SalesActions";
 
@@ -17,10 +18,12 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
   const id = useId();
   const solution = "Necesito orientación";
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [refCode, setRefCode] = useState("");
   const [error, setError] = useState("");
   const sending = useRef(false);
   const submission = useRef({ fingerprint: "", id: "" });
   const cls = "block w-full mt-2 p-3 border border-border rounded-lg bg-card text-foreground";
+  useEffect(() => { setRefCode(getRef()); }, []);
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (sending.current) return;
@@ -28,7 +31,7 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
     const payload = {
       name: String(fields.get("name") ?? "").trim(), email: String(fields.get("email") ?? "").trim(),
       phone: String(fields.get("phone") ?? "").trim(), solution: String(fields.get("solution") ?? ""),
-      project: ["Negocio: " + String(fields.get("business") ?? "").trim(), "Sitio web: " + (String(fields.get("currentSite") ?? "").trim() || "No indicado"), "Quiere contarnos de su negocio para coordinar una reunión de 10 minutos."].join("\n"),
+      project: ["Negocio: " + String(fields.get("business") ?? "").trim(), "Sitio web: " + (String(fields.get("currentSite") ?? "").trim() || "No indicado"), "Quiere contarnos de su negocio para coordinar una reunión de 10 minutos.", getRef() ? `Código: ${getRef()}` : ""].filter(Boolean).join("\n"),
       website: String(fields.get("website") ?? ""), language, currency,
     };
     const fingerprint = JSON.stringify(payload);
@@ -56,6 +59,7 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
       <label htmlFor={id + "phone"} className="block text-sm"><Text value="Teléfono" /><input id={id + "phone"} name="phone" type="tel" autoComplete="tel" maxLength={40} className={cls} /></label>
       <label htmlFor={id + "currentSite"} className="block text-sm"><Copy es="Sitio web, si tienes" en="Website, if you have one" /><input id={id + "currentSite"} name="currentSite" inputMode="url" autoComplete="url" maxLength={200} className={cls} /></label>
       <input type="hidden" name="solution" value={solution} />
+      <input type="hidden" name="ref" value={refCode} />
       <div className="hidden" aria-hidden="true"><label htmlFor={id + "website"}>Website<input id={id + "website"} name="website" tabIndex={-1} autoComplete="off" /></label></div>
       <p className="text-xs text-muted-foreground"><Copy es="Usaremos tus datos para responder tu consulta. Lee nuestra " en="We'll use your details to reply. Read our " /><Link to="/privacy-policy" className="underline"><Copy es="política de privacidad" en="privacy policy" /></Link>.</p>
       <Button type="submit" className="w-full"><Copy es={status === "sending" ? "Enviando…" : "Enviar"} en={status === "sending" ? "Sending…" : "Send"} /></Button>

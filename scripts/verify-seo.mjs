@@ -39,6 +39,10 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   assert.match(alt, model.language(route) === 'es' ? /pedidos por WhatsApp/ : /job requests on WhatsApp/);
   assert.match(document.querySelector('meta[name="twitter:image:alt"]').content, model.language(route) === 'es' ? /pedidos por WhatsApp/ : /job requests on WhatsApp/);
   assert.equal(document.body.textContent.includes(decisions.contactPhone.replace(/\D/g, '')), false, `${route}: phone number stays out of visible text`);
+  for (const phrase of ['Flagler', 'Miami, FL']) assert.equal(html.includes(phrase), false, `${route}: postal address stays off the site (${phrase})`);
+  if (route === '/' || route === '/en') assert.ok(document.getElementById('referidos'), `${route}: referral section`);
+  if (route === '/case-studies') assert.match(document.body.textContent, /Otros proyectos/);
+  if (route === '/en/case-studies') assert.match(document.body.textContent, /Other projects/);
   if (guarded.has(route)) {
     for (const phrase of forbiddenOnUs) assert.equal(html.includes(phrase), false, `${route}: forbidden ${phrase}`);
   }
@@ -67,6 +71,8 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   console.log(`${route}: OK`);
 }
 assert.equal(servicePages.length, 0, 'retired service pages stay out of the catalog loop');
-const notFound = new JSDOM(await fs.readFile('dist/404.html', 'utf8')).window.document;
+const notFoundHtml = await fs.readFile('dist/404.html', 'utf8');
+const notFound = new JSDOM(notFoundHtml).window.document;
 assert.equal(notFound.querySelector('meta[name="robots"]').content, 'noindex,follow');
+for (const phrase of ['Flagler', 'Miami, FL']) assert.equal(notFoundHtml.includes(phrase), false, `404: postal address stays off the site (${phrase})`);
 console.log('Sitemap, HTML, language alternates, live catalog prices and structured data verified.');

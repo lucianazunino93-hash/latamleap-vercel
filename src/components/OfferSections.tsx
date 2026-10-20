@@ -39,6 +39,7 @@ const questions = [
   { id: "google", esQ: "¿Me ayudan a aparecer en Google?", enQ: "Will you help me show up on Google?", esA: "Dejamos tu web y tu perfil completos y bien configurados, que es lo que Google recomienda. El orden de los resultados lo define Google según relevancia, distancia y prominencia.", enA: "We set up your site and profile complete and accurate, which is what Google recommends. Google orders results by relevance, distance and prominence." },
   { id: "vista-previa", esQ: "¿Puedo ver cómo quedaría antes de decidir?", enQ: "Can I see how it would look before deciding?", esA: "Sí. En la charla de 10 minutos ves la vista previa con tu negocio, y después tienes dos rondas de cambios.", enA: "Yes. On the 10-minute call you see a preview with your business, and then you get two rounds of changes." },
   { id: "proyectos", esQ: "¿Hacen proyectos más grandes?", enQ: "Do you take on bigger projects?", esA: "Sí: tiendas, sistemas a medida y automatizaciones con IA. Los cotizamos después de la charla.", enA: "Yes: stores, custom systems and AI automations. We quote them after the call." },
+  { id: "referidos", esQ: "¿Tienen programa de referidos?", enQ: "Do you have a referral program?", esA: `Sí. Por cada negocio que nos recomiendas y empieza su proyecto, te regalamos un mes de tu plan de cuidado, hasta ${offers.referral.capPerYear} por año.`, enA: `Yes. For every business you refer that starts a project, you get a free month of your care plan, up to ${offers.referral.capPerYear} per year.` },
 ];
 
 const chips = [

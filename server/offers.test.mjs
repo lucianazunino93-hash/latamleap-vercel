@@ -109,6 +109,19 @@ test('search console, GA4 and the Meta pixel stay unloaded until configured and 
   assert.match(granted, /fbq\('init','123456'\)/);
 });
 
+test('the referral reward is one care month, capped, and credited on the deposit', () => {
+  assert.deepEqual(offers.referral, {
+    enabled: true,
+    rewardMonths: 1,
+    rewardUSD: 49,
+    rewardARS: 49000,
+    capPerYear: 6,
+    holdMonths: 12,
+    trigger: 'deposit_50',
+    refereeGift: 'gbp_full_optimization',
+  });
+});
+
 test('the time-bound bonus follows its date and stays a fixed add-on', () => {
   const bonus = { ...offers.us.bonus };
   assert.equal(bonus.option, 'A');

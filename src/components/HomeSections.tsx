@@ -7,22 +7,12 @@ import { LocalizedAnchor } from "@/lib/language";
 import { DEMO_URL, INSTAGRAM_URL } from "@/lib/sales";
 import { track } from "@/lib/track";
 import { OfferFAQ, OfferPricing, FounderSection } from "./OfferSections";
+import ReferralSection from "./ReferralSection";
 import { BookButton, DemoButton, WhatsAppLink } from "./SalesActions";
 import { ArrowUpRight, Check, Code2, PenTool, Search } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import AuditForm from "./AuditForm";
-import vetMavie from "@/assets/projects/vet-mavie-1200.webp";
-import vetMavieSmall from "@/assets/projects/vet-mavie-600.webp";
-import gonzaloAlvarez from "@/assets/projects/gonzalo-alvarez-1200.webp";
-import gonzaloAlvarezSmall from "@/assets/projects/gonzalo-alvarez-600.webp";
-import rifaSolidaria from "@/assets/projects/rifa-solidaria-1200.webp";
-import rifaSolidariaSmall from "@/assets/projects/rifa-solidaria-600.webp";
-
-const projects = [
-  { name: "vet.mavie", nameEn: "vet.mavie", es: "Sitio para especialistas veterinarias", en: "Website for veterinary specialists", image: vetMavie, smallImage: vetMavieSmall, href: "https://www.vetmavie.com/", altEs: "Sitio web de vet.mavie", altEn: "vet.mavie website" },
-  { name: "Gonzalo Álvarez", nameEn: "Gonzalo Álvarez", es: "Sitio para un consultorio de psicología", en: "Website for a psychology practice", image: gonzaloAlvarez, smallImage: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", altEs: "Sitio web del consultorio de Gonzalo Álvarez", altEn: "Website for Gonzalo Álvarez's practice" },
-  { name: "Rifa Solidaria", nameEn: "Rifa Solidaria", es: "Sistema a medida para números, reservas y comprobantes (captura).", en: "Custom system for numbers, reservations and receipts (screenshot).", image: rifaSolidaria, smallImage: rifaSolidariaSmall, altEs: "Captura del sistema Rifa Solidaria", altEn: "Screenshot of the Rifa Solidaria system" },
-];
+import { portfolioProjects } from "@/lib/portfolio";
 
 const steps = [
   { n: "01", esT: "Hablamos 10 minutos.", enT: "We talk for 10 minutes.", es: "Nos cuentas cómo te encuentran hoy tus clientes.", en: "You tell us how customers find you today." },
@@ -119,7 +109,7 @@ export const PortfolioSection = () => {
       <ul className="mb-6 max-w-3xl space-y-2">{services.map(([id, es, en]) => <li key={id} className="font-bold"><Copy es={es} en={en} /></li>)}</ul>
       <p className="mb-10 max-w-3xl text-muted-foreground"><Copy es="Cada proyecto a medida se cotiza después de una charla de 10 minutos." en="Every custom project is quoted after a 10-minute call." /></p>
       <div className="space-y-14">
-        {projects.map((project, index) => <AnimatedSection key={project.name} delay={0.08 * index}>
+        {portfolioProjects.map((project, index) => <AnimatedSection key={project.name} delay={0.08 * index}>
           <ProjectCard project={project} index={index} language={language} />
         </AnimatedSection>)}
       </div>
@@ -128,7 +118,7 @@ export const PortfolioSection = () => {
   </section>;
 };
 
-function ProjectCard({ project, index, language }: { project: typeof projects[number]; index: number; language: "es" | "en" }) {
+function ProjectCard({ project, index, language }: { project: typeof portfolioProjects[number]; index: number; language: "es" | "en" }) {
   const media = <div className="aspect-[16/9] overflow-hidden rounded-lg border border-border bg-muted lg:col-span-8">
     <img src={project.image} srcSet={`${project.smallImage} 600w, ${project.image} 1200w`} sizes="(min-width: 1024px) 800px, calc(100vw - 40px)" width={1200} height={675} decoding="async" alt={language === "en" ? project.altEn : project.altEs} loading="lazy" className="h-full w-full object-cover object-top" />
   </div>;
@@ -150,17 +140,6 @@ function ProjectCard({ project, index, language }: { project: typeof projects[nu
     </div>
   </LocalizedAnchor>;
 }
-
-export const ReferralSection = () => {
-  if (!decisions.referral.enabled) return null;
-  return <section id="referidos" className="scroll-mt-24 py-16" data-copy="pending">
-    <div className="mx-auto max-w-3xl px-5 sm:px-6">
-      <p className="section-kicker"><Copy es={decisions.referral.es.kicker} en={decisions.referral.en.kicker} /></p>
-      <h2 className="mb-4 text-4xl font-bold"><Copy es={decisions.referral.es.title} en={decisions.referral.en.title} /></h2>
-      <p className="text-muted-foreground"><Copy es={decisions.referral.es.body} en={decisions.referral.en.body} /></p>
-    </div>
-  </section>;
-};
 
 export const ProcessSection = () => (<section id="proceso" className="scroll-mt-24 bg-secondary py-20 lg:py-28">
   <div className="mx-auto max-w-7xl px-5 sm:px-6">
@@ -202,9 +181,9 @@ export const HomeContent = () => <>
   <DemoSection />
   <OfferPricing />
   <ProcessSection />
+  <ReferralSection />
   <FounderSection />
   <PortfolioSection />
-  <ReferralSection />
   <OfferFAQ />
   <FinalCTASection />
 </>;
