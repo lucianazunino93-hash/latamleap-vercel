@@ -18,6 +18,7 @@ export function activateAnalytics() {
   template.content.querySelectorAll("script").forEach(node => {
     const script = document.createElement("script");
     for (const attr of Array.from(node.attributes)) script.setAttribute(attr.name, attr.value);
+    script.async = node.async;
     script.text = node.textContent || "";
     document.head.appendChild(script);
   });

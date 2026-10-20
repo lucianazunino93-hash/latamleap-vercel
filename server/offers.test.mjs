@@ -106,10 +106,14 @@ test('search console, GA4 and the Meta pixel stay unloaded until configured and 
   assert.equal(analyticsHead({ ga4MeasurementId: 'G-XXXXXXXXXX', metaPixelId: '123456', consent: 'granted' }).includes('googletagmanager'), false);
   assert.equal(analyticsHead({ ga4MeasurementId: '', metaPixelId: '<script>', consent: 'granted' }), '');
   const granted = analyticsHead({ ga4MeasurementId: 'G-ABC123', metaPixelId: '123456', consent: 'granted' });
-  assert.match(granted, /gtag\('consent','update'/);
-  assert.match(granted, /"analytics_storage":"granted"/);
-  assert.match(granted, /G-ABC123/);
-  assert.match(granted, /fbq\('init','123456'\)/);
+  assert.match(granted, /src="\/measurement\.js"/);
+  assert.match(granted, /data-ga-id="G-ABC123"/);
+  assert.match(granted, /googletagmanager\.com\/gtag\/js\?id=G-ABC123/);
+  assert.equal(granted.includes("fbq"), false);
+  assert.equal(granted.includes("gtag("), false);
+  const measurement = fs.readFileSync(new URL('../public/measurement.js', import.meta.url), 'utf8');
+  assert.match(measurement, /analytics_storage: "granted"/);
+  assert.match(measurement, /ad_storage: "denied"/);
 });
 
 test('the referral reward is one care month, capped, and credited on the deposit', () => {

@@ -39,7 +39,7 @@ try {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${Object.keys(model.pages).filter(model.isIndexable).map(route => `<url><loc>${model.origin}${route}</loc>${Object.entries(model.alternates(route)).map(([lang, href]) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`).join('')}</url>`).join('')}</urlset>`;
   await fs.writeFile('dist/sitemap.xml', sitemap);
   let notFound = template.replace('<div id="root"></div>', `<div id="root">${renderPage('/not-found')}</div>`).replace(/<title>.*?<\/title>/, '<title>Página no encontrada | Latam Leap</title>').replace(/<meta name="robots" content="[^"]*"\s*\/?>/, '<meta name="robots" content="noindex,follow" />').replace(/<link rel="canonical"[^>]*>/, '');
-  notFound = notFound.replace("</body>", `<script>if(location.pathname==="/en"||location.pathname.startsWith("/en/")){document.documentElement.lang="en";var p=document.querySelector("[data-nf='msg']");var a=document.querySelector("[data-nf='home']");if(p)p.textContent="Page not found";if(a){a.textContent="Back to home";a.href="/en";}}</script></body>`);
+  notFound = notFound.replace("</body>", `<script src="/not-found-lang.js"></script></body>`);
   await fs.writeFile('dist/404.html', notFound);
   console.log(`HTML generado para ${Object.keys(model.pages).length} páginas y una página 404.`);
 } finally { await vite.close(); }
