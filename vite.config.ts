@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
-import { languageDecision } from "./shared/geo.mjs";
+import { languageDecision, safeRedirect } from "./shared/geo.mjs";
 import { marketPayload } from "./shared/market-data.mjs";
 
 const bots = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|telegram|preview|lighthouse/i;
@@ -29,9 +29,10 @@ function geoPreview() {
     const userAgent = String(req.headers["user-agent"] || "");
     if (bots.test(userAgent)) return next();
     const decision = languageDecision(new URL(url, "http://127.0.0.1"), { cookie: cookie(String(req.headers.cookie || ""), "latamleap.lang"), country });
-    if (!decision?.location) return next();
+    const location = decision?.location && safeRedirect(decision.location, "http://127.0.0.1");
+    if (!location) return next();
     res.statusCode = 307;
-    res.setHeader("Location", decision.location);
+    res.setHeader("Location", location);
     res.setHeader("Set-Cookie", `latamleap.lang=${decision.setCookie}; Path=/; Max-Age=31536000; SameSite=Lax`);
     res.end();
   };

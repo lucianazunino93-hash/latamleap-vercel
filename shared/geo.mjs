@@ -70,6 +70,15 @@ export function languageDecision(input, { cookie = "", country = "" } = {}) {
   return redirect(nextPath, preferred);
 }
 
+/** Path on the same host. Rejects protocol-relative and backslash locations. */
+export function safeRedirect(location, base) {
+  if (typeof location !== "string" || !location.startsWith("/") || location.startsWith("//") || location.includes("\\")) return null;
+  let next;
+  try { next = new URL(location, base); } catch { return null; }
+  if (next.origin !== new URL(base).origin) return null;
+  return `${next.pathname}${next.search}`;
+}
+
 /** Inclusive calendar date from config. No ticking countdown, and a past date turns the offer off. */
 export function isLaunchActive(launch, now = new Date()) {
   if (!launch || launch.enabled !== true) return false;
