@@ -1,11 +1,11 @@
 import { createServer } from 'vite';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { createSeoModel, serializeSchema } from '../shared/seo-model.mjs';
+import { createSeoModel, serializeSchema, shareImageAlt } from '../shared/seo-model.mjs';
 import { trackingHead } from '../shared/tracking.mjs';
 const read = async file => JSON.parse(await fs.readFile(`shared/${file}.json`, 'utf8'));
-const [seo, catalog, english, servicePages, offers] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers'].map(read));
-const model = createSeoModel({ seo, catalog, english, servicePages, offers });
+const [seo, catalog, english, servicePages, offers, decisions] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers', 'decisions'].map(read));
+const model = createSeoModel({ seo, catalog, english, servicePages, offers, contactPhone: decisions.contactPhone });
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const vite = await createServer({ server: { middlewareMode: true }, optimizeDeps: { noDiscovery: true, include: [] }, appType: 'custom', mode: 'production' });
 try {
@@ -26,7 +26,7 @@ try {
     setMeta('name', 'description', description);
     setMeta('property', 'og:title', title); setMeta('property', 'og:description', description); setMeta('property', 'og:url', url);
     setMeta('property', 'og:locale', language === 'es' ? 'es_AR' : 'en_US');
-    const imageAlt = language === 'es' ? 'LatamLeap: que te encuentren y te llamen. Webs en español e inglés para plomeros, electricistas y HVAC.' : 'LatamLeap: get found and get the call. Websites in English and Spanish for plumbers, electricians and HVAC.';
+    const imageAlt = shareImageAlt(language);
     setMeta('property', 'og:image:alt', imageAlt);
     setMeta('name', 'twitter:image:alt', imageAlt);
     setMeta('name', 'twitter:title', title); setMeta('name', 'twitter:description', description);

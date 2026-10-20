@@ -1,10 +1,13 @@
 import http from 'node:http';
 import fs from 'node:fs';
 const catalog = JSON.parse(fs.readFileSync(new URL('../shared/catalog.json', import.meta.url)));
+const decisions = JSON.parse(fs.readFileSync(new URL('../shared/decisions.json', import.meta.url)));
 export function createCheckoutHandler({ token = process.env.MP_ACCESS_TOKEN, origin = process.env.SITE_URL || 'https://www.latamleap.com', fetcher = fetch } = {}) {
  return async (req,res) => {
   const send=(status,data)=>{res.writeHead(status,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
-  if(req.url !== '/api/checkout') return send(404,{error:'not_found'});
+  const path = String(req.url || '').split('?')[0];
+  if(path !== '/api/checkout') return send(404,{error:'not_found'});
+  if(decisions.checkoutRetired) return send(410,{error:'checkout_retired'});
   if(req.method !== 'POST') return send(405,{error:'method_not_allowed'});
   const allowedOrigins = [origin];
   if (process.env.NODE_ENV !== 'production') allowedOrigins.push('http://localhost:8080','http://127.0.0.1:8080','http://127.0.0.1:8081');

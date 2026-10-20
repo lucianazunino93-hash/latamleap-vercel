@@ -12,6 +12,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DataDeletion from "./pages/DataDeletion";
 import NotFound from "./pages/NotFound";
+import Purchase from "./pages/Purchase";
 
 const App = ({ url = "/" }: { url?: string }) => {
  const language = (typeof window === "undefined" ? url : window.location.pathname).match(/^\/en(?:\/|$)/) ? "en" : "es";
@@ -23,7 +24,7 @@ const App = ({ url = "/" }: { url?: string }) => {
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
             <Route path="/argentina" element={<Argentina />} />
-            <Route path="/comprar/:planId" element={<Navigate to="/#oferta" replace />} />
+            <Route path="/comprar/:planId" element={<Purchase />} />
             <Route path="/pago" element={<Navigate to="/#oferta" replace />} />
             <Route path="/services" element={<Navigate to="/#oferta" replace />} />
             <Route path="/services/:serviceSlug" element={<Navigate to="/#oferta" replace />} />

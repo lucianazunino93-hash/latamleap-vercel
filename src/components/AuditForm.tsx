@@ -1,4 +1,4 @@
-import { Text, LocalizedAnchor } from "@/lib/language";
+import { Text } from "@/lib/language";
 import { Copy } from "@/lib/copy";
 import { useCurrency } from "@/lib/currency-context";
 import { LanguageContext } from "@/lib/language-context";
@@ -6,6 +6,8 @@ import { useContext, useId, useRef, useState, FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CALENDAR_URL } from "@/lib/sales";
+import { track } from "@/lib/track";
+import { WhatsAppLink } from "@/components/SalesActions";
 
 interface Props { showIndustry?: boolean; buttonText?: string; showWhatsAppAlt?: boolean; }
 
@@ -36,15 +38,16 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
       const response = await fetch("/api/leads", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...payload, submissionId: submission.current.id }), signal: AbortSignal.timeout(20000) });
       const result = await response.json();
       if (!response.ok || !result.ok) {
-        setError(response.status === 429 ? "Espera un minuto antes de volver a enviar. También puedes escribirme por WhatsApp." : "No pudimos enviar tu consulta. Tus datos siguen aquí: intenta de nuevo o escríbeme por WhatsApp.");
+        setError(response.status === 429 ? "rate" : "send");
         setStatus("error"); return;
       }
+      track("generate_lead", { form_id: "contacto", lang: language, has_website: Boolean(String(fields.get("currentSite") ?? "").trim()) });
       setStatus("success");
     } catch {
-      setError("No pudimos enviar tu consulta. Tus datos siguen aquí: intenta de nuevo o escríbeme por WhatsApp."); setStatus("error");
+      setError("send"); setStatus("error");
     } finally { sending.current = false; }
   };
-  if (status === "success") return <div role="status" className="space-y-4"><h3 className="text-xl font-bold"><Copy es="Recibimos tu mensaje." en="We got your message." /></h3><p><Copy es="Te vamos a escribir al correo que dejaste. Si prefieres, agenda 10 minutos." en="We'll write to the email you left. If you prefer, book 10 minutes." /></p><a className="underline font-bold" href={CALENDAR_URL}><Copy es="Agendar 10 minutos" en="Book 10 minutes" /></a></div>;
+  if (status === "success") return <div role="status" className="space-y-4"><h3 className="text-xl font-bold"><Copy es="Recibimos tu mensaje." en="We got your message." /></h3><p><Copy es="Te vamos a escribir al correo que dejaste. Si prefieres, agenda 10 minutos." en="We'll write to the email you left. If you prefer, book 10 minutes." /></p><a className="underline font-bold" href={CALENDAR_URL} onClick={() => track("book_call_click", { cta_location: "form_success", lang: language, page_path: window.location.pathname })}><Copy es="Agendar 10 minutos" en="Book a 10-minute call" /></a></div>;
   return <form onSubmit={submit} className="space-y-5" aria-busy={status === "sending"}>
     <fieldset disabled={status === "sending"} className="space-y-5">
       <label htmlFor={id + "name"} className="block text-sm"><Text value="Nombre" /><input id={id + "name"} name="name" autoComplete="name" required maxLength={100} className={cls} /></label>
@@ -57,7 +60,9 @@ export default function AuditForm({ showWhatsAppAlt = true }: Props) {
       <p className="text-xs text-muted-foreground"><Copy es="Usaremos tus datos para responder tu consulta. Lee nuestra " en="We'll use your details to reply. Read our " /><Link to="/privacy-policy" className="underline"><Copy es="política de privacidad" en="privacy policy" /></Link>.</p>
       <Button type="submit" className="w-full"><Copy es={status === "sending" ? "Enviando…" : "Enviar"} en={status === "sending" ? "Sending…" : "Send"} /></Button>
     </fieldset>
-    {status === "error" && <p role="alert" className="text-sm text-destructive"><Text value={error} /></p>}
-    {showWhatsAppAlt && <LocalizedAnchor className="block text-sm underline text-center" href="https://wa.me/5493512085644" target="_blank" rel="noopener noreferrer"><Copy es="Prefiero escribir por WhatsApp" en="I'd rather message on WhatsApp" /></LocalizedAnchor>}
+    {status === "error" && <p role="alert" className="text-sm text-destructive">{error === "rate"
+      ? <Copy es="Espera un minuto antes de volver a enviar. También puedes escribirnos por WhatsApp." en="Wait a minute before sending again. You can also message us on WhatsApp." />
+      : <Copy es="Algo falló al enviar. Tus datos siguen aquí: prueba de nuevo o escríbenos por WhatsApp." en="Something went wrong while sending. Your details are still here: try again or message us on WhatsApp." />}</p>}
+    {showWhatsAppAlt && <WhatsAppLink ctaLocation="form" className="block min-h-11 text-center text-sm underline"><Copy es="Prefiero escribir por WhatsApp" en="I'd rather message on WhatsApp" /></WhatsAppLink>}
   </form>;
 }

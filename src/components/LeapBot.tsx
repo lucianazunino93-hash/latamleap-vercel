@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, MessageCircle, Sparkles, Package, CreditCard, ClipboardCheck } from "lucide-react";
 
+import { WHATSAPP_PHONE } from "@/lib/sales";
+
 const CAL_URL = "https://calendar.app.google/2ngzNf9B8zQcUvzu9";
-const WA_URL =
-  "https://wa.me/5493512085644?text=Hola!%20Vi%20Latam%20Leap%20y%20me%20gustar%C3%ADa%20contarles%20sobre%20un%20proyecto%20que%20tengo%20en%20mente.";
+const WA_URL = `https://wa.me/${WHATSAPP_PHONE}?text=Hola!%20Vi%20Latam%20Leap%20y%20me%20gustar%C3%ADa%20contarles%20sobre%20un%20proyecto%20que%20tengo%20en%20mente.`;
 const TEST_URL = "https://latamleap.com/test";
 
 const actions = [

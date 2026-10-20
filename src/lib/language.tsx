@@ -5,6 +5,7 @@ import { LanguageContext } from "./language-context";
 import { useCurrency } from "./currency-context";
 import { translate } from "./language-copy";
 import { WHATSAPP_TEXT, rememberLanguage } from "./sales";
+import { track } from "./track";
 export function Text({value}: {value: string | number | ReactNode}) {
   const language = useContext(LanguageContext);
   const { currency } = useCurrency();
@@ -31,8 +32,8 @@ export function LanguageSwitcher() {
   const esHref = language === "en" ? `/es${bare}` : `${pathname}${search}${hash}`;
   const enHref = language === "en" ? `${pathname}${search}${hash}` : `/en${bare}`;
   return <div role="group" className="flex items-center text-sm font-bold" aria-label={language === "es" ? "Idioma" : "Language"}>
-    <a href={esHref} hrefLang="es" lang="es" aria-current={language === "es" ? "page" : undefined} onClick={() => rememberLanguage("es")} className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${language === "es" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}`}>ES</a>
+    <a href={esHref} hrefLang="es" lang="es" aria-current={language === "es" ? "page" : undefined} onClick={() => { track("lang_switch", { from: language, to: "es" }); rememberLanguage("es"); }} className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${language === "es" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}`}>ES</a>
     <span aria-hidden="true" className="text-muted-foreground">/</span>
-    <a href={enHref} hrefLang="en" lang="en" aria-current={language === "en" ? "page" : undefined} onClick={() => rememberLanguage("en")} className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${language === "en" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}`}>EN</a>
+    <a href={enHref} hrefLang="en" lang="en" aria-current={language === "en" ? "page" : undefined} onClick={() => { track("lang_switch", { from: language, to: "en" }); rememberLanguage("en"); }} className={`inline-flex min-h-11 min-w-11 items-center justify-center px-2 ${language === "en" ? "text-foreground underline underline-offset-4" : "text-muted-foreground"}`}>EN</a>
   </div>;
 }

@@ -1,11 +1,13 @@
 import { useContext } from "react";
 import { LanguageContext } from "@/lib/language-context";
 import offers from "../../shared/offers.json";
+import decisions from "../../shared/decisions.json";
 import { Copy } from "@/lib/copy";
 import { LocalizedAnchor } from "@/lib/language";
-import { EXAMPLE_URL, INSTAGRAM_URL, whatsAppUrl } from "@/lib/sales";
-import { OfferFAQ, OfferPricing, TradesSection, FounderSection } from "./OfferSections";
-import { BookButton, ExampleButton } from "./SalesActions";
+import { DEMO_URL, INSTAGRAM_URL } from "@/lib/sales";
+import { track } from "@/lib/track";
+import { OfferFAQ, OfferPricing, FounderSection } from "./OfferSections";
+import { BookButton, DemoButton, WhatsAppLink } from "./SalesActions";
 import { ArrowUpRight, Check, Code2, PenTool, Search } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import AuditForm from "./AuditForm";
@@ -13,128 +15,196 @@ import vetMavie from "@/assets/projects/vet-mavie-1200.webp";
 import vetMavieSmall from "@/assets/projects/vet-mavie-600.webp";
 import gonzaloAlvarez from "@/assets/projects/gonzalo-alvarez-1200.webp";
 import gonzaloAlvarezSmall from "@/assets/projects/gonzalo-alvarez-600.webp";
-
-export const WHATSAPP_URL = whatsAppUrl("es");
+import rifaSolidaria from "@/assets/projects/rifa-solidaria-1200.webp";
+import rifaSolidariaSmall from "@/assets/projects/rifa-solidaria-600.webp";
 
 const projects = [
-  { name: "vet.mavie", nameEn: "vet.mavie", es: "Sitio web para especialistas veterinarias", en: "Website for veterinary specialists", image: vetMavie, smallImage: vetMavieSmall, href: "https://www.vetmavie.com/", altEs: "Sitio web de vet.mavie", altEn: "vet.mavie website" },
-  { name: "Psicólogo Gonzalo Álvarez", nameEn: "Psychologist Gonzalo Álvarez", es: "Sitio para un consultorio en Argentina", en: "Website for a practice in Argentina", image: gonzaloAlvarez, smallImage: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", altEs: "Sitio web del psicólogo Gonzalo Álvarez", altEn: "Website of psychologist Gonzalo Álvarez" },
+  { name: "vet.mavie", nameEn: "vet.mavie", es: "Sitio para especialistas veterinarias", en: "Website for veterinary specialists", image: vetMavie, smallImage: vetMavieSmall, href: "https://www.vetmavie.com/", altEs: "Sitio web de vet.mavie", altEn: "vet.mavie website" },
+  { name: "Gonzalo Álvarez", nameEn: "Gonzalo Álvarez", es: "Sitio para un consultorio de psicología", en: "Website for a psychology practice", image: gonzaloAlvarez, smallImage: gonzaloAlvarezSmall, href: "https://www.psicogonzaloalvarez.com/", altEs: "Sitio web del consultorio de Gonzalo Álvarez", altEn: "Website for Gonzalo Álvarez's practice" },
+  { name: "Rifa Solidaria", nameEn: "Rifa Solidaria", es: "Sistema a medida para números, reservas y comprobantes (captura).", en: "Custom system for numbers, reservations and receipts (screenshot).", image: rifaSolidaria, smallImage: rifaSolidariaSmall, altEs: "Captura del sistema Rifa Solidaria", altEn: "Screenshot of the Rifa Solidaria system" },
 ];
 
 const steps = [
-  { n: "01", esT: "Hablamos 10 minutos", enT: "We talk for 10 minutes", es: "Me cuentas cómo te encuentran hoy tus clientes. Si esta página llegó después de una llamada, este es el siguiente paso.", en: "You tell me how customers find you today. If you opened this page after a call, this is the next step." },
-  { n: "02", esT: "Te muestro un ejemplo visual", enT: "I show you a visual example", es: "Lleva el nombre de tu negocio para que veas la idea. Es una muestra, no una web que funcione: sin formulario y sin dominio.", en: "It uses your business name so you can see the idea. It is a sample, not a working site: no form and no domain." },
-  { n: "03", esT: "Propuesta y seña del 50%", enT: "Proposal and 50% deposit", es: "Si te sirve, te mando la propuesta. Pagas el 50% para empezar y me envías los materiales completos.", en: "If it works for you, I send a proposal. You pay 50% to start and send me the complete materials." },
-  { n: "04", esT: "Primera versión en 2 días hábiles", enT: "First version in 2 business days", es: "El plazo corre desde la seña y los materiales completos. Me mandas tus comentarios juntos, en un solo mensaje.", en: "The clock starts once I have the deposit and the complete materials. You send all your comments together, in one message." },
-  { n: "05", esT: "Segunda revisión en 2 días hábiles", enT: "Second revision in 2 business days", es: "Arranca cuando recibo todos los comentarios de la primera versión.", en: "It starts when I receive every comment on the first version." },
-  { n: "06", esT: "Saldo y publicación", enT: "Balance and launch", es: "Apruebas, pagas el 50% restante y publico en 1 día hábil.", en: "You approve, pay the remaining 50% and I launch within 1 business day." },
+  { n: "01", esT: "Hablamos 10 minutos.", enT: "We talk for 10 minutes.", es: "Nos cuentas cómo te encuentran hoy tus clientes.", en: "You tell us how customers find you today." },
+  { n: "02", esT: "Ves la vista previa con tu negocio.", enT: "You see a preview with your business.", es: "Tu nombre, tus servicios y tu estilo, para que veas la idea.", en: "Your name, your services and your style, so you can see the idea." },
+  { n: "03", esT: "Arrancamos.", enT: "We get started.", es: "Con el 50 % y tus materiales, la primera versión está en 2 días hábiles.", en: "With the 50% deposit and your materials, the first version is ready in 2 business days." },
+  { n: "04", esT: "Apruebas y publicamos.", enT: "You approve and we launch.", es: "Dos rondas de cambios, el 50 % restante y tu web en línea en 1 día hábil.", en: "Two rounds of changes, the remaining 50% and your site goes live within 1 business day." },
+];
+
+const services = [
+  ["tiendas", "Tiendas online", "Online stores"],
+  ["sistemas", "Sistemas a medida: reservas, portales de clientes, paneles", "Custom systems: bookings, client portals, dashboards"],
+  ["automatizaciones", "Automatizaciones con WhatsApp e IA", "WhatsApp and AI automations"],
+  ["recepcion", "Recepcionista con IA para llamadas entrantes", "AI receptionist for incoming calls"],
+  ["rediseno", "Rediseño de webs existentes", "Redesigns of existing sites"],
 ];
 
 export const ConnectedSystem = () => (<div className="relative min-h-[430px] sm:min-h-[500px]" role="group" aria-label="Bilingual service website / Web bilingüe para servicios">
-  <div className="absolute inset-0 rounded-lg bg-secondary border border-border overflow-hidden">
+  <div className="absolute inset-0 overflow-hidden rounded-lg border border-border bg-secondary">
     <div className="absolute inset-0 studio-grid opacity-60"/>
-    <div className="absolute left-[8%] top-[13%] bg-card border border-border rounded-lg p-4 shadow-studio w-[44%] animate-float">
-      <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground mb-3"><Search size={15} className="text-primary"/><Copy es="Español e inglés" en="English and Spanish" /></div>
-      <div className="h-2 rounded bg-muted mb-2"/><div className="h-2 w-3/4 rounded bg-muted"/>
+    <div className="absolute left-[8%] top-[13%] w-[44%] animate-float rounded-lg border border-border bg-card p-4 shadow-studio">
+      <div className="mb-3 flex items-center gap-2 text-xs font-bold text-muted-foreground"><Search size={15} className="text-primary"/><Copy es="Español e inglés" en="English and Spanish" /></div>
+      <div className="mb-2 h-2 rounded bg-muted"/><div className="h-2 w-3/4 rounded bg-muted"/>
     </div>
-    <div className="absolute right-[7%] top-[29%] bg-foreground text-background rounded-lg p-4 shadow-studio w-[47%] animate-float-delayed">
-      <div className="flex items-center gap-2 text-xs font-bold mb-3"><PenTool size={15} className="text-primary"/><Copy es="Pedido por WhatsApp" en="Request on WhatsApp" /></div>
+    <div className="absolute right-[7%] top-[29%] w-[47%] animate-float-delayed rounded-lg bg-foreground p-4 text-background shadow-studio">
+      <div className="mb-3 flex items-center gap-2 text-xs font-bold"><PenTool size={15} className="text-primary"/><Copy es="Pedido por WhatsApp" en="Request on WhatsApp" /></div>
       <div className="grid grid-cols-3 gap-2"><span className="h-12 rounded bg-background/15"/><span className="h-12 rounded bg-background/15"/><span className="h-12 rounded bg-primary"/></div>
     </div>
-    <div className="absolute left-[12%] bottom-[14%] bg-card border border-border rounded-lg p-4 shadow-studio w-[49%] animate-float-slow">
-      <div className="flex items-center gap-2 text-xs font-bold text-muted-foreground mb-3"><Code2 size={15} className="text-primary"/><Copy es="Lanzamiento" en="Launch price" /></div>
+    <div className="absolute bottom-[14%] left-[12%] w-[49%] animate-float-slow rounded-lg border border-border bg-card p-4 shadow-studio">
+      <div className="mb-3 flex items-center gap-2 text-xs font-bold text-muted-foreground"><Code2 size={15} className="text-primary"/><Copy es="Precio fijo" en="Fixed price" /></div>
       <div className="space-y-2"><div className="h-1.5 w-5/6 rounded bg-accent"/><div className="h-1.5 w-2/3 rounded bg-muted"/><div className="h-1.5 w-4/5 rounded bg-primary"/></div>
     </div>
-    <div className="absolute right-[8%] bottom-[7%] bg-primary text-primary-foreground rounded-lg px-4 py-3 shadow-studio flex items-center gap-2 text-xs font-bold"><Check size={16}/><span>USD {offers.us.price}</span></div>
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 600 500" fill="none" aria-hidden="true"><path d="M220 120C350 120 320 220 420 220M420 280C360 330 300 350 220 380" stroke="currentColor" className="text-primary/50" strokeWidth="2" strokeDasharray="6 8"/></svg>
+    <div className="absolute bottom-[7%] right-[8%] flex items-center gap-2 rounded-lg bg-primary px-4 py-3 text-xs font-bold text-primary-foreground shadow-studio"><Check size={16}/><span>USD {offers.us.price}</span></div>
+    <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 600 500" fill="none" aria-hidden="true"><path d="M220 120C350 120 320 220 420 220M420 280C360 330 300 350 220 380" stroke="currentColor" className="text-primary/50" strokeWidth="2" strokeDasharray="6 8"/></svg>
   </div>
 </div>);
 
-export const PortfolioSection = () => { const language = useContext(LanguageContext); return (<section id="proyectos" className="py-20 lg:py-28 bg-card">
-  <div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <AnimatedSection className="grid lg:grid-cols-[0.7fr_1.3fr] gap-8 lg:gap-16 items-end mb-12">
-      <p className="section-kicker"><Copy es="Trabajos reales" en="Real work" /></p>
-      <h2 className="text-4xl md:text-6xl font-bold leading-[1.02]"><Copy es="Otros trabajos, sin reseñas inventadas." en="Other work, with no invented reviews." /></h2>
-    </AnimatedSection>
-    <p className="text-muted-foreground mb-10 max-w-3xl"><Copy es="Estos proyectos son reales y están en Argentina. No publicamos testimonios que no tengamos, ni resultados que no hayamos medido." en="These projects are real and based in Argentina. We do not publish testimonials we do not have, or results we have not measured." /></p>
-    <div className="space-y-14">
-      {projects.map((project, index) => (<AnimatedSection key={project.name} delay={0.08 * index}>
-        <LocalizedAnchor href={project.href} target="_blank" rel="noopener noreferrer" className="group block">
-          <div className={`grid lg:grid-cols-12 gap-6 items-center ${index % 2 ? "lg:[&>*:first-child]:order-2" : ""}`}>
-            <div className="lg:col-span-8 overflow-hidden rounded-lg border border-border bg-muted aspect-[16/9]">
-              <img src={project.image} srcSet={`${project.smallImage} 600w, ${project.image} 1200w`} sizes="(min-width: 1024px) 800px, calc(100vw - 40px)" width={1200} height={675} decoding="async" alt={language === "en" ? project.altEn : project.altEs} loading="lazy" className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"/>
-            </div>
-            <div className="lg:col-span-4 lg:px-5">
-              <span className="text-xs font-bold text-primary-text">0{index + 1}</span>
-              <h3 className="text-2xl md:text-3xl font-bold mt-3 mb-3 group-hover:text-primary-text transition-colors">{language === "en" ? project.nameEn : project.name}</h3>
-              <p className="text-muted-foreground leading-relaxed mb-5"><Copy es={project.es} en={project.en} /></p>
-              <span className="inline-flex items-center gap-2 text-sm font-bold"><Copy es="Ver proyecto" en="View project" /><ArrowUpRight size={16}/></span>
-            </div>
-          </div>
-        </LocalizedAnchor>
-      </AnimatedSection>))}
-    </div>
-  </div>
-</section>); };
+export const PainSection = () => {
+  const language = useContext(LanguageContext);
+  return <section id="dolor" className="scroll-mt-24 py-16 lg:py-20"><div className="mx-auto max-w-7xl px-5 sm:px-6">
+    <h2 className="max-w-3xl text-4xl font-bold leading-[1.05] md:text-5xl"><Copy es="Tú estás en el trabajo. Tu próximo cliente te está buscando." en="You're on the job. Your next customer is looking for you." /></h2>
+    <p className="mt-5 max-w-3xl text-lg text-muted-foreground"><Copy es="Estás bajo un fregadero, en un ático a 40 grados o cambiando un tablero. En ese momento, alguien busca en Google “plomero cerca de mí”, en inglés o en español, y quiere saber tres cosas: qué haces, si llegas a su zona y cómo pedirte el trabajo." en="You're under a sink, in a 100-degree attic or swapping a panel. Right then, someone searches “plumber near me”, in English or in Spanish, and wants three answers: what you do, whether you cover their area and how to book you." /></p>
+    <p className="mt-4 max-w-3xl text-lg"><Copy es="Con tu web, esa respuesta ya está lista, en los dos idiomas, y el pedido te espera en WhatsApp para cuando termines." en="With your website, those answers are ready in both languages, and the job request waits on your WhatsApp for when you're done." /></p>
+    {language === "en" && <p className="mt-4 max-w-3xl text-sm text-muted-foreground">In the U.S., more than 43 million people speak Spanish at home.<sup><a className="underline" href="https://data.census.gov/table/ACSDT1Y2023.C16001" target="_blank" rel="noopener noreferrer">1</a></sup></p>}
+    <ul className="mt-6 flex flex-wrap gap-3">
+      <li id="plumbers" className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Copy es="Plomeros" en="Plumbers" /></li>
+      <li id="electricians" className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Copy es="Electricistas" en="Electricians" /></li>
+      <li id="hvac" className="scroll-mt-24 rounded-full border border-border bg-card px-4 py-2 text-sm font-bold">HVAC</li>
+    </ul>
+  </div></section>;
+};
 
-export const ExampleSection = () => (<section id="ejemplo" className="py-20 lg:py-28 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6">
-  <div className="grid lg:grid-cols-2 gap-10 items-center">
-    <AnimatedSection>
-      <p className="section-kicker"><Copy es="Ejemplo" en="Example" /></p>
-      <h2 className="text-4xl md:text-6xl font-bold leading-[1.02] mb-5"><Copy es="Así puede verse un negocio de servicios." en="This is what a service business can look like." /></h2>
-      <p className="text-lg text-muted-foreground mb-4"><Copy es="Ejemplo de diseño. Negocio ficticio." en="Sample design. Fictional business." /></p>
-      <p className="text-muted-foreground leading-relaxed mb-6"><Copy es={`Prime Home Solutions no es un cliente. Es una muestra de plomería, electricidad y HVAC. Lo que incluye el precio está en la oferta de abajo: no todo lo que aparece en el ejemplo forma parte de los USD ${offers.us.price} de lanzamiento ni de los USD ${offers.us.regularPrice} de después.`} en={`Prime Home Solutions is not a client. It is a sample for plumbing, electrical and HVAC work. What the price includes is in the offer below: not everything on the example is part of the USD ${offers.us.price} launch price or the USD ${offers.us.regularPrice} price after that.`} /></p>
-      <ExampleButton />
-    </AnimatedSection>
-    <figure className="mx-auto w-full max-w-sm">
-      <div className="rounded-[2rem] border-8 border-foreground bg-background shadow-studio overflow-hidden">
-        <iframe title="Prime Home Solutions, negocio ficticio" src={EXAMPLE_URL} className="w-full h-[34rem] bg-card" loading="lazy" />
+export const SolutionSection = () => {
+  const items = [
+    ["idioma", "En su idioma", "In their language", "Tu web en español y en inglés, con tus servicios, tu zona y tus fotos.", "Your site in English and Spanish, with your services, your area and your photos."],
+    ["whatsapp", "Directo a tu WhatsApp", "Straight to your WhatsApp", "El cliente elige el trabajo y te llega el pedido a WhatsApp, más un aviso por email.", "Customers pick the job and the request lands on your WhatsApp, plus an email alert."],
+    ["google", "Lista en Google", "Ready on Google", "Configuramos tu perfil de Google Business para que te encuentren con la misma información.", "We set up your Google Business Profile so people find the same info everywhere."],
+  ];
+  return <section id="solucion" className="scroll-mt-24 bg-card py-16 lg:py-20"><div className="mx-auto grid max-w-7xl gap-6 px-5 sm:px-6 md:grid-cols-3">
+    {items.map(([id, esT, enT, es, en]) => <article key={id}><h2 className="mb-3 text-2xl font-bold"><Copy es={esT} en={enT} /></h2><p className="leading-relaxed text-muted-foreground"><Copy es={es} en={en} /></p></article>)}
+  </div></section>;
+};
+
+export const DemoSection = () => {
+  const language = useContext(LanguageContext);
+  const rob = decisions.robComingSoon
+    ? { es: "y Rob, nuestra recepcionista con IA para llamadas entrantes (disponible pronto para clientes).", en: "and Rob, the AI receptionist for incoming calls (coming soon for clients)." }
+    : { es: "y Rob, la recepcionista con IA que atiende las llamadas entrantes.", en: "and Rob, the AI receptionist who answers incoming calls." };
+  return <section id="demo" className="scroll-mt-24 py-20 lg:py-28"><div className="mx-auto max-w-7xl px-5 sm:px-6">
+    <div className="grid items-center gap-10 lg:grid-cols-2">
+      <AnimatedSection>
+        <p className="section-kicker"><Copy es="Demo" en="Demo" /></p>
+        <h2 className="mb-5 text-4xl font-bold leading-[1.02] md:text-6xl"><Copy es="Mira una web de servicios del hogar en acción." en="See a home-services website in action." /></h2>
+        <p className="mb-6 leading-relaxed text-muted-foreground"><Copy es={`Prime Home Solutions: plomería, electricidad, calefacción y aire. Servicios claros, pedido por WhatsApp, calendario para agendar visitas ${rob.es}`} en={`Prime Home Solutions: plumbing, electrical, heating and air. Clear services, job requests on WhatsApp, a calendar to book visits ${rob.en}`} /></p>
+        <DemoButton ctaLocation="demo" />
+        <p className="mt-4 text-sm text-muted-foreground"><Copy es={`Tu web de USD ${offers.us.price} incluye las 5 secciones y el pedido a WhatsApp. El calendario y Rob se suman como extras.`} en={`Your USD ${offers.us.price} site includes the 5 sections and the WhatsApp request form. The calendar and Rob are add-ons.`} /></p>
+      </AnimatedSection>
+      <figure className="mx-auto w-full max-w-sm">
+        <div className="overflow-hidden rounded-[2rem] border-8 border-foreground bg-background shadow-studio">
+          <iframe title={language === "en" ? "Prime Home Solutions demo" : "Demo de Prime Home Solutions"} src={DEMO_URL} className="h-[34rem] w-full bg-card" loading="lazy" />
+        </div>
+      </figure>
+    </div>
+  </div></section>;
+};
+
+export const PortfolioSection = () => {
+  const language = useContext(LanguageContext);
+  if (!decisions.showPortfolioOnHome) return null;
+  return <section id="proyectos" className="scroll-mt-24 bg-card py-20 lg:py-28">
+    <div className="mx-auto max-w-7xl px-5 sm:px-6">
+      <AnimatedSection className="mb-8 max-w-3xl">
+        <h2 className="text-4xl font-bold leading-[1.02] md:text-6xl"><Copy es="Y cuando tu negocio necesita más que una web." en="And when your business needs more than a website." /></h2>
+      </AnimatedSection>
+      <ul className="mb-6 max-w-3xl space-y-2">{services.map(([id, es, en]) => <li key={id} className="font-bold"><Copy es={es} en={en} /></li>)}</ul>
+      <p className="mb-10 max-w-3xl text-muted-foreground"><Copy es="Cada proyecto a medida se cotiza después de una charla de 10 minutos." en="Every custom project is quoted after a 10-minute call." /></p>
+      <div className="space-y-14">
+        {projects.map((project, index) => <AnimatedSection key={project.name} delay={0.08 * index}>
+          <ProjectCard project={project} index={index} language={language} />
+        </AnimatedSection>)}
       </div>
-      <figcaption className="text-sm text-muted-foreground mt-4"><Copy es="Ejemplo de diseño. Negocio ficticio / sample business." en="Sample design. Fictional business / negocio ficticio." /></figcaption>
-    </figure>
-  </div>
-</div></section>);
-
-export const ProcessSection = () => (<section id="proceso" className="py-20 lg:py-28 bg-secondary scroll-mt-24">
-  <div className="max-w-7xl mx-auto px-5 sm:px-6">
-    <AnimatedSection className="max-w-3xl mb-12">
-      <p className="section-kicker"><Copy es="Cómo funciona" en="How it works" /></p>
-      <h2 className="text-4xl md:text-6xl font-bold mb-4"><Copy es="De la llamada a la publicación." en="From the call to launch." /></h2>
-      <p className="text-lg text-muted-foreground"><Copy es="Si nos mandas todo a tiempo, la mayoría de los proyectos se publica en 1 a 2 semanas. Los plazos son días hábiles, no horas corridas." en="If you send everything on time, most projects launch in 1 to 2 weeks. The timelines are business days, not clock hours." /></p>
-    </AnimatedSection>
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 border-t border-border">
-      {steps.map((step, index) => <AnimatedSection key={step.n} delay={index * 0.04} className="py-7 md:px-5 border-b md:border-r border-border"><span className="text-xs font-bold text-primary-text">{step.n}</span><h3 className="text-xl font-bold mt-8 mb-3"><Copy es={step.esT} en={step.enT} /></h3><p className="text-sm text-muted-foreground leading-relaxed"><Copy es={step.es} en={step.en} /></p></AnimatedSection>)}
+      <div className="mt-10"><BookButton ctaLocation="proyectos" /></div>
     </div>
-    <div className="mt-8"><BookButton /></div>
+  </section>;
+};
+
+function ProjectCard({ project, index, language }: { project: typeof projects[number]; index: number; language: "es" | "en" }) {
+  const media = <div className="aspect-[16/9] overflow-hidden rounded-lg border border-border bg-muted lg:col-span-8">
+    <img src={project.image} srcSet={`${project.smallImage} 600w, ${project.image} 1200w`} sizes="(min-width: 1024px) 800px, calc(100vw - 40px)" width={1200} height={675} decoding="async" alt={language === "en" ? project.altEn : project.altEs} loading="lazy" className="h-full w-full object-cover object-top" />
+  </div>;
+  const copy = <div className="lg:col-span-4 lg:px-5">
+    <span className="text-xs font-bold text-primary-text">0{index + 1}</span>
+    <h3 className="mb-3 mt-3 text-2xl font-bold md:text-3xl">{language === "en" ? project.nameEn : project.name}</h3>
+    <p className="leading-relaxed text-muted-foreground"><Copy es={project.es} en={project.en} /></p>
+  </div>;
+  if (!project.href) return <figure className={`grid items-center gap-6 lg:grid-cols-12 ${index % 2 ? "lg:[&>*:first-child]:order-2" : ""}`}>{media}{copy}</figure>;
+  return <LocalizedAnchor href={project.href} target="_blank" rel="noopener noreferrer" className="group block">
+    <div className={`grid items-center gap-6 lg:grid-cols-12 ${index % 2 ? "lg:[&>*:first-child]:order-2" : ""}`}>
+      {media}
+      <div className="lg:col-span-4 lg:px-5">
+        <span className="text-xs font-bold text-primary-text">0{index + 1}</span>
+        <h3 className="mb-3 mt-3 text-2xl font-bold transition-colors group-hover:text-primary-text md:text-3xl">{language === "en" ? project.nameEn : project.name}</h3>
+        <p className="mb-5 leading-relaxed text-muted-foreground"><Copy es={project.es} en={project.en} /></p>
+        <span className="inline-flex items-center gap-2 text-sm font-bold"><Copy es="Ver proyecto" en="View project" /><ArrowUpRight size={16}/></span>
+      </div>
+    </div>
+  </LocalizedAnchor>;
+}
+
+export const ReferralSection = () => {
+  if (!decisions.referral.enabled) return null;
+  return <section id="referidos" className="scroll-mt-24 py-16" data-copy="pending">
+    <div className="mx-auto max-w-3xl px-5 sm:px-6">
+      <p className="section-kicker"><Copy es={decisions.referral.es.kicker} en={decisions.referral.en.kicker} /></p>
+      <h2 className="mb-4 text-4xl font-bold"><Copy es={decisions.referral.es.title} en={decisions.referral.en.title} /></h2>
+      <p className="text-muted-foreground"><Copy es={decisions.referral.es.body} en={decisions.referral.en.body} /></p>
+    </div>
+  </section>;
+};
+
+export const ProcessSection = () => (<section id="proceso" className="scroll-mt-24 bg-secondary py-20 lg:py-28">
+  <div className="mx-auto max-w-7xl px-5 sm:px-6">
+    <AnimatedSection className="mb-12 max-w-3xl">
+      <h2 className="mb-4 text-4xl font-bold md:text-6xl"><Copy es="De la primera charla a tu web publicada." en="From our first chat to your site going live." /></h2>
+      <p className="text-lg text-muted-foreground"><Copy es="Si recibimos todo a tiempo, la mayoría de las webs se publica en 1 a 2 semanas." en="If we get everything on time, most sites launch in 1 to 2 weeks." /></p>
+    </AnimatedSection>
+    <div className="grid border-t border-border md:grid-cols-2 lg:grid-cols-4">
+      {steps.map((step, index) => <AnimatedSection key={step.n} delay={index * 0.04} className="border-b border-border py-7 md:border-r md:px-5"><span className="text-xs font-bold text-primary-text">{step.n}</span><h3 className="mb-3 mt-8 text-xl font-bold"><Copy es={step.esT} en={step.enT} /></h3><p className="text-sm leading-relaxed text-muted-foreground"><Copy es={step.es} en={step.en} /></p></AnimatedSection>)}
+    </div>
+    <div className="mt-8"><BookButton ctaLocation="proceso" /></div>
   </div>
 </section>);
 
-export const FinalCTASection = () => (<section id="contacto" className="py-20 lg:py-28 scroll-mt-24"><div className="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-[1.1fr_.9fr] gap-12 lg:gap-20">
-  <AnimatedSection>
-    <p className="section-kicker"><Copy es="Siguiente paso" en="Next step" /></p>
-    <h2 className="text-4xl md:text-6xl font-bold leading-[1.03] mb-6"><Copy es="¿Quieres ver cómo quedaría tu negocio?" en="Want to see how your business could look?" /></h2>
-    <p className="text-lg text-muted-foreground max-w-xl mb-8"><Copy es="Agenda 10 minutos o escríbeme por WhatsApp. Si prefieres, deja los datos del negocio y te escribo." en="Book 10 minutes or message me on WhatsApp. If you prefer, leave your business details and I'll write back." /></p>
-    <div className="flex flex-col items-start gap-3">
-      <BookButton />
-      <LocalizedAnchor href={whatsAppUrl("es")} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center font-bold underline underline-offset-4">WhatsApp +54 9 351 2085644</LocalizedAnchor>
-      <a className="inline-flex min-h-11 items-center font-bold underline underline-offset-4" href="mailto:hola@latamleap.com">hola@latamleap.com</a>
-      <a className="inline-flex min-h-11 items-center font-bold underline underline-offset-4" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">Instagram @latam.leap</a>
-    </div>
-  </AnimatedSection>
-  <AnimatedSection delay={.1} className="bg-card border border-border rounded-lg p-6 md:p-8 shadow-studio">
-    <h3 className="text-2xl font-bold mb-2"><Copy es="Cuéntame de tu negocio" en="Tell me about your business" /></h3>
-    <p className="text-sm text-muted-foreground mb-5"><Copy es="Esto no reserva un diseño. Si encaja, el siguiente paso es la reunión de 10 minutos." en="This does not reserve a design. If it's a fit, the next step is the 10-minute meeting." /></p>
-    <AuditForm />
-  </AnimatedSection>
-</div></section>);
+export const FinalCTASection = () => {
+  const language = useContext(LanguageContext);
+  return <section id="contacto" className="scroll-mt-24 py-20 lg:py-28"><div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-6 lg:grid-cols-[1.1fr_.9fr] lg:gap-20">
+    <AnimatedSection>
+      <h2 className="mb-6 text-4xl font-bold leading-[1.03] md:text-6xl"><Copy es="¿Vemos cómo quedaría tu negocio?" en="Shall we see how your business could look?" /></h2>
+      <p className="mb-8 max-w-xl text-lg text-muted-foreground"><Copy es="Agenda 10 minutos y te mostramos la vista previa. Si prefieres, escríbenos por WhatsApp o déjanos tus datos." en="Book 10 minutes and we'll show you the preview. Or message us on WhatsApp, or leave your details." /></p>
+      <div className="flex flex-col items-start gap-3">
+        <BookButton ctaLocation="final" />
+        <WhatsAppLink ctaLocation="final" className="inline-flex min-h-11 items-center font-bold underline underline-offset-4">WhatsApp</WhatsAppLink>
+        <a className="inline-flex min-h-11 items-center font-bold underline underline-offset-4" href="mailto:hola@latamleap.com" onClick={() => track("email_click", { cta_location: "final", lang: language })}>hola@latamleap.com</a>
+        <a className="inline-flex min-h-11 items-center font-bold underline underline-offset-4" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" onClick={() => track("instagram_click", { cta_location: "final" })}>Instagram @latam.leap</a>
+      </div>
+    </AnimatedSection>
+    <AnimatedSection delay={.1} className="rounded-lg border border-border bg-card p-6 shadow-studio md:p-8">
+      <h3 className="mb-2 text-2xl font-bold"><Copy es="Te escribimos nosotros" en="We'll reach out" /></h3>
+      <p className="mb-5 text-sm text-muted-foreground"><Copy es="Te respondemos para coordinar la charla de 10 minutos." en="We'll reply to set up the 10-minute call." /></p>
+      <AuditForm />
+    </AnimatedSection>
+  </div></section>;
+};
 
 export const HomeContent = () => <>
-  <TradesSection />
-  <ExampleSection />
+  <PainSection />
+  <SolutionSection />
+  <DemoSection />
   <OfferPricing />
   <ProcessSection />
   <FounderSection />
+  <PortfolioSection />
+  <ReferralSection />
   <OfferFAQ />
   <FinalCTASection />
-  <PortfolioSection />
 </>;

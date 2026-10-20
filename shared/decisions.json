@@ -1,0 +1,34 @@
+{
+  "contactPhone": "+54 9 351 208 5644",
+  "showFounderPhoto": true,
+  "founderPhotoPending": true,
+  "robComingSoon": true,
+  "showArgentinaLinkOnHome": false,
+  "showWhatsAppNumber": false,
+  "checkoutRetired": true,
+  "showPortfolioOnHome": true,
+  "consentBanner": true,
+  "usSpanish": "tu",
+  "bonus": {
+    "wordingPending": true,
+    "note": "Bonus wording is still pending. The spec default (option A, through 2026-11-30, America/Chicago) is the copy in shared/offers.json → us.bonus. Edit that object to change the date, the sentences, or enabled. wordingPending does not hide the spec default."
+  },
+  "referral": {
+    "enabled": false,
+    "pending": true,
+    "note": "Referral copy is pending. This block stays hidden until enabled is true. Replace the placeholder sentences, then set enabled to true.",
+    "es": {
+      "kicker": "Referidos",
+      "title": "Texto de referidos pendiente",
+      "body": "Este bloque está apagado hasta que llegue el copy. Editar shared/decisions.json → referral."
+    },
+    "en": {
+      "kicker": "Referrals",
+      "title": "Referral copy pending",
+      "body": "This block stays off until the copy arrives. Edit shared/decisions.json → referral."
+    }
+  },
+  "analytics": {
+    "note": "Placeholders live in shared/seo.json: ga4MeasurementId (example G-XXXXXXXXXX; empty or all-X does not load), metaPixelId (digits only; empty does not load), googleSiteVerification (empty does not print the meta tag). GA4 and the pixel load only after the visitor accepts the consent banner. Consent Mode v2 defaults to denied in index.html and updates to granted on accept. The choice is stored in localStorage under latamleap.consent."
+  }
+}

@@ -18,8 +18,8 @@
     { "source": "/services/:path*", "destination": "/#oferta", "permanent": true },
     { "source": "/en/services", "destination": "/en#oferta", "permanent": true },
     { "source": "/en/services/:path*", "destination": "/en#oferta", "permanent": true },
-    { "source": "/comprar/:path*", "destination": "/#oferta", "permanent": true },
-    { "source": "/en/comprar/:path*", "destination": "/en#oferta", "permanent": true },
+    { "source": "/comprar/:path*", "destination": "/#compra", "permanent": true },
+    { "source": "/en/comprar/:path*", "destination": "/en#compra", "permanent": true },
     { "source": "/pago", "destination": "/#oferta", "permanent": true },
     { "source": "/en/pago", "destination": "/en#oferta", "permanent": true }
   ],

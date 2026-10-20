@@ -6,6 +6,7 @@ import { Text, LocalizedAnchor } from "@/lib/language";
 import PriceComparison from "./PriceComparison";
 import servicePages from "../../shared/service-pages.json";
 import care from "../../shared/care.json";
+import { WHATSAPP_PHONE } from "@/lib/sales";
 import catalog from "../../shared/catalog.json";
 import { Button } from "./ui/button";
 import { Check } from "lucide-react";
@@ -21,7 +22,7 @@ function Features({ features }: { features: string[] }) {
 export default function CommercialPricing() {
   const { currency } = useCurrency();
   const language = useContext(LanguageContext);
-  const inquiry = (plan: typeof landing) => `https://wa.me/5493512085644?text=${encodeURIComponent(`Hola, quiero dar el salto con ${plan.name}, desde ${formatPrice(plan, currency, language)}. Me gustaría confirmar el alcance para mi negocio.`)}`;
+  const inquiry = (plan: typeof landing) => `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(`Hola, quiero dar el salto con ${plan.name}, desde ${formatPrice(plan, currency, language)}. Me gustaría confirmar el alcance para mi negocio.`)}`;
   return <section id="precios" className="py-20 lg:py-28 bg-secondary"><div className="max-w-7xl mx-auto px-5 sm:px-6">
     <div className="max-w-3xl mb-12"><p className="section-kicker"><Text value="Precios y alcance"/></p><h2 className="text-4xl md:text-6xl font-bold mb-5"><Text value="Elegí cómo querés empezar."/></h2><p className="text-lg text-muted-foreground"><Text value="Diseño, mensaje y desarrollo adaptados a tu negocio. Los paquetes definen el alcance; la solución lleva tu marca."/></p></div>
     <div className="grid md:grid-cols-3 gap-6">{tiers.map(plan => <article key={plan.id} className="bg-card border border-border rounded-xl p-7 flex flex-col">

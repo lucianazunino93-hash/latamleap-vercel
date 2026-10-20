@@ -1,3 +1,13 @@
-import { Text } from "@/lib/language";
+import { Copy } from "@/lib/copy";
 import { PortfolioSection, FinalCTASection } from "@/components/HomeSections";
-export default function CaseStudies() { return <><section className="pt-32 px-6 max-w-7xl mx-auto"><h1 className="text-4xl md:text-6xl font-bold"><Text value={"Proyectos web para negocios reales"}/></h1><p className="text-lg text-muted-foreground mt-5"><Text value={"Explora el diseño y la experiencia de los proyectos seleccionados."}/></p></section><PortfolioSection /><FinalCTASection /></>; }
+
+export default function CaseStudies() {
+  return <>
+    <section className="mx-auto max-w-7xl px-6 pt-32">
+      <h1 className="text-4xl font-bold md:text-6xl"><Copy es="Proyectos para negocios reales" en="Projects for real businesses" /></h1>
+      <p className="mt-5 text-lg text-muted-foreground"><Copy es="Webs, sistemas a medida y automatizaciones para negocios reales." en="Websites, custom systems and automations for real businesses." /></p>
+    </section>
+    <PortfolioSection />
+    <FinalCTASection />
+  </>;
+}

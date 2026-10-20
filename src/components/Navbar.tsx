@@ -7,10 +7,10 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
 const usLinks = [
-  { es: "Ejemplo", en: "Example", href: "/#ejemplo" },
-  { es: "Precio", en: "Price", href: "/#oferta" },
+  { es: "Demo", en: "Demo", href: "/#demo" },
+  { es: "Precio", en: "Pricing", href: "/#oferta" },
   { es: "Proceso", en: "Process", href: "/#proceso" },
-  { es: "Preguntas", en: "Questions", href: "/#preguntas" },
+  { es: "Preguntas", en: "FAQ", href: "/#preguntas" },
 ];
 const argentinaLinks = [
   { es: "Precio", en: "Precio", href: "#oferta" },
@@ -43,7 +43,7 @@ const Navbar = () => {
         {links.map((l) => (<a key={l.href} href={onArgentina ? l.href : language === "en" ? `/en${l.href}` : l.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
           <Copy es={l.es} en={l.en} />
         </a>))}
-        <BookButton />
+        <BookButton ctaLocation="nav" />
       </div>
       <div className="flex items-center gap-3">{onArgentina ? null : <LanguageSwitcher />}<button className="lg:hidden text-foreground p-2 -mr-2 min-h-11 min-w-11 inline-flex items-center justify-center" onClick={() => setOpen(!open)} aria-label={language === "en" ? (open ? "Close menu" : "Open menu") : (open ? "Cerrar menú" : "Abrir menú")} aria-expanded={open}>
         {open ? <X size={24}/> : <Menu size={24}/>}
@@ -53,7 +53,7 @@ const Navbar = () => {
       {links.map((l) => (<a key={l.href} href={onArgentina ? l.href : language === "en" ? `/en${l.href}` : l.href} className="inline-flex items-center text-foreground text-base min-h-11" onClick={() => setOpen(false)}>
         <Copy es={l.es} en={l.en} />
       </a>))}
-      <BookButton className="w-full" />
+      <BookButton className="w-full" ctaLocation="nav" />
     </div>)}
   </nav>);
 };

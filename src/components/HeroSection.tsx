@@ -1,32 +1,47 @@
+import { useContext } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Copy } from "@/lib/copy";
+import { LanguageContext } from "@/lib/language-context";
 import offers from "../../shared/offers.json";
-import SocialLinks from "./SocialLinks";
 import { ConnectedSystem } from "./HomeSections";
-import { ArgentinaLink, BookButton, ExampleButton, WhatsAppLink } from "./SalesActions";
+import { BookButton, DemoButton, WhatsAppLink } from "./SalesActions";
 
-const HeroSection = () => (<section className="relative pt-8 lg:pt-12 pb-16 lg:pb-24 overflow-hidden">
-  <div className="relative max-w-7xl mx-auto px-5 sm:px-6">
-    <div className="grid lg:grid-cols-[1.02fr_.98fr] gap-12 lg:gap-16 items-center lg:min-h-[calc(100svh-7rem)]">
-      <div className="max-w-2xl">
-        <p className="section-kicker"><Copy es="Estudio en Córdoba, Argentina" en="Studio in Córdoba, Argentina" /></p>
-        <h1 className="font-bold text-[42px] sm:text-6xl lg:text-[64px] xl:text-[68px] leading-[.98] mb-5"><Copy es="Te buscan en Google y llaman a otro." en="They search on Google and call someone else." /></h1>
-        <p className="text-xl lg:text-2xl font-bold leading-snug mb-8"><Copy es="Para que te encuentren y te llamen." en="So you get found and get the call." /></p>
-        <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-center">
-          <BookButton />
-          <ExampleButton />
-          <WhatsAppLink />
+function previewSlug(value: string | null) {
+  const slug = String(value || "").trim().toLowerCase();
+  return /^[a-z0-9-]{1,80}$/.test(slug) ? slug : "";
+}
+
+const HeroSection = () => {
+  const language = useContext(LanguageContext);
+  const [params] = useSearchParams();
+  const fromPreview = params.get("utm_source") === "cold_email" || Boolean(params.get("preview"));
+  const slug = previewSlug(params.get("preview"));
+  return <section className="relative overflow-hidden pt-8 pb-16 lg:pt-12 lg:pb-24">
+    <div className="relative mx-auto max-w-7xl px-5 sm:px-6">
+      <div className="grid items-center gap-12 lg:min-h-[calc(100svh-7rem)] lg:grid-cols-[1.02fr_.98fr] lg:gap-16">
+        <div className="max-w-2xl">
+          <p className="section-kicker"><Copy es="Webs, IA y automatización para negocios de servicios" en="Websites, AI and automation for service businesses" /></p>
+          <h1 className="mb-5 font-bold text-[42px] leading-[.98] sm:text-6xl lg:text-[64px] xl:text-[68px]">
+            {fromPreview
+              ? <Copy es="¿Ya viste la vista previa de tu negocio?" en="Saw the preview of your business?" />
+              : <Copy es="Mientras trabajas, tu web recibe al próximo cliente." en="While you're on the job, your website welcomes the next customer." />}
+          </h1>
+          <p className="mb-8 text-xl font-bold leading-snug lg:text-2xl">
+            {fromPreview
+              ? <Copy es="Agenda 10 minutos y la terminamos juntos." en="Book 10 minutes and we'll finish it together." />
+              : <Copy es={`Webs en español y en inglés para plomeros, electricistas y técnicos de HVAC. Tus clientes ven qué haces y dónde trabajas, y te mandan el pedido por WhatsApp. USD ${offers.us.price}, precio fijo.`} en={`English and Spanish websites for plumbers, electricians and HVAC pros. Customers see what you do and where you work, and send the job request straight to your WhatsApp. USD ${offers.us.price}, fixed price.`} />}
+          </p>
+          {slug && <img src={`/previews/${slug}.webp`} alt={language === "en" ? "Your preview" : "Tu vista previa"} width={640} height={360} className="mb-6 w-full max-w-md rounded-lg border border-border" onError={event => { event.currentTarget.remove(); }} />}
+          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <BookButton ctaLocation="hero" />
+            <DemoButton ctaLocation="hero" />
+            <WhatsAppLink ctaLocation="hero" />
+          </div>
         </div>
-        <p className="text-foreground font-medium mt-5"><Copy es={`Lanzamiento: USD ${offers.us.price} para mis primeros 5 clientes.`} en={`Launch: USD ${offers.us.price} for my first 5 clients.`} /></p>
-        <p className="mt-6"><ArgentinaLink /></p>
-        <SocialLinks />
+        <div><ConnectedSystem /></div>
       </div>
-      <div><ConnectedSystem /></div>
     </div>
-    <div className="max-w-3xl mt-14 lg:mt-20 space-y-4 text-lg text-muted-foreground leading-relaxed">
-      <p><Copy es="Si no te encuentran, o no confían en lo que ven, llaman al competidor que sí tiene una web. Si dependes del boca a boca o de Facebook, el cliente que habla inglés no tiene dónde verte." en="If they don't find you, or they don't trust what they see, they call the competitor who does have a website. If you rely on word of mouth or Facebook, English-speaking customers have nowhere to see you." /></p>
-      <p><Copy es="Me mandas el logo y las fotos por WhatsApp: yo hago el resto, incluido tu perfil de Google. Primera versión en 2 días hábiles después de la seña y los materiales completos." en="You send your logo and photos over WhatsApp: I do the rest, including your Google profile. First version in 2 business days after the deposit and the complete materials." /></p>
-      <p><Copy es={`Precio de lanzamiento: USD ${offers.us.price} para mis primeros 5 clientes, a cambio de un testimonio y permiso para mostrar tu sitio. Después, USD ${offers.us.regularPrice}. Trabajo a distancia: no tengo oficina en Estados Unidos.`} en={`Launch price: USD ${offers.us.price} for my first 5 clients, in exchange for a testimonial and permission to show your site. After that, USD ${offers.us.regularPrice}. I work remotely: I don't have an office in the United States.`} /></p>
-    </div>
-  </div>
-</section>);
+  </section>;
+};
+
 export default HeroSection;

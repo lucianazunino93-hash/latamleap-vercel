@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import { createMarketHandler } from '../api/market.js';
 import { clearRateCache } from '../shared/market-data.mjs';
 import { currencyForCountry, priceFor, formatPrice } from '../shared/pricing.mjs';
+import { buildCatalog } from '../shared/catalog.mjs';
 const catalog = JSON.parse(fs.readFileSync(new URL('../shared/catalog.json', import.meta.url)));
 const care = JSON.parse(fs.readFileSync(new URL('../shared/care.json', import.meta.url)));
 
@@ -14,8 +15,9 @@ test('Argentina gets ARS and every other visitor gets USD', () => {
   for (const country of [undefined, '', ['US'], 'unknown']) assert.equal(currencyForCountry(country), 'USD');
 });
 test('fixed international prices remain independent of language and Argentine prices', () => {
-  assert.deepEqual(catalog.map(item => priceFor(item, 'USD')), [349, 879, 879, 1299]);
-  assert.deepEqual(catalog.map(item => priceFor(item, 'ARS')), [349000, 879000, 879000, 1299000]);
+  assert.deepEqual(catalog, buildCatalog());
+  assert.deepEqual(catalog.map(item => priceFor(item, 'USD')), [298.5, 298.5, 0]);
+  assert.deepEqual(catalog.map(item => priceFor(item, 'ARS')), [274500, 274500, 0]);
   assert.equal(formatPrice(care, 'USD', 'es'), 'USD 49');
   assert.equal(formatPrice(care, 'ARS', 'en'), 'ARS 49,000');
 });

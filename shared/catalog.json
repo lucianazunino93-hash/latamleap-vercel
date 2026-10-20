@@ -1,63 +1,31 @@
 [
   {
-    "id": "landing",
-    "name": "Landing",
-    "price": 349000,
-    "description": "Presentá una oferta concreta y facilitá el primer contacto.",
+    "id": "web-5-secciones-sena",
+    "name": "Web de 5 secciones · seña 50%",
+    "price": 274500,
+    "priceUSD": 298.5,
+    "description": "Seña del 50% de la web de 5 secciones (ARS 549.000). El saldo se paga al publicar.",
     "features": [
-      "Una página, hasta 6 secciones",
-      "Diseño adaptado a tu marca y a celulares",
-      "Textos comerciales a partir de tu información",
-      "Formulario y WhatsApp",
-      "SEO técnico inicial y publicación",
-      "Dos rondas de ajustes"
-    ],
-    "priceUSD": 349
+      "5 secciones",
+      "Formulario que abre WhatsApp y avisa por email",
+      "Dos rondas de cambios",
+      "Publicación en tu dominio"
+    ]
   },
   {
-    "id": "sitio",
-    "name": "Web profesional",
-    "price": 879000,
-    "description": "Mostrá el valor de tu negocio y ayudá a que te elijan.",
-    "features": [
-      "Hasta 5 páginas",
-      "Diseño y textos adaptados a tu negocio",
-      "Formulario y WhatsApp",
-      "SEO inicial por página",
-      "Configuración de medición con tu cuenta",
-      "Dos rondas de ajustes",
-      "Panel de administración y capacitación"
-    ],
-    "priceUSD": 879
-  },
-  {
-    "id": "tienda",
-    "name": "Tienda online",
-    "price": 879000,
-    "description": "Mostrá tus productos y recibí pedidos con pagos online.",
-    "features": [
-      "Catálogo inicial de hasta 30 productos",
-      "Carrito y configuración de pagos según tu país",
-      "Configuración de envíos según tu operación",
-      "Panel de productos y pedidos",
-      "SEO inicial y capacitación",
-      "Dos rondas de ajustes"
-    ],
-    "priceUSD": 879
+    "id": "web-5-secciones-saldo",
+    "name": "Web de 5 secciones · saldo 50%",
+    "price": 274500,
+    "priceUSD": 298.5,
+    "description": "Saldo del 50% al aprobar y publicar.",
+    "features": []
   },
   {
     "id": "custom",
-    "name": "Solución a medida",
-    "price": 1299000,
-    "priceUSD": 1299,
-    "description": "Cuando una web no alcanza, creamos una herramienta para simplificar tu operación.",
-    "features": [
-      "Portal de clientes y documentación",
-      "Panel de gestión de clientes, tareas y vencimientos",
-      "Reservas, inscripciones o procesos específicos",
-      "Automatizaciones e integraciones según alcance",
-      "Primera versión con funciones acordadas",
-      "Capacitación para usar tu herramienta"
-    ]
+    "name": "Proyecto a medida",
+    "price": 0,
+    "priceUSD": 0,
+    "description": "Tiendas, sistemas y automatizaciones: se cotizan después de la charla.",
+    "features": []
   }
 ]
