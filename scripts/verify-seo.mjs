@@ -91,6 +91,12 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     assert.equal(photo.getAttribute('height'), '800');
     assert.equal(html.includes('Foto pendiente'), false, `${route}: placeholder label`);
     assert.equal(html.includes('luciana-placeholder'), false, `${route}: placeholder file`);
+    const chip = route === '/' ? 'Marketing digital y analítica web' : 'Digital marketing & web analytics';
+    assert.ok(document.body.textContent.includes(chip), `${route}: analytics chip`);
+    assert.equal(document.body.textContent.includes('cursos de Google'), false, `${route}: old Google courses chip`);
+    assert.equal(document.body.textContent.includes('Google courses'), false, `${route}: old Google courses chip`);
+    assert.equal(document.body.textContent.includes('Certificaciones'), false, `${route}: certifications stay hidden`);
+    assert.equal(document.body.textContent.includes('Certifications'), false, `${route}: certifications stay hidden`);
   }
   if (route === '/about' || route === '/en/about') {
     const coverage = route === '/about'
@@ -100,6 +106,10 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     const photo = document.querySelector('img[src="/luciana-800.webp"]');
     assert.equal(photo.getAttribute('alt'), route === '/about' ? 'Luciana, fundadora de Latam Leap' : 'Luciana, founder of Latam Leap');
     assert.equal(html.includes('Foto pendiente'), false, `${route}: placeholder label`);
+    const chip = route === '/about' ? 'Marketing digital y analítica web' : 'Digital marketing & web analytics';
+    assert.ok(document.body.textContent.includes(chip), `${route}: analytics chip`);
+    assert.equal(document.body.textContent.includes('Certificaciones'), false, `${route}: certifications stay hidden`);
+    assert.equal(document.body.textContent.includes('Certifications'), false, `${route}: certifications stay hidden`);
   }
   if (route === '/argentina') {
     const service = graph.find(item => item['@id'] === `${model.origin}/#offer-argentina`);

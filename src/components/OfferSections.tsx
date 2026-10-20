@@ -46,7 +46,7 @@ const questions = [
 
 const chips = [
   ["inti", "Formación en programación (INTI)", "Programming training (INTI)"],
-  ["google", "Marketing digital (cursos de Google)", "Digital marketing (Google courses)"],
+  ["analytics", "Marketing digital y analítica web", "Digital marketing & web analytics"],
   ["inc5000", "Experiencia en una empresa de marketing del Inc. 5000", "Experience at an Inc. 5000 marketing company"],
 ];
 
@@ -63,11 +63,28 @@ export function FounderPortrait() {
   </figure>;
 }
 
+function Certifications() {
+  const language = useContext(LanguageContext);
+  const items = decisions.certifications?.enabled
+    ? decisions.certifications.items.filter(item => item.url.trim() !== "")
+    : [];
+  if (!items.length) return null;
+  return <div className="mt-6">
+    <p className="mb-3 text-sm font-bold"><Copy es="Certificaciones" en="Certifications" /></p>
+    <ul className="flex flex-wrap gap-2">
+      {items.map(item => <li key={item.id}>
+        <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-sm font-bold text-foreground underline-offset-4 hover:underline" aria-label={language === "en" ? `View ${item.label} certificate` : `Ver certificado de ${item.label}`}>{item.label}</a>
+      </li>)}
+    </ul>
+  </div>;
+}
+
 export function FounderCopy() {
   return <>
     <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground"><Copy es="Latam Leap la fundó Luciana, que une programación, marketing digital y experiencia en una empresa de marketing del Inc. 5000. Hoy lidera proyectos de webs, tiendas online, sistemas a medida y automatización con IA para negocios de servicios. Cuando trabajas con nosotros, hablas directo con quien diseña tu proyecto y respondemos en tu horario de trabajo." en="Latam Leap was founded by Luciana, who brings together software development, digital marketing and experience at an Inc. 5000 marketing company. Today she leads website, online store, custom system and AI automation projects for service businesses. When you work with us, you talk directly to the person designing your project, and we reply during your business hours." /></p>
     <p className="mt-4 max-w-3xl text-lg leading-relaxed text-muted-foreground"><Copy es="Trabajamos con negocios de todo Estados Unidos y Latinoamérica." en="We work with businesses across the United States and Latin America." /></p>
     <ul className="mt-6 flex flex-wrap gap-2">{chips.map(([id, es, en]) => <li key={id} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Copy es={es} en={en} /></li>)}</ul>
+    <Certifications />
   </>;
 }
 
