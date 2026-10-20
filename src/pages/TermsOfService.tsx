@@ -1,5 +1,7 @@
 import { Text, LocalizedAnchor } from "@/lib/language";
+import { Copy } from "@/lib/copy";
 import care from "../../shared/care.json";
+import offers from "../../shared/offers.json";
 import { money } from "@/lib/money";
 const sections = [
     ['Qué contratás', 'Latam Leap diseña y desarrolla landings, webs profesionales, tiendas online y soluciones digitales a medida. La compra directa cubre únicamente el alcance base indicado en la página del paquete. Incluye una instancia inicial para definir público, oferta y mensaje, y acompañamiento durante el desarrollo. Las ampliaciones se presupuestan por separado antes de realizarlas.'],
@@ -13,4 +15,26 @@ const sections = [
     ['Resultados', 'La configuración SEO inicial prepara el sitio para su rastreo y comprensión. No garantiza posiciones en Google, un volumen de visitas ni resultados de ventas. Las herramientas de terceros tienen sus propias condiciones y costos.'],
     ['Cancelaciones y consultas', 'Para solicitar una cancelación, devolución o ejercer los derechos que correspondan, escribí a hola@latamleap.com e identificá la compra. Estas condiciones no limitan los derechos establecidos por la legislación aplicable.']
 ];
-export default function TermsOfService() { return <section className="pt-32 pb-20 px-6 max-w-3xl mx-auto"><h1 className="text-4xl font-bold mb-8"><Text value={"T\u00E9rminos del servicio"}/></h1><p className="text-muted-foreground mb-8"><Text value={"Actualizados el 12 de octubre de 2026."}/></p>{sections.map(([title, text]) => <div key={title} className="mb-8"><h2 className="text-2xl font-bold mb-3"><Text value={title}/></h2><p className="text-muted-foreground leading-relaxed"><Text value={text}/></p></div>)}<LocalizedAnchor className="underline" href="mailto:hola@latamleap.com"><Text value={"hola@latamleap.com"}/></LocalizedAnchor></section>; }
+const referral = offers.referral;
+const referralArs = new Intl.NumberFormat("es-AR").format(referral.rewardARS);
+const referralArsEn = new Intl.NumberFormat("en-US").format(referral.rewardARS);
+const referralRules = {
+  es: [
+    "Tu mes se acredita cuando tu recomendado paga el 50 % inicial.",
+    `Los meses se acumulan: hasta ${referral.capPerYear} por año.`,
+    `Si todavía no tienes el plan de cuidado, te guardamos el mes durante ${referral.holdMonths} meses.`,
+    "Es un crédito de servicio, personal, para el plan de cuidado de tu web con nosotros.",
+    "Si dos personas recomiendan al mismo negocio, vale la primera recomendación que recibimos.",
+    "Latam Leap puede actualizar el programa con aviso en esta página; los créditos ya ganados se respetan.",
+  ],
+  en: [
+    "Your month is credited when your referral pays their 50% deposit.",
+    `Months stack: up to ${referral.capPerYear} per year.`,
+    `If you don't have the care plan yet, we keep your month for ${referral.holdMonths} months.`,
+    "It's a personal service credit for the care plan of your website with us.",
+    "If two people refer the same business, the first referral we receive counts.",
+    "Latam Leap may update the program with notice on this page; credits already earned are kept.",
+  ],
+};
+
+export default function TermsOfService() { return <section className="pt-32 pb-20 px-6 max-w-3xl mx-auto"><h1 className="text-4xl font-bold mb-8"><Text value={"T\u00E9rminos del servicio"}/></h1><p className="text-muted-foreground mb-8"><Copy es="Actualizados el 20 de octubre de 2026." en="Updated on October 20, 2026." /></p>{sections.map(([title, text]) => <div key={title} className="mb-8"><h2 className="text-2xl font-bold mb-3"><Text value={title}/></h2><p className="text-muted-foreground leading-relaxed"><Text value={text}/></p></div>)}<div className="mb-8"><h2 className="text-2xl font-bold mb-3"><Copy es="Programa de referidos" en="Referral program" /></h2><p className="text-muted-foreground leading-relaxed mb-4"><Copy es={`Por cada negocio que nos recomiendas y que paga el 50 % para empezar, te acreditamos ${referral.rewardMonths} mes de tu plan de cuidado (USD ${referral.rewardUSD}). En Argentina, ese mes es de mantenimiento y vale ARS ${referralArs}. La persona recomendada recibe la optimización completa de su perfil de Google.`} en={`For every business you refer that pays the 50% deposit, we credit you ${referral.rewardMonths} month of your care plan (USD ${referral.rewardUSD}). In Argentina, that month is maintenance and is worth ARS ${referralArsEn}. The person you refer receives a full Google Business Profile optimization.`} /></p><ul className="list-disc space-y-2 pl-5 text-muted-foreground leading-relaxed">{referralRules.es.map((rule, index) => <li key={rule}><Copy es={rule} en={referralRules.en[index]} /></li>)}</ul></div><LocalizedAnchor className="underline" href="mailto:hola@latamleap.com"><Text value={"hola@latamleap.com"}/></LocalizedAnchor></section>; }

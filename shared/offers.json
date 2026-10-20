@@ -1,17 +1,25 @@
 {
   "fallbackArsPerUsd": 1500,
   "rateUrl": "https://open.er-api.com/v6/latest/USD",
-  "notes": "US launch price is USD 497 for the first 5 clients, in exchange for a testimonial and permission to show the site. After those 5, the price is USD 597. The condition is written in the copy. There is no strikethrough, countdown, or spot counter. Argentina is a separate ARS price and is not derived from the US price. Maintenance is optional and can be declined. The client pays domain, hosting and tools in their own accounts.",
+  "notes": "Single source of truth for the public offer (Luciana, 19/10/2026). US: USD 597 fixed + optional USD 49/month care, 50/50 via Wise. Bonus is option A only (full Google Business Profile optimization for projects that start before us.bonus.endsOn). Referral reward is one care month, credited when the referred client pays 50%. Argentina: ARS 549,000 + optional ARS 49,000/month, 50/50. Client pays domain, hosting and tools in their own accounts.",
   "us": {
     "id": "bilingual-service-website",
     "name": {
       "es": "Web bilingüe para negocios de servicios",
       "en": "Bilingual website for service businesses"
     },
-    "price": 497,
-    "regularPrice": 597,
+    "price": 597,
     "currency": "USD",
-    "maintenance": 49
+    "maintenance": 49,
+    "bonus": {
+      "option": "A",
+      "enabled": true,
+      "endsOn": "2026-11-30",
+      "timezone": "America/Chicago",
+      "wordingPending": false,
+      "es": "Si empiezas antes del 30 de noviembre de 2026: optimización completa de tu perfil de Google incluida: todos tus servicios cargados con descripción en español y en inglés, preguntas frecuentes, fotos organizadas y atributos.",
+      "en": "Start before November 30, 2026: full Google Business Profile optimization included: every service listed with an English and Spanish description, FAQs, organized photos and attributes."
+    }
   },
   "ar": {
     "id": "argentina-service-website",
@@ -19,5 +27,15 @@
     "price": 549000,
     "currency": "ARS",
     "maintenance": 49000
+  },
+  "referral": {
+    "enabled": true,
+    "rewardMonths": 1,
+    "rewardUSD": 49,
+    "rewardARS": 49000,
+    "capPerYear": 6,
+    "holdMonths": 12,
+    "trigger": "deposit_50",
+    "refereeGift": "gbp_full_optimization"
   }
 }

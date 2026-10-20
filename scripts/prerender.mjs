@@ -1,11 +1,11 @@
 import { createServer } from 'vite';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { createSeoModel, serializeSchema } from '../shared/seo-model.mjs';
+import { createSeoModel, serializeSchema, shareImageAlt } from '../shared/seo-model.mjs';
 import { trackingHead } from '../shared/tracking.mjs';
 const read = async file => JSON.parse(await fs.readFile(`shared/${file}.json`, 'utf8'));
-const [seo, catalog, english, servicePages, offers] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers'].map(read));
-const model = createSeoModel({ seo, catalog, english, servicePages, offers });
+const [seo, catalog, english, servicePages, offers, decisions] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers', 'decisions'].map(read));
+const model = createSeoModel({ seo, catalog, english, servicePages, offers, contactPhone: decisions.contactPhone });
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const vite = await createServer({ server: { middlewareMode: true }, optimizeDeps: { noDiscovery: true, include: [] }, appType: 'custom', mode: 'production' });
 try {
@@ -26,7 +26,7 @@ try {
     setMeta('name', 'description', description);
     setMeta('property', 'og:title', title); setMeta('property', 'og:description', description); setMeta('property', 'og:url', url);
     setMeta('property', 'og:locale', language === 'es' ? 'es_AR' : 'en_US');
-    const imageAlt = language === 'es' ? 'LatamLeap: que te encuentren y te llamen. Webs en español e inglés para plomeros, electricistas y HVAC.' : 'LatamLeap: get found and get the call. Websites in English and Spanish for plumbers, electricians and HVAC.';
+    const imageAlt = shareImageAlt(language);
     setMeta('property', 'og:image:alt', imageAlt);
     setMeta('name', 'twitter:image:alt', imageAlt);
     setMeta('name', 'twitter:title', title); setMeta('name', 'twitter:description', description);
@@ -39,7 +39,7 @@ try {
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${Object.keys(model.pages).filter(model.isIndexable).map(route => `<url><loc>${model.origin}${route}</loc>${Object.entries(model.alternates(route)).map(([lang, href]) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`).join('')}</url>`).join('')}</urlset>`;
   await fs.writeFile('dist/sitemap.xml', sitemap);
   let notFound = template.replace('<div id="root"></div>', `<div id="root">${renderPage('/not-found')}</div>`).replace(/<title>.*?<\/title>/, '<title>Página no encontrada | Latam Leap</title>').replace(/<meta name="robots" content="[^"]*"\s*\/?>/, '<meta name="robots" content="noindex,follow" />').replace(/<link rel="canonical"[^>]*>/, '');
-  notFound = notFound.replace("</body>", `<script>if(location.pathname==="/en"||location.pathname.startsWith("/en/")){document.documentElement.lang="en";var p=document.querySelector("[data-nf='msg']");var a=document.querySelector("[data-nf='home']");if(p)p.textContent="Page not found";if(a){a.textContent="Back to home";a.href="/en";}}</script></body>`);
+  notFound = notFound.replace("</body>", `<script src="/not-found-lang.js"></script></body>`);
   await fs.writeFile('dist/404.html', notFound);
   console.log(`HTML generado para ${Object.keys(model.pages).length} páginas y una página 404.`);
 } finally { await vite.close(); }

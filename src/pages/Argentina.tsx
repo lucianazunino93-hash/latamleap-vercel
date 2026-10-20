@@ -1,6 +1,8 @@
 import { useEffect } from "react";
+import ReferralSection from "@/components/ReferralSection";
 import offers from "../../shared/offers.json";
-import { CALENDAR_URL, INSTAGRAM_URL, whatsAppUrl } from "@/lib/sales";
+import { CALENDAR_URL, INSTAGRAM_URL, rememberLanguage, whatsAppUrl } from "@/lib/sales";
+import { track } from "@/lib/track";
 import vetMavie from "@/assets/projects/vet-mavie-1200.webp";
 import vetMavieSmall from "@/assets/projects/vet-mavie-600.webp";
 import gonzaloAlvarez from "@/assets/projects/gonzalo-alvarez-1200.webp";
@@ -18,7 +20,7 @@ const works = [
 
 export default function Argentina() {
   useEffect(() => {
-    document.cookie = "latamleap.lang=es; Path=/; Max-Age=31536000; SameSite=Lax";
+    rememberLanguage("es");
   }, []);
   return <article className="pb-8">
     <section className="pt-10 pb-16">
@@ -27,8 +29,8 @@ export default function Argentina() {
         <h1 className="text-4xl md:text-6xl font-bold leading-[1.02] mb-6">Una web clara para tu negocio, con precio cerrado.</h1>
         <p className="text-lg text-muted-foreground mb-8">Para negocios en Argentina. Trabajo desde Córdoba y la página queda en español, salvo que haga falta inglés. Precio cerrado: ARS {pesos}.</p>
         <div className="flex flex-col sm:flex-row gap-3">
-          <a href={CALENDAR_URL} className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-6 font-bold text-primary-foreground">Agendar 10 minutos</a>
-          <a href={whatsAppUrl("es")} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-6 font-bold">Escribir por WhatsApp</a>
+          <a href={CALENDAR_URL} onClick={() => track("book_call_click", { cta_location: "argentina", lang: "es", page_path: "/argentina" })} className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-6 font-bold text-primary-foreground">Agendar 10 minutos</a>
+          <a href={whatsAppUrl("es")} target="_blank" rel="noopener noreferrer" onClick={() => track("whatsapp_click", { cta_location: "argentina", lang: "es" })} className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-6 font-bold">Escribir por WhatsApp</a>
         </div>
       </div>
     </section>
@@ -51,6 +53,7 @@ export default function Argentina() {
         </article>
       </div>
     </section>
+    <ReferralSection market="ar" />
     <section id="trabajos" className="py-16 scroll-mt-24">
       <div className="max-w-5xl mx-auto px-5 sm:px-6">
         <h2 className="text-3xl md:text-5xl font-bold mb-4">Trabajos</h2>
@@ -76,8 +79,8 @@ export default function Argentina() {
         <h2 className="text-3xl font-bold mb-3">Proyectos a medida</h2>
         <p className="text-muted-foreground">Tiendas, sistemas y rifas: consultá. Se cotizan aparte y no forman parte de la web de 5 secciones.</p>
         <div className="flex flex-col sm:flex-row gap-4 mt-6">
-          <a className="font-bold underline min-h-11 inline-flex items-center" href={whatsAppUrl("es")}>WhatsApp</a>
-          <a className="font-bold underline min-h-11 inline-flex items-center" href={CALENDAR_URL}>Agendar</a>
+          <a className="font-bold underline min-h-11 inline-flex items-center" href={whatsAppUrl("es")} onClick={() => track("whatsapp_click", { cta_location: "argentina_custom", lang: "es" })}>WhatsApp</a>
+          <a className="font-bold underline min-h-11 inline-flex items-center" href={CALENDAR_URL} onClick={() => track("book_call_click", { cta_location: "argentina_custom", lang: "es", page_path: "/argentina" })}>Agendar</a>
           <a className="font-bold underline min-h-11 inline-flex items-center" href="mailto:hola@latamleap.com">hola@latamleap.com</a>
           <a className="font-bold underline min-h-11 inline-flex items-center" href={INSTAGRAM_URL}>Instagram</a>
         </div>

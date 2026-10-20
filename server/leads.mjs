@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { isCurrency } from '../shared/pricing.mjs';
-const solutions = ['Presencia', 'Captación automática', 'Asistente con IA', 'Necesito orientación', 'Una landing', 'Una Web profesional', 'Una tienda online', 'Marketing o marca', 'Una solución a medida'];
+const solutions = ['Presencia', 'Captación automática', 'Asistente con IA', 'Necesito orientación', 'Una landing', 'Una Web profesional', 'Una tienda online', 'Marketing o marca', 'Una solución a medida', 'Referido'];
 const clean = (value, max) => typeof value === 'string' && value.trim().length <= max ? value.trim() : null;
 
 export function createLeadHandler({ apiKey = process.env.RESEND_API_KEY, domain = process.env.RESEND_EMAIL_DOMAIN || 'latamleap.com', recipient = 'hola@latamleap.com', fetcher = fetch, now = Date.now } = {}) {

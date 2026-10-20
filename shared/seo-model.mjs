@@ -6,7 +6,15 @@ export function getServiceCopy(service, plan, lang, currency = 'ARS') {
   return Object.fromEntries(Object.entries(service[lang]).map(([key, value]) => [key, replace(value)]));
 }
 
-export function createSeoModel({ seo, catalog, english, servicePages, offers }) {
+export function shareImageAlt(lang) {
+  return lang === 'es'
+    ? 'Latam Leap: webs bilingües que reciben pedidos por WhatsApp.'
+    : 'Latam Leap: bilingual websites that take job requests on WhatsApp.';
+}
+
+export const organizationAreaServed = ['United States', 'Latin America'];
+
+export function createSeoModel({ seo, catalog, english, servicePages, offers, contactPhone }) {
   const origin = seo.origin;
   const organizationId = `${origin}/#organization`;
   const websiteId = `${origin}/#website`;
@@ -17,9 +25,8 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
   const language = route => route === '/en' || route.startsWith('/en/') ? 'en' : 'es';
   const pages = { ...seo.pages };
   if (offers?.us?.price) {
-    const later = offers.us.regularPrice ? ` USD ${offers.us.regularPrice}` : '';
-    pages['/'] = [pages['/'][0], `Web bilingüe para plomeros, electricistas y HVAC en EE. UU. Que te encuentren y te llamen. Precio de lanzamiento: USD ${offers.us.price} para los primeros 5 clientes; después,${later}.`];
-    pages['/en'] = [pages['/en'][0], `Bilingual websites for plumbers, electricians and HVAC businesses in the U.S. Get found and get the call. Launch price: USD ${offers.us.price} for the first 5 clients; then${later}.`];
+    pages['/'] = [pages['/'][0], `Webs en español e inglés para plomeros, electricistas y HVAC en Estados Unidos y Latinoamérica. Pedidos por WhatsApp. USD ${offers.us.price}, precio fijo.`];
+    pages['/en'] = [pages['/en'][0], `English and Spanish websites for plumbers, electricians and HVAC pros across the United States and Latin America. Job requests on WhatsApp. USD ${offers.us.price}, fixed price.`];
   }
   if (offers?.ar?.price && pages['/argentina']) {
     pages['/argentina'] = [pages['/argentina'][0], `Web de 5 secciones para negocios en Argentina. Precio cerrado ARS ${new Intl.NumberFormat('es-AR').format(offers.ar.price)}. Seña del 50% y saldo al publicar.`];
@@ -33,9 +40,10 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
   function schema(route) {
     if (!pages[route]) return null;
     const lang = language(route), path = basePath(route), url = absolute(route);
+    const phone = contactPhone || '';
     const nodes = [
-      { '@type': 'Organization', '@id': organizationId, name: 'Latam Leap', url: `${origin}/`, email: 'hola@latamleap.com', telephone: '+54 9 351 208 5644', image: `${origin}/og-latamleap.png`, sameAs: ['https://www.instagram.com/latam.leap/'], areaServed: ['United States', 'Argentina'], founder: { '@type': 'Person', name: 'Luciana Zunino' }, contactPoint: { '@type': 'ContactPoint', contactType: 'sales', telephone: '+54 9 351 208 5644', email: 'hola@latamleap.com', availableLanguage: ['Spanish', 'English'] } },
-      { '@type': ['ProfessionalService', 'LocalBusiness'], '@id': `${origin}/#local-business`, name: 'Latam Leap', url: `${origin}/`, image: `${origin}/og-latamleap.png`, email: 'hola@latamleap.com', telephone: '+54 9 351 208 5644', priceRange: '$$', currenciesAccepted: 'USD, ARS', address: { '@type': 'PostalAddress', addressCountry: 'AR' }, areaServed: ['United States', 'Argentina'], sameAs: ['https://www.instagram.com/latam.leap/'], founder: { '@type': 'Person', name: 'Luciana Zunino' } },
+      { '@type': 'Organization', '@id': organizationId, name: 'Latam Leap', url: `${origin}/`, email: 'hola@latamleap.com', telephone: phone, image: `${origin}/og-latamleap.png`, sameAs: ['https://www.instagram.com/latam.leap/'], areaServed: organizationAreaServed, founder: { '@type': 'Person', name: 'Luciana' }, contactPoint: { '@type': 'ContactPoint', contactType: 'sales', telephone: phone, email: 'hola@latamleap.com', availableLanguage: ['Spanish', 'English'] } },
+      { '@type': ['ProfessionalService', 'LocalBusiness'], '@id': `${origin}/#local-business`, name: 'Latam Leap', url: `${origin}/`, image: `${origin}/og-latamleap.png`, email: 'hola@latamleap.com', telephone: phone, priceRange: '$$', currenciesAccepted: 'USD, ARS', areaServed: organizationAreaServed, sameAs: ['https://www.instagram.com/latam.leap/'], founder: { '@type': 'Person', name: 'Luciana' } },
       { '@type': 'WebSite', '@id': websiteId, name: 'Latam Leap', url: `${origin}/`, publisher: { '@id': organizationId }, inLanguage: ['es-AR', 'en'] },
       { '@type': path === '/about' ? 'AboutPage' : path === '/case-studies' || path === '/services' ? 'CollectionPage' : 'WebPage', '@id': `${url}#webpage`, url, name: pages[route][0], description: pages[route][1], inLanguage: lang === 'es' ? 'es-AR' : 'en', isPartOf: { '@id': websiteId }, about: { '@id': organizationId }, ...(path !== '/' ? { breadcrumb: { '@id': `${url}#breadcrumbs` } } : {}) },
     ];
@@ -49,14 +57,10 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
     const plans = servicePage ? catalog.filter(plan => plan.id === servicePage.id) : [];
     if (offers?.us && path === '/') {
       const offerUrl = `${absolute(localized('/', lang))}#oferta`;
-      const launchDescription = lang === 'es'
-        ? `USD ${offers.us.price} para los primeros 5 clientes, a cambio de un testimonio y permiso para mostrar el sitio.${offers.us.regularPrice ? ` Después, USD ${offers.us.regularPrice}.` : ''}`
-        : `USD ${offers.us.price} for the first 5 clients, in exchange for a testimonial and permission to show the site.${offers.us.regularPrice ? ` After that, USD ${offers.us.regularPrice}.` : ''}`;
       const listed = [
-        { '@type': 'Offer', name: lang === 'es' ? 'Precio de lanzamiento' : 'Launch price', price: offers.us.price, priceCurrency: 'USD', url: offerUrl, description: launchDescription },
+        { '@type': 'Offer', name: offers.us.name[lang], price: offers.us.price, priceCurrency: 'USD', url: offerUrl },
+        { '@type': 'Offer', name: lang === 'es' ? 'Plan de cuidado opcional' : 'Optional care plan', price: offers.us.maintenance, priceCurrency: 'USD', url: offerUrl, priceSpecification: { '@type': 'UnitPriceSpecification', price: offers.us.maintenance, priceCurrency: 'USD', unitText: 'MONTH' } },
       ];
-      if (offers.us.regularPrice) listed.push({ '@type': 'Offer', name: lang === 'es' ? 'Precio después de los primeros 5 clientes' : 'Price after the first 5 clients', price: offers.us.regularPrice, priceCurrency: 'USD', url: offerUrl });
-      listed.push({ '@type': 'Offer', name: lang === 'es' ? 'Mantenimiento opcional' : 'Optional maintenance', price: offers.us.maintenance, priceCurrency: 'USD', url: offerUrl, priceSpecification: { '@type': 'UnitPriceSpecification', price: offers.us.maintenance, priceCurrency: 'USD', unitText: 'MONTH' } });
       nodes.push({
         '@type': 'Service',
         '@id': `${origin}/#offer-bilingual`,
@@ -64,7 +68,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers }) 
         description: pages[route][1],
         serviceType: offers.us.name.en,
         provider: { '@id': `${origin}/#local-business` },
-        areaServed: 'United States',
+        areaServed: organizationAreaServed,
         offers: listed,
       });
     }

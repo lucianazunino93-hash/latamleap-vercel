@@ -13,20 +13,72 @@
     }
   },
   "redirects": [
-    { "source": "/test", "destination": "/", "permanent": true },
-    { "source": "/services", "destination": "/#oferta", "permanent": true },
-    { "source": "/services/:path*", "destination": "/#oferta", "permanent": true },
-    { "source": "/en/services", "destination": "/en#oferta", "permanent": true },
-    { "source": "/en/services/:path*", "destination": "/en#oferta", "permanent": true },
-    { "source": "/comprar/:path*", "destination": "/#oferta", "permanent": true },
-    { "source": "/en/comprar/:path*", "destination": "/en#oferta", "permanent": true },
-    { "source": "/pago", "destination": "/#oferta", "permanent": true },
-    { "source": "/en/pago", "destination": "/en#oferta", "permanent": true }
+    {
+      "source": "/test",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/services",
+      "destination": "/#oferta",
+      "permanent": true
+    },
+    {
+      "source": "/services/:path*",
+      "destination": "/#oferta",
+      "permanent": true
+    },
+    {
+      "source": "/en/services",
+      "destination": "/en#oferta",
+      "permanent": true
+    },
+    {
+      "source": "/en/services/:path*",
+      "destination": "/en#oferta",
+      "permanent": true
+    },
+    {
+      "source": "/comprar/:path*",
+      "destination": "/#compra",
+      "permanent": true
+    },
+    {
+      "source": "/en/comprar/:path*",
+      "destination": "/en#compra",
+      "permanent": true
+    },
+    {
+      "source": "/pago",
+      "destination": "/#oferta",
+      "permanent": true
+    },
+    {
+      "source": "/en/pago",
+      "destination": "/en#oferta",
+      "permanent": true
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; frame-src https://demo-prime-home-solutions.vercel.app https://demo.latamleap.com; img-src 'self' data: https://www.google-analytics.com https://*.google-analytics.com https://www.googletagmanager.com https://www.facebook.com; font-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.google.com https://www.facebook.com https://connect.facebook.net"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains"
+        },
         {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
@@ -70,6 +122,24 @@
         {
           "key": "X-Robots-Tag",
           "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/fonts/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=2592000"
         }
       ]
     }

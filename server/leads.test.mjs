@@ -41,6 +41,15 @@ test('limits bursts and permits requests after the window expires', async () => 
   assert.equal((await run(handler)).status, 200);
 });
 
+test('accepts a referral and rejects an unknown solution', async () => {
+  let subject = '';
+  const handler = createLeadHandler({ apiKey: 'test', fetcher: async (_, options) => { subject = JSON.parse(options.body).subject; return { ok: true, json: async () => ({ id: 'sent' }) }; } });
+  const referral = { ...lead, solution: 'Referido', phone: '', project: 'Recomendado: Ana · Taller · ana@example.com\nCódigo: R-101\nConfirmó que el recomendado sabe que lo contactarán: sí' };
+  assert.equal((await run(handler, referral)).status, 200);
+  assert.match(subject, /^Nueva consulta · Referido · /);
+  assert.equal((await run(handler, { ...lead, solution: 'Descuento secreto' })).status, 400);
+});
+
 test('includes the selected currency in the email and rejects unsupported currencies', async () => {
   let text;
   const handler = createLeadHandler({ apiKey: 'test', fetcher: async (_, options) => { text = JSON.parse(options.body).text; return { ok: true, json: async () => ({ id: 'sent' }) }; } });
