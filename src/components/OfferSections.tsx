@@ -65,16 +65,20 @@ export function FounderPortrait() {
 
 function Certifications() {
   const language = useContext(LanguageContext);
-  const items = decisions.certifications?.enabled
-    ? decisions.certifications.items.filter(item => item.url.trim() !== "")
-    : [];
+  if (!decisions.certifications?.enabled) return null;
+  const items = decisions.certifications.items;
   if (!items.length) return null;
   return <div className="mt-6">
     <p className="mb-3 text-sm font-bold"><Copy es="Certificaciones" en="Certifications" /></p>
-    <ul className="flex flex-wrap gap-2">
-      {items.map(item => <li key={item.id}>
-        <a href={item.url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-sm font-bold text-foreground underline-offset-4 hover:underline" aria-label={language === "en" ? `View ${item.label} certificate` : `Ver certificado de ${item.label}`}>{item.label}</a>
-      </li>)}
+    <ul className="flex flex-wrap gap-2" data-certifications="">
+      {items.map(item => {
+        const url = item.url.trim();
+        return <li key={item.id}>
+          {url
+            ? <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-sm font-bold text-foreground underline-offset-4 hover:underline" aria-label={language === "en" ? `View ${item.label} certificate` : `Ver certificado de ${item.label}`}>{item.label}</a>
+            : <span className="inline-flex items-center rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-foreground">{item.label}</span>}
+        </li>;
+      })}
     </ul>
   </div>;
 }

@@ -7,6 +7,14 @@ const [seo, catalog, english, servicePages, offers, decisions] = await Promise.a
 const model = createSeoModel({ seo, catalog, english, servicePages, offers, contactPhone: decisions.contactPhone });
 const forbiddenOnUs = ['497', 'primeros 5', 'first 5', 'first five', 'regularPrice', 'ficticio', 'Fictional', 'fictional', 'no tengo oficina', "don't have an office", 'sin reseñas inventadas', 'invented reviews', 'Argentina', 'Córdoba', 'Zunino', 'office there'];
 const guarded = new Set(['/', '/en', '/about', '/en/about', '/case-studies', '/en/case-studies']);
+function assertCertifications(document, route) {
+  const list = document.querySelector('[data-certifications]');
+  assert.ok(list, `${route}: certifications strip`);
+  assert.equal(list.querySelectorAll('a').length, 0, `${route}: badges stay text until a URL is set`);
+  for (const label of ['Google Analytics', 'Google Ads Search', 'HubSpot Inbound', 'Semrush SEO']) {
+    assert.ok(list.textContent.includes(label), `${route}: ${label}`);
+  }
+}
 const sitemap = new JSDOM(await fs.readFile('dist/sitemap.xml', 'utf8'), { contentType: 'application/xml' }).window.document;
 assert.equal(sitemap.getElementsByTagName('url').length, Object.keys(model.pages).filter(model.isIndexable).length);
 for (const [route, [title, description]] of Object.entries(model.pages)) {
@@ -95,8 +103,7 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     assert.ok(document.body.textContent.includes(chip), `${route}: analytics chip`);
     assert.equal(document.body.textContent.includes('cursos de Google'), false, `${route}: old Google courses chip`);
     assert.equal(document.body.textContent.includes('Google courses'), false, `${route}: old Google courses chip`);
-    assert.equal(document.body.textContent.includes('Certificaciones'), false, `${route}: certifications stay hidden`);
-    assert.equal(document.body.textContent.includes('Certifications'), false, `${route}: certifications stay hidden`);
+    assertCertifications(document, route);
   }
   if (route === '/about' || route === '/en/about') {
     const coverage = route === '/about'
@@ -108,8 +115,7 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     assert.equal(html.includes('Foto pendiente'), false, `${route}: placeholder label`);
     const chip = route === '/about' ? 'Marketing digital y analítica web' : 'Digital marketing & web analytics';
     assert.ok(document.body.textContent.includes(chip), `${route}: analytics chip`);
-    assert.equal(document.body.textContent.includes('Certificaciones'), false, `${route}: certifications stay hidden`);
-    assert.equal(document.body.textContent.includes('Certifications'), false, `${route}: certifications stay hidden`);
+    assertCertifications(document, route);
   }
   if (route === '/argentina') {
     const service = graph.find(item => item['@id'] === `${model.origin}/#offer-argentina`);

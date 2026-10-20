@@ -19,7 +19,7 @@
     "note": "D10 and D11 are confirmed. Amounts and rules live in shared/offers.json → referral: one month, cap 6 per year, credited when the referred client pays 50%, held 12 months. The US home uses tú and USD 49. /argentina uses voseo and ARS 49,000."
   },
   "certifications": {
-    "enabled": false,
+    "enabled": true,
     "items": [
       { "id": "google-analytics", "label": "Google Analytics", "issuer": "Google", "url": "" },
       { "id": "google-ads-search", "label": "Google Ads Search", "issuer": "Google", "url": "" },
