@@ -15,6 +15,7 @@ const usLinks = [
 ];
 const argentinaLinks = [
   { es: "Precio", en: "Precio", href: "#oferta" },
+  { es: "Recomendá", en: "Recomendá", href: "#referidos" },
   { es: "Trabajos", en: "Trabajos", href: "#trabajos" },
   { es: "A medida", en: "A medida", href: "#a-medida" },
 ];

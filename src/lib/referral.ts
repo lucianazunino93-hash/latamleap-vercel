@@ -34,24 +34,32 @@ export function getRef() {
   }
 }
 
-export function shareUrl(lang: "es" | "en", code = "") {
-  const url = new URL(lang === "en" ? `${SITE}/en` : `${SITE}/`);
+export type ShareMarket = "es" | "en" | "ar";
+
+export function shareUrl(market: ShareMarket, code = "") {
+  const path = market === "en" ? "/en" : market === "ar" ? "/argentina" : "/";
+  const url = new URL(`${SITE}${path}`);
   if (isRefCode(code)) url.searchParams.set("ref", code);
   return url.toString();
 }
 
-export function shareMessage(lang: "es" | "en", code = "") {
-  const link = shareUrl(lang, code);
-  if (lang === "en") {
+export function shareMessage(market: ShareMarket, code = "") {
+  const link = shareUrl(market, code);
+  const named = Boolean(code && isRefCode(code));
+  if (market === "en") {
     const text = `I recommend Latam Leap for your website. You talk with them for 10 minutes and they show you how it could look: ${link}`;
-    return code && isRefCode(code) ? text : `${text} When you talk with them, mention who sent you.`;
+    return named ? text : `${text} When you talk with them, mention who sent you.`;
+  }
+  if (market === "ar") {
+    const text = `Te recomiendo Latam Leap para tu web. Hablás 10 minutos con ellos y te muestran cómo quedaría: ${link}`;
+    return named ? text : `${text} Cuando hables con ellos, mencioná quién te envió.`;
   }
   const text = `Te recomiendo Latam Leap para tu web. Hablas 10 minutos con ellos y te muestran cómo quedaría: ${link}`;
-  return code && isRefCode(code) ? text : `${text} Cuando hables con ellos, menciona quién te envió.`;
+  return named ? text : `${text} Cuando hables con ellos, menciona quién te envió.`;
 }
 
-export function shareWhatsAppUrl(lang: "es" | "en", code = "") {
-  return `https://wa.me/?text=${encodeURIComponent(shareMessage(lang, code))}`;
+export function shareWhatsAppUrl(market: ShareMarket, code = "") {
+  return `https://wa.me/?text=${encodeURIComponent(shareMessage(market, code))}`;
 }
 
 /** Contact message to Latam Leap. The referral code is appended only when one is stored. */

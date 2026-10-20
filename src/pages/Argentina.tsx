@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import ReferralSection from "@/components/ReferralSection";
 import offers from "../../shared/offers.json";
 import { CALENDAR_URL, INSTAGRAM_URL, whatsAppUrl } from "@/lib/sales";
 import { track } from "@/lib/track";
@@ -52,6 +53,7 @@ export default function Argentina() {
         </article>
       </div>
     </section>
+    <ReferralSection market="ar" />
     <section id="trabajos" className="py-16 scroll-mt-24">
       <div className="max-w-5xl mx-auto px-5 sm:px-6">
         <h2 className="text-3xl md:text-5xl font-bold mb-4">Trabajos</h2>

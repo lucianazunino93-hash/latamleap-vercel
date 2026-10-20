@@ -40,7 +40,23 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   assert.match(document.querySelector('meta[name="twitter:image:alt"]').content, model.language(route) === 'es' ? /pedidos por WhatsApp/ : /job requests on WhatsApp/);
   assert.equal(document.body.textContent.includes(decisions.contactPhone.replace(/\D/g, '')), false, `${route}: phone number stays out of visible text`);
   for (const phrase of ['Flagler', 'Miami, FL']) assert.equal(html.includes(phrase), false, `${route}: postal address stays off the site (${phrase})`);
-  if (route === '/' || route === '/en') assert.ok(document.getElementById('referidos'), `${route}: referral section`);
+  if (route === '/' || route === '/en' || route === '/argentina') assert.ok(document.getElementById('referidos'), `${route}: referral section`);
+  if (route === '/') {
+    const referral = document.getElementById('referidos').textContent;
+    assert.match(referral, /Recomienda Latam Leap/);
+    assert.equal(referral.includes('Recomendá'), false, '/: US Spanish stays in tú');
+    assert.equal(referral.includes('tenés'), false, '/: US Spanish stays in tú');
+  }
+  if (route === '/argentina') {
+    const referral = document.getElementById('referidos').textContent;
+    const rewardArs = new Intl.NumberFormat('es-AR').format(offers.referral.rewardARS);
+    assert.match(referral, /Recomendá Latam Leap/);
+    assert.match(referral, new RegExp(`ARS ${rewardArs.replaceAll('.', '\\.')}`));
+    assert.match(referral, /tenés/);
+    assert.match(referral, /Compartí/);
+    assert.equal(referral.includes('Recomienda Latam Leap'), false, '/argentina: referral copy stays in voseo');
+    assert.equal(referral.includes('USD'), false, '/argentina: referral reward is in pesos');
+  }
   if (route === '/case-studies') assert.match(document.body.textContent, /Otros proyectos/);
   if (route === '/en/case-studies') assert.match(document.body.textContent, /Other projects/);
   if (guarded.has(route)) {

@@ -27,6 +27,11 @@ test("builds a public share link and asks for a name when there is no code", () 
   expect(shareMessage("en", "")).toContain("mention who sent you");
   expect(shareMessage("es", "R-101")).toContain("?ref=R-101");
   expect(shareMessage("es", "R-101")).not.toContain("menciona quién te envió");
+  expect(shareUrl("ar", "R-101")).toBe("https://www.latamleap.com/argentina?ref=R-101");
+  expect(shareMessage("ar", "R-101")).toContain("Hablás 10 minutos");
+  expect(shareMessage("ar", "")).toContain("mencioná quién te envió");
+  expect(shareMessage("ar", "")).toContain("https://www.latamleap.com/argentina");
+  expect(shareMessage("es", "")).not.toContain("/argentina");
   expect(contactWhatsAppText("es")).toBe("Hola, vi la web de LatamLeap y quiero agendar 10 minutos.");
   readRefFromUrl("?ref=R-101");
   expect(contactWhatsAppText("en")).toBe("Hi, I saw the LatamLeap site and I'd like to book 10 minutes. Referred by: R-101");
