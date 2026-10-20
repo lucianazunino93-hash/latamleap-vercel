@@ -26,10 +26,13 @@ const HeroSection = () => {
               ? <Copy es="¿Ya viste la vista previa de tu negocio?" en="Saw the preview of your business?" />
               : <Copy es="Mientras trabajas, tu web recibe al próximo cliente." en="While you're on the job, your website welcomes the next customer." />}
           </h1>
-          <p className="mb-8 text-xl font-bold leading-snug lg:text-2xl">
+          <p className="mb-3 text-xl font-bold leading-snug lg:text-2xl">
             {fromPreview
               ? <Copy es="Agenda 10 minutos y la terminamos juntos." en="Book 10 minutes and we'll finish it together." />
               : <Copy es={`Webs en español y en inglés para plomeros, electricistas y técnicos de HVAC. Tus clientes ven qué haces y dónde trabajas, y te mandan el pedido por WhatsApp. USD ${offers.us.price}, precio fijo.`} en={`English and Spanish websites for plumbers, electricians and HVAC pros. Customers see what you do and where you work, and send the job request straight to your WhatsApp. USD ${offers.us.price}, fixed price.`} />}
+          </p>
+          <p className="mb-8 text-lg leading-snug">
+            <Copy es="Trabajamos con negocios de todo Estados Unidos y Latinoamérica." en="We work with businesses across the United States and Latin America." />
           </p>
           {slug && <img src={`/previews/${slug}.webp`} alt={language === "en" ? "Your preview" : "Tu vista previa"} width={640} height={360} className="mb-6 w-full max-w-md rounded-lg border border-border" onError={event => { event.currentTarget.remove(); }} />}
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">

@@ -1,7 +1,7 @@
 {
   "contactPhone": "+54 9 351 208 5644",
   "showFounderPhoto": true,
-  "founderPhotoPending": true,
+  "founderPhotoPending": false,
   "robComingSoon": true,
   "showArgentinaLinkOnHome": false,
   "showWhatsAppNumber": false,

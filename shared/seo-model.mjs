@@ -12,6 +12,8 @@ export function shareImageAlt(lang) {
     : 'Latam Leap: bilingual websites that take job requests on WhatsApp.';
 }
 
+export const organizationAreaServed = ['United States', 'Latin America'];
+
 export function createSeoModel({ seo, catalog, english, servicePages, offers, contactPhone }) {
   const origin = seo.origin;
   const organizationId = `${origin}/#organization`;
@@ -23,8 +25,8 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
   const language = route => route === '/en' || route.startsWith('/en/') ? 'en' : 'es';
   const pages = { ...seo.pages };
   if (offers?.us?.price) {
-    pages['/'] = [pages['/'][0], `Webs en español e inglés para plomeros, electricistas y HVAC. Tus clientes te mandan el pedido por WhatsApp. USD ${offers.us.price}, precio fijo.`];
-    pages['/en'] = [pages['/en'][0], `English and Spanish websites for plumbers, electricians and HVAC pros. Customers send job requests to your WhatsApp. USD ${offers.us.price}, fixed price.`];
+    pages['/'] = [pages['/'][0], `Webs en español e inglés para plomeros, electricistas y HVAC en Estados Unidos y Latinoamérica. Pedidos por WhatsApp. USD ${offers.us.price}, precio fijo.`];
+    pages['/en'] = [pages['/en'][0], `English and Spanish websites for plumbers, electricians and HVAC pros across the United States and Latin America. Job requests on WhatsApp. USD ${offers.us.price}, fixed price.`];
   }
   if (offers?.ar?.price && pages['/argentina']) {
     pages['/argentina'] = [pages['/argentina'][0], `Web de 5 secciones para negocios en Argentina. Precio cerrado ARS ${new Intl.NumberFormat('es-AR').format(offers.ar.price)}. Seña del 50% y saldo al publicar.`];
@@ -39,10 +41,9 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
     if (!pages[route]) return null;
     const lang = language(route), path = basePath(route), url = absolute(route);
     const phone = contactPhone || '';
-    const served = path === '/argentina' ? ['Argentina'] : ['United States'];
     const nodes = [
-      { '@type': 'Organization', '@id': organizationId, name: 'Latam Leap', url: `${origin}/`, email: 'hola@latamleap.com', telephone: phone, image: `${origin}/og-latamleap.png`, sameAs: ['https://www.instagram.com/latam.leap/'], areaServed: served, founder: { '@type': 'Person', name: 'Luciana' }, contactPoint: { '@type': 'ContactPoint', contactType: 'sales', telephone: phone, email: 'hola@latamleap.com', availableLanguage: ['Spanish', 'English'] } },
-      { '@type': ['ProfessionalService', 'LocalBusiness'], '@id': `${origin}/#local-business`, name: 'Latam Leap', url: `${origin}/`, image: `${origin}/og-latamleap.png`, email: 'hola@latamleap.com', telephone: phone, priceRange: '$$', currenciesAccepted: 'USD, ARS', areaServed: served, sameAs: ['https://www.instagram.com/latam.leap/'], founder: { '@type': 'Person', name: 'Luciana' } },
+      { '@type': 'Organization', '@id': organizationId, name: 'Latam Leap', url: `${origin}/`, email: 'hola@latamleap.com', telephone: phone, image: `${origin}/og-latamleap.png`, sameAs: ['https://www.instagram.com/latam.leap/'], areaServed: organizationAreaServed, founder: { '@type': 'Person', name: 'Luciana' }, contactPoint: { '@type': 'ContactPoint', contactType: 'sales', telephone: phone, email: 'hola@latamleap.com', availableLanguage: ['Spanish', 'English'] } },
+      { '@type': ['ProfessionalService', 'LocalBusiness'], '@id': `${origin}/#local-business`, name: 'Latam Leap', url: `${origin}/`, image: `${origin}/og-latamleap.png`, email: 'hola@latamleap.com', telephone: phone, priceRange: '$$', currenciesAccepted: 'USD, ARS', areaServed: organizationAreaServed, sameAs: ['https://www.instagram.com/latam.leap/'], founder: { '@type': 'Person', name: 'Luciana' } },
       { '@type': 'WebSite', '@id': websiteId, name: 'Latam Leap', url: `${origin}/`, publisher: { '@id': organizationId }, inLanguage: ['es-AR', 'en'] },
       { '@type': path === '/about' ? 'AboutPage' : path === '/case-studies' || path === '/services' ? 'CollectionPage' : 'WebPage', '@id': `${url}#webpage`, url, name: pages[route][0], description: pages[route][1], inLanguage: lang === 'es' ? 'es-AR' : 'en', isPartOf: { '@id': websiteId }, about: { '@id': organizationId }, ...(path !== '/' ? { breadcrumb: { '@id': `${url}#breadcrumbs` } } : {}) },
     ];
@@ -67,7 +68,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
         description: pages[route][1],
         serviceType: offers.us.name.en,
         provider: { '@id': `${origin}/#local-business` },
-        areaServed: 'United States',
+        areaServed: organizationAreaServed,
         offers: listed,
       });
     }

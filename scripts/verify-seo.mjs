@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { JSDOM } from 'jsdom';
-import { createSeoModel } from '../shared/seo-model.mjs';
+import { createSeoModel, organizationAreaServed } from '../shared/seo-model.mjs';
 const read = async file => JSON.parse(await fs.readFile(`shared/${file}.json`, 'utf8'));
 const [seo, catalog, english, servicePages, offers, decisions] = await Promise.all(['seo', 'catalog', 'en', 'service-pages', 'offers', 'decisions'].map(read));
 const model = createSeoModel({ seo, catalog, english, servicePages, offers, contactPhone: decisions.contactPhone });
@@ -12,8 +12,9 @@ assert.equal(sitemap.getElementsByTagName('url').length, Object.keys(model.pages
 for (const [route, [title, description]] of Object.entries(model.pages)) {
   const html = await fs.readFile(`dist${route === '/' ? '' : route}/index.html`, 'utf8');
   const document = new JSDOM(html).window.document;
-  for (const image of document.querySelectorAll('img')) {
-    const urls = [image.getAttribute('src'), ...image.srcset.split(',').map(entry => entry.trim().split(/\s+/)[0])].filter(Boolean);
+  for (const image of document.querySelectorAll('img, source')) {
+    const srcset = image.getAttribute('srcset') || '';
+    const urls = [image.getAttribute('src'), ...srcset.split(',').map(entry => entry.trim().split(/\s+/)[0])].filter(Boolean);
     for (const url of urls) {
       assert.ok(!url.startsWith('/src/'), `${route}: no development asset URL`);
       if (url.startsWith('/')) await fs.access(`dist${url}`);
@@ -27,9 +28,13 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   assert.equal(document.querySelectorAll('script[type="application/ld+json"]').length, 1, `${route}: one graph`);
   assert.equal(document.querySelector('meta[name="robots"]').content.startsWith('index,'), model.isIndexable(route));
   const graph = JSON.parse(document.getElementById('page-schema').textContent)['@graph'];
-  assert.equal(graph.find(item => item['@type'] === 'Organization').telephone, decisions.contactPhone);
-  for (const [lang, url] of Object.entries(model.alternates(route))) assert.equal(document.querySelector(`link[hreflang="${lang}"]`).href, url);
   const types = value => Array.isArray(value) ? value : [value];
+  const organization = graph.find(item => item['@type'] === 'Organization');
+  assert.equal(organization.telephone, decisions.contactPhone);
+  assert.deepEqual(organization.areaServed, organizationAreaServed, `${route}: organization areaServed`);
+  const localBusiness = graph.find(item => types(item['@type']).includes('LocalBusiness'));
+  assert.deepEqual(localBusiness.areaServed, organizationAreaServed, `${route}: local business areaServed`);
+  for (const [lang, url] of Object.entries(model.alternates(route))) assert.equal(document.querySelector(`link[hreflang="${lang}"]`).href, url);
   assert.ok(graph.some(item => types(item['@type']).includes('ProfessionalService') && types(item['@type']).includes('LocalBusiness')), `${route}: local business`);
   assert.ok(document.querySelector('meta[property="og:image"]').content.endsWith('/og-latamleap.png'), `${route}: share image`);
   assert.equal(document.querySelector('meta[name="twitter:card"]').content, 'summary_large_image');
@@ -67,6 +72,7 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     assert.equal(service.offers.find(offer => offer.price === offers.us.price).priceCurrency, 'USD');
     assert.equal(service.offers.find(offer => offer.priceSpecification).priceSpecification.price, offers.us.maintenance);
     assert.equal(service.offers.length, 2, `${route}: fixed price plus care`);
+    assert.deepEqual(service.areaServed, organizationAreaServed, `${route}: offer areaServed`);
     assert.equal(graph.filter(item => item['@type'] === 'Service').length, 1, `${route}: one offer`);
     assert.ok(document.body.textContent.includes(`USD ${offers.us.price}`), `${route}: fixed price visible`);
     assert.equal(offers.us.regularPrice, undefined);
@@ -75,6 +81,25 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     }
     assert.equal(html.includes('line-through'), false, `${route}: strikethrough price`);
     assert.equal(document.getElementById('ga4-src'), null, `${route}: GA4 stays unloaded until consent`);
+    const coverage = route === '/'
+      ? 'Trabajamos con negocios de todo Estados Unidos y Latinoamérica.'
+      : 'We work with businesses across the United States and Latin America.';
+    assert.ok(document.body.textContent.includes(coverage), `${route}: coverage line`);
+    const photo = document.querySelector('#equipo img');
+    assert.equal(photo.getAttribute('alt'), route === '/' ? 'Luciana, fundadora de Latam Leap' : 'Luciana, founder of Latam Leap');
+    assert.equal(photo.getAttribute('width'), '800');
+    assert.equal(photo.getAttribute('height'), '800');
+    assert.equal(html.includes('Foto pendiente'), false, `${route}: placeholder label`);
+    assert.equal(html.includes('luciana-placeholder'), false, `${route}: placeholder file`);
+  }
+  if (route === '/about' || route === '/en/about') {
+    const coverage = route === '/about'
+      ? 'Trabajamos con negocios de todo Estados Unidos y Latinoamérica.'
+      : 'We work with businesses across the United States and Latin America.';
+    assert.ok(document.body.textContent.includes(coverage), `${route}: coverage line`);
+    const photo = document.querySelector('img[src="/luciana-800.webp"]');
+    assert.equal(photo.getAttribute('alt'), route === '/about' ? 'Luciana, fundadora de Latam Leap' : 'Luciana, founder of Latam Leap');
+    assert.equal(html.includes('Foto pendiente'), false, `${route}: placeholder label`);
   }
   if (route === '/argentina') {
     const service = graph.find(item => item['@id'] === `${model.origin}/#offer-argentina`);

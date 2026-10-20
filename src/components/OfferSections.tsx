@@ -8,7 +8,9 @@ import { LanguageContext } from "@/lib/language-context";
 import { track } from "@/lib/track";
 import { BookButton, WhatsAppLink } from "./SalesActions";
 import AnimatedSection from "./AnimatedSection";
-const portrait = "/luciana-placeholder.svg";
+const portraitSrcSet = "/luciana-400.webp 400w, /luciana-800.webp 800w";
+const portraitAvifSrcSet = "/luciana-400.avif 400w, /luciana-800.avif 800w";
+const portraitSizes = "(min-width: 1024px) 384px, calc(100vw - 2.5rem)";
 
 const includes = {
   es: [
@@ -31,7 +33,7 @@ const includes = {
 
 const questions = [
   { id: "pago", esQ: "¿Cómo pago?", enQ: "How do I pay?", esA: "Te enviamos una solicitud de pago de Wise en dólares: 50 % para empezar y 50 % al aprobar la web.", enA: "We send you a Wise payment request in U.S. dollars: 50% to start and 50% when you approve the site." },
-  { id: "ciudad", esQ: "¿Trabajan con negocios de mi ciudad?", enQ: "Do you work with businesses in my city?", esA: "Sí. Trabajamos en remoto con negocios de todo Estados Unidos y respondemos en tu horario de trabajo.", enA: "Yes. We work remotely with businesses across the U.S. and reply during your business hours." },
+  { id: "ciudad", esQ: "¿Trabajan con negocios de mi ciudad?", enQ: "Do you work with businesses in my city?", esA: "Sí. Trabajamos con negocios de todo Estados Unidos y Latinoamérica. Respondemos en tu horario de trabajo.", enA: "Yes. We work with businesses across the United States and Latin America. We reply during your business hours." },
   { id: "tiempo", esQ: "¿Cuánto tarda?", enQ: "How long does it take?", esA: "La primera versión está en 2 días hábiles desde el pago inicial y tus materiales. La mayoría de las webs se publica en 1 a 2 semanas.", enA: "The first version is ready 2 business days after the deposit and your materials. Most sites launch in 1 to 2 weeks." },
   { id: "materiales", esQ: "¿Qué necesito tener listo?", enQ: "What do I need to have ready?", esA: "Tu logo, tus servicios, tu zona, tus horarios y algunas fotos de tus trabajos. Te mandamos la lista completa.", enA: "Your logo, services, service area, hours and a few photos of your work. We'll send you the full list." },
   { id: "cuentas", esQ: "¿De quién son la web y las cuentas?", enQ: "Who owns the site and accounts?", esA: "Tuyas. Dominio, hosting y perfil de Google quedan a tu nombre desde el primer día.", enA: "You do. Domain, hosting and Google profile are in your name from day one." },
@@ -51,16 +53,20 @@ const chips = [
 export function FounderPortrait() {
   const language = useContext(LanguageContext);
   if (!decisions.showFounderPhoto) return null;
-  const alt = language === "en" ? "Placeholder for a photo of Luciana, founder of Latam Leap" : "Marcador de posición para la foto de Luciana, fundadora de Latam Leap";
+  const alt = language === "en" ? "Luciana, founder of Latam Leap" : "Luciana, fundadora de Latam Leap";
   return <figure>
-    <img src={portrait} width={600} height={600} alt={alt} decoding="async" loading="lazy" className="aspect-square w-full max-w-sm rounded-lg border border-border bg-secondary object-cover" />
-    {decisions.founderPhotoPending && <figcaption className="mt-3 text-sm font-bold"><Copy es="Foto pendiente. Marcador de posición." en="Photo pending. Placeholder." /></figcaption>}
+    <picture>
+      <source type="image/avif" srcSet={portraitAvifSrcSet} sizes={portraitSizes} />
+      <source type="image/webp" srcSet={portraitSrcSet} sizes={portraitSizes} />
+      <img src="/luciana-800.webp" srcSet={portraitSrcSet} sizes={portraitSizes} width={800} height={800} alt={alt} decoding="async" loading="lazy" className="aspect-square w-full max-w-sm rounded-lg border border-border bg-secondary object-cover" />
+    </picture>
   </figure>;
 }
 
 export function FounderCopy() {
   return <>
     <p className="max-w-3xl text-lg leading-relaxed text-muted-foreground"><Copy es="Latam Leap la fundó Luciana, que une programación, marketing digital y experiencia en una empresa de marketing del Inc. 5000. Hoy lidera proyectos de webs, tiendas online, sistemas a medida y automatización con IA para negocios de servicios. Cuando trabajas con nosotros, hablas directo con quien diseña tu proyecto y respondemos en tu horario de trabajo." en="Latam Leap was founded by Luciana, who brings together software development, digital marketing and experience at an Inc. 5000 marketing company. Today she leads website, online store, custom system and AI automation projects for service businesses. When you work with us, you talk directly to the person designing your project, and we reply during your business hours." /></p>
+    <p className="mt-4 max-w-3xl text-lg leading-relaxed text-muted-foreground"><Copy es="Trabajamos con negocios de todo Estados Unidos y Latinoamérica." en="We work with businesses across the United States and Latin America." /></p>
     <ul className="mt-6 flex flex-wrap gap-2">{chips.map(([id, es, en]) => <li key={id} className="rounded-full border border-border bg-card px-4 py-2 text-sm font-bold"><Copy es={es} en={en} /></li>)}</ul>
   </>;
 }
