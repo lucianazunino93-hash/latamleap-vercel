@@ -60,6 +60,7 @@ const Footer = () => {
         <Copy es={l.es} en={l.en} />
       </Link>))}
       <a href="mailto:hola@latamleap.com" className={tap} onClick={() => track("email_click", { cta_location: "footer", lang: language })}>hola@latamleap.com</a>
+      <button type="button" className={tap} onClick={() => window.dispatchEvent(new Event("latamleap:consent-open"))}><Copy es="Cookies" en="Cookies" /></button>
     </div>
   </div>
 </footer>);

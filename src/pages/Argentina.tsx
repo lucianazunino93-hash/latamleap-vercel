@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ReferralSection from "@/components/ReferralSection";
 import offers from "../../shared/offers.json";
-import { CALENDAR_URL, INSTAGRAM_URL, whatsAppUrl } from "@/lib/sales";
+import { CALENDAR_URL, INSTAGRAM_URL, rememberLanguage, whatsAppUrl } from "@/lib/sales";
 import { track } from "@/lib/track";
 import vetMavie from "@/assets/projects/vet-mavie-1200.webp";
 import vetMavieSmall from "@/assets/projects/vet-mavie-600.webp";
@@ -20,7 +20,7 @@ const works = [
 
 export default function Argentina() {
   useEffect(() => {
-    document.cookie = "latamleap.lang=es; Path=/; Max-Age=31536000; SameSite=Lax";
+    rememberLanguage("es");
   }, []);
   return <article className="pb-8">
     <section className="pt-10 pb-16">

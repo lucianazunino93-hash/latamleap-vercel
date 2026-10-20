@@ -21,5 +21,6 @@ export function whatsAppUrl(language: "es" | "en") {
 }
 
 export function rememberLanguage(value: "es" | "en") {
-  document.cookie = `latamleap.lang=${value}; Path=/; Max-Age=31536000; SameSite=Lax`;
+  const secure = location.protocol === "https:" ? "; Secure" : "";
+  document.cookie = `latamleap.lang=${value}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
 }

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LocalizedAnchor } from "@/lib/language";
 import { LanguageContext } from "@/lib/language-context";
 import { Copy } from "@/lib/copy";
-import { CALENDAR_URL, DEMO_URL, whatsAppUrl } from "@/lib/sales";
+import { CALENDAR_URL, DEMO_URL, rememberLanguage, whatsAppUrl } from "@/lib/sales";
 import { track } from "@/lib/track";
 import decisions from "../../shared/decisions.json";
 
@@ -27,5 +27,5 @@ export function WhatsAppLink({ className = "inline-flex min-h-11 items-center te
 
 export function ArgentinaLink({ className = "inline-flex min-h-11 items-center text-sm font-bold underline underline-offset-4" }: { className?: string }) {
   if (!decisions.showArgentinaLinkOnHome) return null;
-  return <a href="/argentina" hrefLang="es" lang="es" className={className} onClick={() => { document.cookie = "latamleap.lang=es; Path=/; Max-Age=31536000; SameSite=Lax"; }}><Copy es="¿Tu negocio está en Argentina?" en="Is your business in Argentina?" /></a>;
+  return <a href="/argentina" hrefLang="es" lang="es" className={className} onClick={() => { rememberLanguage("es"); }}><Copy es="¿Tu negocio está en Argentina?" en="Is your business in Argentina?" /></a>;
 }
