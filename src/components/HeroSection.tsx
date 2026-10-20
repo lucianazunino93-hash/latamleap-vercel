@@ -19,7 +19,7 @@ const HeroSection = () => {
     <div className="relative mx-auto max-w-7xl px-5 sm:px-6">
       <div className="grid items-center gap-12 lg:min-h-[calc(100svh-7rem)] lg:grid-cols-[1.02fr_.98fr] lg:gap-16">
         <div className="max-w-2xl">
-          <p className="section-kicker"><Copy es="Webs, IA y automatización para negocios de servicios" en="Websites, AI and automation for service businesses" /></p>
+          <p className="section-kicker"><Copy es="Webs, IA y automatización para tu negocio" en="Websites, AI and automation for your business" /></p>
           <h1 className="mb-5 font-bold text-[42px] leading-[.98] sm:text-6xl lg:text-[64px] xl:text-[68px]">
             {fromPreview
               ? <Copy es="¿Ya viste la vista previa de tu negocio?" en="Saw the preview of your business?" />
