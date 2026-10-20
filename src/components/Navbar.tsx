@@ -51,8 +51,8 @@ const Navbar = () => {
         {open ? <X size={24}/> : <Menu size={24}/>}
       </button></div>
     </div>
-    {open && (<div className="lg:hidden bg-card border-t border-border px-6 py-6 space-y-4">
-      {links.map((l) => (<a key={l.href} href={onArgentina ? l.href : language === "en" ? `/en${l.href}` : l.href} className="inline-flex items-center text-foreground text-base min-h-11" onClick={() => setOpen(false)}>
+    {open && (<div className="lg:hidden flex flex-col bg-card border-t border-border px-6 py-4">
+      {links.map((l) => (<a key={l.href} href={onArgentina ? l.href : language === "en" ? `/en${l.href}` : l.href} className="flex w-full items-center text-foreground text-base min-h-11" onClick={() => setOpen(false)}>
         <Copy es={l.es} en={l.en} />
       </a>))}
       <BookButton className="w-full" ctaLocation="nav" />

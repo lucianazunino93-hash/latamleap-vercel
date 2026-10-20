@@ -30,7 +30,7 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   }
   assert.equal(document.title, title, `${route}: title`);
   assert.equal(document.querySelector('meta[name="description"]').content, description, `${route}: description`);
-  assert.equal(document.documentElement.lang, model.language(route));
+  assert.equal(document.documentElement.lang, model.htmlLang(route));
   assert.equal(document.querySelector('link[rel="canonical"]').href, `${model.origin}${route}`);
   assert.equal(document.querySelectorAll('h1').length, 1, `${route}: one H1`);
   assert.equal(document.querySelectorAll('script[type="application/ld+json"]').length, 1, `${route}: one graph`);
@@ -40,13 +40,32 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   const organization = graph.find(item => item['@type'] === 'Organization');
   assert.equal(organization.telephone, decisions.contactPhone);
   assert.deepEqual(organization.areaServed, organizationAreaServed, `${route}: organization areaServed`);
-  const localBusiness = graph.find(item => types(item['@type']).includes('LocalBusiness'));
-  assert.deepEqual(localBusiness.areaServed, organizationAreaServed, `${route}: local business areaServed`);
+  assert.equal(graph.some(item => types(item['@type']).includes('LocalBusiness') || types(item['@type']).includes('ProfessionalService')), false, `${route}: no addressless LocalBusiness`);
+  assert.equal(organization.logo.url, `${model.origin}/og-latamleap.png`);
+  assert.equal(organization.logo.width, 1200);
+  assert.equal(organization.logo.height, 630);
+  assert.deepEqual(organization.sameAs, ['https://www.instagram.com/latam.leap/']);
+  const founder = graph.find(item => item['@type'] === 'Person');
+  assert.equal(founder.name, 'Luciana');
+  assert.equal(founder['@id'], `${model.origin}/#founder`);
+  assert.equal(organization.founder['@id'], founder['@id']);
+  assert.equal(graph.filter(item => item['@type'] === 'FAQPage').length, route === '/' || route === '/en' ? 1 : 0, `${route}: FAQPage only where the FAQ is visible`);
+  if (route === '/' || route === '/en') {
+    const faq = graph.find(item => item['@type'] === 'FAQPage');
+    assert.ok(faq.mainEntity.length >= 8, `${route}: FAQ questions`);
+    assert.ok(faq.mainEntity.every(item => item['@type'] === 'Question' && item.acceptedAnswer['@type'] === 'Answer' && item.acceptedAnswer.text), `${route}: FAQ answers`);
+  }
+  if (route !== '/' && route !== '/en') assert.ok(graph.some(item => item['@type'] === 'BreadcrumbList'), `${route}: breadcrumbs`);
+  assert.equal(document.querySelector('meta[property="og:image:width"]').content, '1200');
+  assert.equal(document.querySelector('meta[property="og:image:height"]').content, '630');
+  assert.equal(document.querySelector('meta[property="og:url"]').content, `${model.origin}${route}`);
   for (const [lang, url] of Object.entries(model.alternates(route))) assert.equal(document.querySelector(`link[hreflang="${lang}"]`).href, url);
-  assert.ok(graph.some(item => types(item['@type']).includes('ProfessionalService') && types(item['@type']).includes('LocalBusiness')), `${route}: local business`);
+  assert.ok(graph.some(item => item['@type'] === 'WebSite'), `${route}: website`);
   assert.ok(document.querySelector('meta[property="og:image"]').content.endsWith('/og-latamleap.png'), `${route}: share image`);
   assert.equal(document.querySelector('meta[name="twitter:card"]').content, 'summary_large_image');
-  assert.equal(document.querySelector('meta[name="google-site-verification"]'), null, `${route}: verification token stays empty`);
+  const verification = String(seo.googleSiteVerification || "").trim();
+  assert.equal(document.querySelector('meta[name="google-site-verification"]')?.getAttribute("content") || "", verification, `${route}: search console token matches config`);
+  assert.equal(html.includes("googletagmanager.com"), false, `${route}: GA4 stays out of the HTML until consent`);
   assert.equal(document.getElementById('meta-pixel'), null, `${route}: pixel stays disabled`);
   const alt = document.querySelector('meta[property="og:image:alt"]').content;
   assert.match(alt, model.language(route) === 'es' ? /pedidos por WhatsApp/ : /job requests on WhatsApp/);
@@ -76,6 +95,8 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
     for (const phrase of forbiddenOnUs) assert.equal(html.includes(phrase), false, `${route}: forbidden ${phrase}`);
   }
   if (route === '/' || route === '/en') {
+    assert.equal(document.querySelector('iframe'), null, `${route}: demo iframe stays unloaded`);
+    assert.ok(html.includes('case-studies'), `${route}: projects page is linked`);
     const service = graph.find(item => item['@id'] === `${model.origin}/#offer-bilingual`);
     assert.equal(service.offers.find(offer => offer.price === offers.us.price).priceCurrency, 'USD');
     assert.equal(service.offers.find(offer => offer.priceSpecification).priceSpecification.price, offers.us.maintenance);
@@ -120,6 +141,11 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   if (route === '/argentina') {
     const service = graph.find(item => item['@id'] === `${model.origin}/#offer-argentina`);
     assert.equal(service.offers.find(offer => offer.price === offers.ar.price).priceCurrency, 'ARS');
+    for (const image of document.querySelectorAll('#trabajos img')) {
+      assert.match(image.getAttribute('srcset'), /800w/, `${route}: 800w image`);
+      assert.equal(image.getAttribute('loading'), 'lazy');
+      assert.match(image.getAttribute('sizes'), /calc\(100vw - 40px\)/);
+    }
     assert.equal(html.includes('admin-rifa.latamleap.com'), false, 'rifa login stays unlinked');
     assert.ok(document.body.textContent.includes('ARS'), `${route}: peso price visible`);
   }
@@ -127,7 +153,24 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   assert.ok(!document.body.textContent.includes('{price}'), `${route}: expanded prices`);
   console.log(`${route}: OK`);
 }
+assert.equal(offers.us.price, 597);
+assert.equal(offers.us.maintenance, 49);
+assert.equal(offers.ar.price, 549000);
+assert.equal(offers.ar.maintenance, 49000);
 assert.equal(servicePages.length, 0, 'retired service pages stay out of the catalog loop');
+const sitemapXml = await fs.readFile('dist/sitemap.xml', 'utf8');
+const robots = await fs.readFile('dist/robots.txt', 'utf8');
+assert.match(robots, /Sitemap: https:\/\/www\.latamleap\.com\/sitemap\.xml/);
+for (const route of Object.keys(model.pages).filter(model.isIndexable)) {
+  assert.match(sitemapXml, new RegExp(`<loc>${model.origin}${route}</loc><lastmod>${seo.updated}</lastmod>`), `${route}: sitemap lastmod`);
+  for (const [lang, href] of Object.entries(model.alternates(route))) {
+    assert.ok(sitemapXml.includes(`hreflang="${lang}" href="${href}"`), `${route}: sitemap ${lang}`);
+    const target = new URL(href).pathname;
+    assert.ok(Object.values(model.alternates(target)).includes(`${model.origin}${route}`), `${route} ${lang} is not reciprocal`);
+  }
+  await fs.access(`dist${route === '/' ? '' : route}/index.html`);
+}
+for (const route of ['/privacy-policy', '/terms-of-service', '/data-deletion']) assert.equal(sitemapXml.includes(`${model.origin}${route}`), false, `${route}: noindex stays out of the sitemap`);
 const notFoundHtml = await fs.readFile('dist/404.html', 'utf8');
 const notFound = new JSDOM(notFoundHtml).window.document;
 assert.equal(notFound.querySelector('meta[name="robots"]').content, 'noindex,follow');

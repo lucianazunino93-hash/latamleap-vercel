@@ -2,11 +2,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { languageDecision, safeRedirect } from "../shared/geo.mjs";
 
-test("a Spanish preference cannot turn /en/ into another host", () => {
-  const base = "https://www.latamleap.com/en//example.invalid";
-  const decision = languageDecision(base, { country: "AR" });
-  assert.equal(decision.location.startsWith("//"), true);
-  assert.equal(safeRedirect(decision.location, base), null);
-  const kept = safeRedirect("/en/case-studies", base);
-  assert.equal(kept, "/en/case-studies");
+test("an explicit /en URL stays English even when the cookie is Spanish", () => {
+  const decision = languageDecision("https://www.latamleap.com/en", { cookie: "es", country: "AR" });
+  assert.equal(decision.location, undefined);
+  assert.equal(decision.setCookie, "en");
+  assert.equal(languageDecision("https://www.latamleap.com/en/about", { cookie: "en", country: "AR" }), null);
+  assert.equal(safeRedirect("//example.invalid", "https://www.latamleap.com"), null);
+  assert.equal(safeRedirect("/en/case-studies", "https://www.latamleap.com"), "/en/case-studies");
 });

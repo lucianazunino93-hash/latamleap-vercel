@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Check } from "lucide-react";
 import offers from "../../shared/offers.json";
+import { homeFaq } from "../../shared/home-faq.mjs";
 import decisions from "../../shared/decisions.json";
 import { isBonusActive } from "../../shared/bonus.mjs";
 import { Copy } from "@/lib/copy";
@@ -31,18 +32,7 @@ const includes = {
   ],
 };
 
-const questions = [
-  { id: "pago", esQ: "¿Cómo pago?", enQ: "How do I pay?", esA: "Te enviamos una solicitud de pago de Wise en dólares: 50 % para empezar y 50 % al aprobar la web.", enA: "We send you a Wise payment request in U.S. dollars: 50% to start and 50% when you approve the site." },
-  { id: "ciudad", esQ: "¿Trabajan con negocios de mi ciudad?", enQ: "Do you work with businesses in my city?", esA: "Sí. Trabajamos con negocios de todo Estados Unidos y Latinoamérica. Respondemos en tu horario de trabajo.", enA: "Yes. We work with businesses across the United States and Latin America. We reply during your business hours." },
-  { id: "tiempo", esQ: "¿Cuánto tarda?", enQ: "How long does it take?", esA: "La primera versión está en 2 días hábiles desde el pago inicial y tus materiales. La mayoría de las webs se publica en 1 a 2 semanas.", enA: "The first version is ready 2 business days after the deposit and your materials. Most sites launch in 1 to 2 weeks." },
-  { id: "materiales", esQ: "¿Qué necesito tener listo?", enQ: "What do I need to have ready?", esA: "Tu logo, tus servicios, tu zona, tus horarios y algunas fotos de tus trabajos. Te mandamos la lista completa.", enA: "Your logo, services, service area, hours and a few photos of your work. We'll send you the full list." },
-  { id: "cuentas", esQ: "¿De quién son la web y las cuentas?", enQ: "Who owns the site and accounts?", esA: "Tuyas. Dominio, hosting y perfil de Google quedan a tu nombre desde el primer día.", enA: "You do. Domain, hosting and Google profile are in your name from day one." },
-  { id: "cuidado", esQ: "¿El plan de cuidado es obligatorio?", enQ: "Is the care plan required?", esA: `Es opcional: USD ${offers.us.maintenance} al mes por soporte, 2 cambios menores y una revisión mensual. Cualquier detalle de lo que entregamos lo corregimos sin costo.`, enA: `It's optional: USD ${offers.us.maintenance}/month for support, 2 minor changes and a monthly check. Anything we delivered that needs fixing, we fix at no cost.` },
-  { id: "google", esQ: "¿Me ayudan a aparecer en Google?", enQ: "Will you help me show up on Google?", esA: "Dejamos tu web y tu perfil completos y bien configurados, que es lo que Google recomienda. El orden de los resultados lo define Google según relevancia, distancia y prominencia.", enA: "We set up your site and profile complete and accurate, which is what Google recommends. Google orders results by relevance, distance and prominence." },
-  { id: "vista-previa", esQ: "¿Puedo ver cómo quedaría antes de decidir?", enQ: "Can I see how it would look before deciding?", esA: "Sí. En la charla de 10 minutos ves la vista previa con tu negocio, y después tienes dos rondas de cambios.", enA: "Yes. On the 10-minute call you see a preview with your business, and then you get two rounds of changes." },
-  { id: "proyectos", esQ: "¿Hacen proyectos más grandes?", enQ: "Do you take on bigger projects?", esA: "Sí: tiendas, sistemas a medida y automatizaciones con IA. Los cotizamos después de la charla.", enA: "Yes: stores, custom systems and AI automations. We quote them after the call." },
-  { id: "referidos", esQ: "¿Tienen programa de referidos?", enQ: "Do you have a referral program?", esA: `Sí. Por cada negocio que nos recomiendas y empieza su proyecto, te regalamos un mes de tu plan de cuidado, hasta ${offers.referral.capPerYear} por año.`, enA: `Yes. For every business you refer that starts a project, you get a free month of your care plan, up to ${offers.referral.capPerYear} per year.` },
-];
+const questions = homeFaq(offers);
 
 const chips = [
   ["inti", "Formación en programación (INTI)", "Programming training (INTI)"],
@@ -70,13 +60,13 @@ function Certifications() {
   if (!items.length) return null;
   return <div className="mt-6">
     <p className="mb-3 text-sm font-bold"><Copy es="Certificaciones" en="Certifications" /></p>
-    <ul className="flex flex-wrap gap-2" data-certifications="">
+    <ul className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap" data-certifications="">
       {items.map(item => {
         const url = item.url.trim();
         return <li key={item.id}>
           {url
-            ? <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center rounded-full border border-border bg-card px-4 text-sm font-bold text-foreground underline-offset-4 hover:underline" aria-label={language === "en" ? `View ${item.label} certificate` : `Ver certificado de ${item.label}`}>{item.label}</a>
-            : <span className="inline-flex items-center rounded-full border border-border bg-card px-4 py-2 text-sm font-bold text-foreground">{item.label}</span>}
+            ? <a href={url} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 w-full items-center justify-center rounded-full border border-border bg-card px-3 text-center text-sm font-bold leading-snug text-foreground underline-offset-4 hover:underline" aria-label={language === "en" ? `View ${item.label} certificate` : `Ver certificado de ${item.label}`}>{item.label}</a>
+            : <span className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card px-3 py-2 text-center text-sm font-bold leading-snug text-foreground">{item.label}</span>}
         </li>;
       })}
     </ul>

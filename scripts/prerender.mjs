@@ -17,7 +17,7 @@ try {
     asset.src ? html.replaceAll(`/${asset.src}`, `/${asset.file}`) : html, render(route));
   for (const [route, [title, description]] of Object.entries(model.pages)) {
     const language = model.language(route), url = `${model.origin}${route}`;
-    let html = template.replace('<div id="root"></div>', `<div id="root">${renderPage(route)}</div>`).replace(/<title>.*?<\/title>/, `<title>${escape(title)}</title>`).replace('<html lang="es">', `<html lang="${language}">`);
+    let html = template.replace('<div id="root"></div>', `<div id="root">${renderPage(route)}</div>`).replace(/<title>.*?<\/title>/, `<title>${escape(title)}</title>`).replace('<html lang="es">', `<html lang="${model.htmlLang(route)}">`);
     const setMeta = (attribute, key, value) => {
       const pattern = new RegExp(`<meta ${attribute}="${key}" content="[^"]*"\\s*/?>`);
       const tag = `<meta ${attribute}="${key}" content="${escape(value)}" />`;
@@ -25,7 +25,8 @@ try {
     };
     setMeta('name', 'description', description);
     setMeta('property', 'og:title', title); setMeta('property', 'og:description', description); setMeta('property', 'og:url', url);
-    setMeta('property', 'og:locale', language === 'es' ? 'es_AR' : 'en_US');
+    const htmlLang = model.htmlLang(route);
+    setMeta('property', 'og:locale', htmlLang === 'en' ? 'en_US' : htmlLang === 'es-AR' ? 'es_AR' : 'es_ES');
     const imageAlt = shareImageAlt(language);
     setMeta('property', 'og:image:alt', imageAlt);
     setMeta('name', 'twitter:image:alt', imageAlt);
@@ -36,7 +37,8 @@ try {
     html = html.replace('</head>', `${links}${trackingHead(seo)}<script id="page-schema" type="application/ld+json">${serializeSchema(model.schema(route))}</script></head>`);
     const folder = path.join('dist', route); await fs.mkdir(folder, { recursive: true }); await fs.writeFile(path.join(folder, 'index.html'), html);
   }
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${Object.keys(model.pages).filter(model.isIndexable).map(route => `<url><loc>${model.origin}${route}</loc>${Object.entries(model.alternates(route)).map(([lang, href]) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`).join('')}</url>`).join('')}</urlset>`;
+  const lastmod = seo.updated;
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">${Object.keys(model.pages).filter(model.isIndexable).map(route => `<url><loc>${model.origin}${route}</loc><lastmod>${lastmod}</lastmod>${Object.entries(model.alternates(route)).map(([lang, href]) => `<xhtml:link rel="alternate" hreflang="${lang}" href="${href}"/>`).join('')}</url>`).join('')}</urlset>`;
   await fs.writeFile('dist/sitemap.xml', sitemap);
   let notFound = template.replace('<div id="root"></div>', `<div id="root">${renderPage('/not-found')}</div>`).replace(/<title>.*?<\/title>/, '<title>Página no encontrada | Latam Leap</title>').replace(/<meta name="robots" content="[^"]*"\s*\/?>/, '<meta name="robots" content="noindex,follow" />').replace(/<link rel="canonical"[^>]*>/, '');
   notFound = notFound.replace("</body>", `<script src="/not-found-lang.js"></script></body>`);

@@ -1,5 +1,7 @@
 // referral_submit is a GA4 key event. Mark it in GA4 Admin when the property exists.
 // When the Meta pixel is active, that event is sent as Lead with content_category "referral".
+// consent-default.js defines gtag before a choice. Events stay local until Accept.
+import { CONSENT_STORAGE_KEY } from "../../shared/tracking.mjs";
 type TrackValue = string | number | boolean | undefined;
 
 const META: Record<string, string> = {
@@ -10,6 +12,11 @@ const META: Record<string, string> = {
 
 export function track(name: string, params: Record<string, TrackValue> = {}) {
   if (typeof window === "undefined") return;
+  try {
+    if (window.localStorage.getItem(CONSENT_STORAGE_KEY) !== "granted") return;
+  } catch {
+    return;
+  }
   const payload: Record<string, string | number | boolean> = {};
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined) payload[key] = value;

@@ -52,6 +52,11 @@ export function languageDecision(input, { cookie = "", country = "" } = {}) {
   if (pathname === "/en/argentina" || pathname.startsWith("/en/argentina/")) return redirect(pathname.slice(3) || "/argentina", "es");
   const alias = unwrapSpanishAlias(pathname);
   if (alias) return redirect(alias, "es");
+  // An explicit /en URL wins over the saved cookie and over geo. Record that choice.
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    if (cookie === "en") return null;
+    return { setCookie: "en" };
+  }
   if (pathname === "/argentina" || pathname.startsWith("/argentina/")) {
     if (cookie === "es" && url.searchParams.has("lang")) {
       url.searchParams.delete("lang");

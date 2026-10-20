@@ -14,6 +14,7 @@ const usLinks = [
   { es: "Proceso", en: "Process", href: "/#proceso" },
   { es: "Recomienda", en: "Refer", href: "/#referidos" },
   { es: "Preguntas", en: "FAQ", href: "/#preguntas" },
+  { es: "Proyectos", en: "Projects", href: "/case-studies" },
 ];
 const argentinaLinks = [
   { es: "Precio", en: "Precio", href: "#oferta" },
@@ -40,7 +41,7 @@ const Footer = () => {
         <div className="flex items-center gap-2 justify-center md:justify-start mb-1">
           <span className="font-display font-bold text-background text-xs">LATAM LEAP</span>
         </div>
-        <p className="text-[11px] text-background/60">{onArgentina
+        <p className="text-xs text-background/80">{onArgentina
           ? "© 2026 Latam Leap. Estudio en Córdoba, Argentina. Webs para negocios de servicios."
           : <Copy es="© 2026 Latam Leap. Webs, IA y automatización para negocios de servicios." en="© 2026 Latam Leap. Websites, AI and automation for service businesses." />}</p>
       </div>
