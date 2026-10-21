@@ -9,9 +9,6 @@ import { LanguageContext } from "@/lib/language-context";
 import { track } from "@/lib/track";
 import { BookButton, WhatsAppLink } from "./SalesActions";
 import AnimatedSection from "./AnimatedSection";
-const portraitSrcSet = "/luciana-400.webp 400w, /luciana-800.webp 800w";
-const portraitAvifSrcSet = "/luciana-400.avif 400w, /luciana-800.avif 800w";
-const portraitSizes = "(min-width: 1024px) 384px, calc(100vw - 2.5rem)";
 
 const includes = {
   es: [
@@ -41,16 +38,7 @@ const chips = [
 ];
 
 export function FounderPortrait() {
-  const language = useContext(LanguageContext);
-  if (!decisions.showFounderPhoto) return null;
-  const alt = language === "en" ? "Luciana, founder of Latam Leap" : "Luciana, fundadora de Latam Leap";
-  return <figure>
-    <picture>
-      <source type="image/avif" srcSet={portraitAvifSrcSet} sizes={portraitSizes} />
-      <source type="image/webp" srcSet={portraitSrcSet} sizes={portraitSizes} />
-      <img src="/luciana-800.webp" srcSet={portraitSrcSet} sizes={portraitSizes} width={800} height={800} alt={alt} decoding="async" loading="lazy" className="aspect-square w-full max-w-sm rounded-lg border border-border bg-secondary object-cover" />
-    </picture>
-  </figure>;
+  return <p data-founder-name="" className="max-w-sm text-3xl font-bold leading-tight text-foreground md:text-4xl">Luciana Zunino</p>;
 }
 
 function Certifications() {

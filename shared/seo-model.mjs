@@ -50,7 +50,7 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
     const founderId = `${origin}/#founder`;
     const nodes = [
       { '@type': 'Organization', '@id': organizationId, name: 'Latam Leap', url: `${origin}/`, email: 'hola@latamleap.com', telephone: phone, image: `${origin}/og-latamleap.png`, logo: { '@type': 'ImageObject', url: `${origin}/og-latamleap.png`, width: 1200, height: 630 }, sameAs: ['https://www.instagram.com/latam.leap/'], areaServed: organizationAreaServed, founder: { '@id': founderId }, contactPoint: { '@type': 'ContactPoint', contactType: 'sales', telephone: phone, email: 'hola@latamleap.com', availableLanguage: ['Spanish', 'English'] } },
-      { '@type': 'Person', '@id': founderId, name: 'Luciana', jobTitle: lang === 'en' ? 'Founder' : 'Fundadora', image: `${origin}/luciana-800.webp`, worksFor: { '@id': organizationId } },
+      { '@type': 'Person', '@id': founderId, name: 'Luciana', jobTitle: lang === 'en' ? 'Founder' : 'Fundadora', worksFor: { '@id': organizationId } },
       { '@type': 'WebSite', '@id': websiteId, name: 'Latam Leap', url: `${origin}/`, publisher: { '@id': organizationId }, inLanguage: ['es', 'en', 'es-AR'] },
       { '@type': path === '/about' ? 'AboutPage' : path === '/case-studies' || path === '/services' ? 'CollectionPage' : 'WebPage', '@id': `${url}#webpage`, url, name: pages[route][0], description: pages[route][1], inLanguage: htmlLang(route), isPartOf: { '@id': websiteId }, about: { '@id': organizationId }, ...(path !== '/' ? { breadcrumb: { '@id': `${url}#breadcrumbs` } } : {}) },
     ];
