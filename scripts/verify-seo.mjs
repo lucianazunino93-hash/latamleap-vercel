@@ -94,8 +94,7 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
   if (route === '/case-studies') assert.match(document.body.textContent, /Otros proyectos/);
   if (route === '/en/case-studies') assert.match(document.body.textContent, /Other projects/);
   if (guarded.has(route)) {
-    const scanned = html.replaceAll('>Luciana Zunino<', '><');
-    for (const phrase of forbiddenOnUs) assert.equal(scanned.includes(phrase), false, `${route}: forbidden ${phrase}`);
+    for (const phrase of forbiddenOnUs) assert.equal(html.includes(phrase), false, `${route}: forbidden ${phrase}`);
   }
   if (route === '/' || route === '/en') {
     assert.equal(document.querySelector('iframe'), null, `${route}: demo iframe stays unloaded`);
@@ -118,7 +117,7 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
       : 'We work with businesses across the United States and Latin America.';
     assert.ok(document.body.textContent.includes(coverage), `${route}: coverage line`);
     assert.equal(document.querySelector('#equipo img'), null, `${route}: founder photo removed`);
-    assert.equal(document.querySelector('#equipo [data-founder-name]')?.textContent, 'Luciana Zunino', `${route}: founder name`);
+    assert.equal(document.querySelector('#equipo [data-founder-name]')?.textContent, 'Luciana', `${route}: founder name`);
     assert.equal(html.includes('Foto pendiente'), false, `${route}: placeholder label`);
     assert.equal(html.includes('luciana-placeholder'), false, `${route}: placeholder file`);
     const chip = route === '/' ? 'Marketing digital y analítica web' : 'Digital marketing & web analytics';
@@ -133,7 +132,7 @@ for (const [route, [title, description]] of Object.entries(model.pages)) {
       : 'We work with businesses across the United States and Latin America.';
     assert.ok(document.body.textContent.includes(coverage), `${route}: coverage line`);
     assert.equal(document.querySelector('img[src*="luciana"]'), null, `${route}: founder photo removed`);
-    assert.equal(document.querySelector('[data-founder-name]')?.textContent, 'Luciana Zunino', `${route}: founder name`);
+    assert.equal(document.querySelector('[data-founder-name]')?.textContent, 'Luciana', `${route}: founder name`);
     assert.equal(html.includes('Foto pendiente'), false, `${route}: placeholder label`);
     const chip = route === '/about' ? 'Marketing digital y analítica web' : 'Digital marketing & web analytics';
     assert.ok(document.body.textContent.includes(chip), `${route}: analytics chip`);

@@ -38,7 +38,7 @@ const chips = [
 ];
 
 export function FounderPortrait() {
-  return <p data-founder-name="" className="max-w-sm text-3xl font-bold leading-tight text-foreground md:text-4xl">Luciana Zunino</p>;
+  return <p data-founder-name="" className="max-w-sm text-3xl font-bold leading-tight text-foreground md:text-4xl">Luciana</p>;
 }
 
 function Certifications() {
