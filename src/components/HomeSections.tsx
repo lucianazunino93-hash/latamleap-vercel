@@ -9,7 +9,7 @@ import { track } from "@/lib/track";
 import { OfferFAQ, OfferPricing, FounderSection } from "./OfferSections";
 import ReferralSection from "./ReferralSection";
 import { BookButton, DemoButton, WhatsAppLink } from "./SalesActions";
-import { ArrowUpRight, Check, Code2, PenTool, Search } from "lucide-react";
+import { ArrowUpRight, Code2, PenTool, Search } from "lucide-react";
 import AnimatedSection from "./AnimatedSection";
 import AuditForm from "./AuditForm";
 import { portfolioProjects } from "@/lib/portfolio";
@@ -45,7 +45,6 @@ export const ConnectedSystem = () => (<div className="relative min-h-[430px] sm:
       <div className="mb-3 flex items-center gap-2 text-xs font-bold text-muted-foreground"><Code2 size={15} className="text-primary"/><Copy es="Precio fijo" en="Fixed price" /></div>
       <div className="space-y-2"><div className="h-1.5 w-5/6 rounded bg-accent"/><div className="h-1.5 w-2/3 rounded bg-muted"/><div className="h-1.5 w-4/5 rounded bg-primary"/></div>
     </div>
-    <div className="absolute bottom-[7%] right-[8%] flex items-center gap-2 rounded-lg bg-primary px-4 py-3 text-xs font-bold text-primary-foreground shadow-studio"><Check size={16}/><span>USD {offers.us.price}</span></div>
     <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 600 500" fill="none" aria-hidden="true"><path d="M220 120C350 120 320 220 420 220M420 280C360 330 300 350 220 380" stroke="currentColor" className="text-primary/50" strokeWidth="2" strokeDasharray="6 8"/></svg>
   </div>
 </div>);

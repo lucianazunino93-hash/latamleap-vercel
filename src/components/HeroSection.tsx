@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Copy } from "@/lib/copy";
 import { LanguageContext } from "@/lib/language-context";
-import offers from "../../shared/offers.json";
 import { ConnectedSystem } from "./HomeSections";
 import { BookButton, DemoButton, WhatsAppLink } from "./SalesActions";
 
@@ -20,7 +19,7 @@ const HeroSection = () => {
     <div className="relative mx-auto max-w-7xl px-5 sm:px-6">
       <div className="grid items-center gap-12 lg:min-h-[calc(100svh-7rem)] lg:grid-cols-[1.02fr_.98fr] lg:gap-16">
         <div className="max-w-2xl">
-          <p className="section-kicker"><Copy es="Webs, IA y automatización para negocios de servicios" en="Websites, AI and automation for service businesses" /></p>
+          <p className="section-kicker"><Copy es="Webs, IA y automatización para tu negocio" en="Websites, AI and automation for your business" /></p>
           <h1 className="mb-5 font-bold text-[42px] leading-[.98] sm:text-6xl lg:text-[64px] xl:text-[68px]">
             {fromPreview
               ? <Copy es="¿Ya viste la vista previa de tu negocio?" en="Saw the preview of your business?" />
@@ -29,7 +28,7 @@ const HeroSection = () => {
           <p className="mb-3 text-xl font-bold leading-snug lg:text-2xl">
             {fromPreview
               ? <Copy es="Agenda 10 minutos y la terminamos juntos." en="Book 10 minutes and we'll finish it together." />
-              : <Copy es={`Webs en español y en inglés para plomeros, electricistas y técnicos de HVAC. Tus clientes ven qué haces y dónde trabajas, y te mandan el pedido por WhatsApp. USD ${offers.us.price}, precio fijo.`} en={`English and Spanish websites for plumbers, electricians and HVAC pros. Customers see what you do and where you work, and send the job request straight to your WhatsApp. USD ${offers.us.price}, fixed price.`} />}
+              : <Copy es="Diseñamos webs en español y en inglés que trabajan por tu negocio: muestran lo que haces, generan confianza y te traen pedidos por WhatsApp." en="We design websites in English and Spanish that work for your business: they show what you do, build trust and bring you requests on WhatsApp." />}
           </p>
           <p className="mb-8 text-lg leading-snug">
             <Copy es="Trabajamos con negocios de todo Estados Unidos y Latinoamérica." en="We work with businesses across the United States and Latin America." />

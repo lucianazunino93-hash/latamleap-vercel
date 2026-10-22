@@ -26,10 +26,6 @@ export function createSeoModel({ seo, catalog, english, servicePages, offers, co
   const language = route => route === '/en' || route.startsWith('/en/') ? 'en' : 'es';
   const htmlLang = route => basePath(route) === '/argentina' ? 'es-AR' : language(route);
   const pages = { ...seo.pages };
-  if (offers?.us?.price) {
-    pages['/'] = [pages['/'][0], `Webs en español e inglés para plomeros, electricistas y HVAC en Estados Unidos y Latinoamérica. Pedidos por WhatsApp. USD ${offers.us.price}, precio fijo.`];
-    pages['/en'] = [pages['/en'][0], `English and Spanish websites for plumbers, electricians and HVAC pros across the United States and Latin America. Job requests on WhatsApp. USD ${offers.us.price}, fixed price.`];
-  }
   if (offers?.ar?.price && pages['/argentina']) {
     pages['/argentina'] = [pages['/argentina'][0], `Web de 5 secciones para negocios en Argentina. Precio cerrado ARS ${new Intl.NumberFormat('es-AR').format(offers.ar.price)}. Seña del 50% y saldo al publicar.`];
   }

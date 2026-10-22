@@ -8,3 +8,7 @@ gtag("consent", "default", {
   analytics_storage: "denied",
   wait_for_update: 500
 });
+try {
+  var saved = localStorage.getItem("latamleap.consent");
+  if (saved === "granted" || saved === "denied") document.documentElement.setAttribute("data-consent", saved);
+} catch (error) {}
